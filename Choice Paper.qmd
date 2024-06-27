@@ -1,0 +1,65 @@
+---
+title: "Choice Paper"
+author: "Bijesh Mishra, Ph.D."
+toc: true
+number-sections: true
+colorlinks: true
+#format: html
+format:
+  pdf: default
+  html: default
+  ipynb: default
+editor: visual
+editor_options:
+  chunk_output_type: inline
+---
+
+# Choice Paper
+
+This paper expands Ngbede's thesis work to publish in Choice Magazine of AAEA.
+
+## Housekeeping
+
+```{r, warning=FALSE, error=TRUE}
+#| echo: TRUE
+rm(list = ls()) # Clean the environment.
+options(warn=-1) # Supress warnings. options(warn=0) to bring it back.
+```
+
+```{r, echo=FALSE, results='hide', error=TRUE}
+path_to_dir = "/Users/bmishra/Library/CloudStorage/OneDrive-AuburnUniversity/AU AV/Collaboration/Musa, N/Choice"
+ifelse(Sys.info()[6] == "bmishra", setwd(path_to_dir))
+```
+
+## Load libraries
+
+```{r, echo = TRUE, warning=FALSE, error=TRUE}
+# Modify as necesary:
+options(tigris_use_cache = TRUE)
+library(ggplot2, warn.conflicts = FALSE, quietly = TRUE)
+library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
+library(tidyverse, warn.conflicts = FALSE, quietly = TRUE)
+library(tigris, warn.conflicts = FALSE, quietly = TRUE)
+library(sf, warn.conflicts = FALSE, quietly = TRUE)
+library(GJRM, warn.conflicts = FALSE, quietly = TRUE) #bivariate probit
+library(psych, warn.conflicts = FALSE, quietly = TRUE)
+library(likert,  warn.conflicts = FALSE, quietly = TRUE) #likert scale plot
+library(mice,  warn.conflicts = FALSE, quietly = TRUE) #likert scale plot
+library(gmodels,  warn.conflicts = FALSE, quietly = TRUE)
+```
+
+## Import Data
+
+import necessary data.
+
+```{r}
+# Modify Code.
+#Survey data with zipcode:
+# surveydata = read.csv("SurveyWZip.csv") %>% 
+#   dplyr::mutate(countyname = tolower(OrgCOUNTY))
+# names(surveydata) <- tolower(names(surveydata))
+# #setNames(swzip, tolower(names(swzip))) #Prints df. Not Preferred.
+# surveydata[45:54][is.na(surveydata[45:54])] <- 0
+```
+
+# 
