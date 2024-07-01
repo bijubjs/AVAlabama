@@ -369,6 +369,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><p>Everything same as tomato.</p></li>
 <li><p>Numbers 3 to 9 in names are price ranges for strawberry.</p></li>
+<li><p>Comment: Fix revenue table. This calculation is incorrect.</p></li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>strawberry <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">"Parameters.xlsx"</span>,</span>
@@ -393,27 +394,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6    1.7 5227.5 15682.5 20910 26137.5 125460 36592.5 1003680 47047.5   19153.56
 7    1.6 4920.0 14760.0 19680 24600.0 118080 34440.0  944640 44280.0   18807.91
 8    1.5 4612.5 13837.5 18450 23062.5 110700 32287.5  885600 41512.5   18462.27
-     rolac3    rolac4    rolac5    rolac6    rolac7    rolac8    rolac9
-3 -14040.49 -14040.49 -14040.49 -14040.49 -14040.49 -14040.49 -14040.49
-4 -14347.99 -14347.99 -14347.99 -14347.99 -14347.99 -14347.99 -14347.99
-5 -14655.49 -14655.49 -14655.49 -14655.49 -14655.49 -14655.49 -14655.49
-6 -14962.99 -14962.99 -14962.99 -14962.99 -14962.99 -14962.99 -14962.99
-7 -15270.49 -15270.49 -15270.49 -15270.49 -15270.49 -15270.49 -15270.49
-8 -15577.99 -15577.99 -15577.99 -15577.99 -15577.99 -15577.99 -15577.99
-  Operator Cost      rlc3      rlc4      rlc5      rlc6      rlc7      rlc8
-3          2700 -16740.49 -16740.49 -16740.49 -16740.49 -16740.49 -16740.49
-4          2565 -16912.99 -16912.99 -16912.99 -16912.99 -16912.99 -16912.99
-5          2430 -17085.49 -17085.49 -17085.49 -17085.49 -17085.49 -17085.49
-6          2295 -17257.99 -17257.99 -17257.99 -17257.99 -17257.99 -17257.99
-7          2160 -17430.49 -17430.49 -17430.49 -17430.49 -17430.49 -17430.49
-8          2025 -17602.99 -17602.99 -17602.99 -17602.99 -17602.99 -17602.99
+     rolac3    rolac4     rolac5    rolac6    rolac7   rolac8    rolac9
+3 -14040.49 -1740.495 4409.50503 10559.505 127409.51 22859.51 1160609.5
+4 -14002.35 -2317.350 3525.15003  9367.650 120375.15 21052.65 1101915.2
+5 -13964.20 -2894.205 2640.79503  8175.795 113340.80 19245.80 1043220.8
+6 -13926.06 -3471.060 1756.44003  6983.940 106306.44 17438.94  984526.4
+7 -13887.91 -4047.915  872.08503  5792.085  99272.09 15632.09  925832.1
+8 -13849.77 -4624.770  -12.26997  4600.230  92237.73 13825.23  867137.7
+  Operator Cost      rlc3      rlc4      rlc5     rlc6      rlc7     rlc8
+3          2700 -16740.49 -4440.495  1709.505 7859.505 124709.51 20159.51
+4          2565 -16567.35 -4882.350   960.150 6802.650 117810.15 18487.65
+5          2430 -16394.20 -5324.205   210.795 5745.795 110910.80 16815.80
+6          2295 -16221.06 -5766.060  -538.560 4688.940 104011.44 15143.94
+7          2160 -16047.91 -6207.915 -1287.915 3632.085  97112.09 13472.09
+8          2025 -15874.77 -6649.770 -2037.270 2575.230  90212.73 11800.23
        rlc9
-3 -16740.49
-4 -16912.99
-5 -17085.49
-6 -17257.99
-7 -17430.49
-8 -17602.99</code></pre>
+3 1157909.5
+4 1099350.2
+5 1040790.8
+6  982231.4
+7  923672.1
+8  865112.7</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   yldvar  yield   Rev3 Rev4   Rev5  Rev6    Rev7   Rev8    Rev9 Total Cost
@@ -423,27 +424,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 20    0.3  922.5 2767.5 3690 4612.5 22140  6457.5 177120  8302.5   14314.53
 21    0.2  615.0 1845.0 2460 3075.0 14760  4305.0 118080  5535.0   13968.88
 22    0.1  307.5  922.5 1230 1537.5  7380  2152.5  59040  2767.5   13623.24
-      rolac3    rolac4    rolac5    rolac6    rolac7    rolac8    rolac9
-17 -18345.49 -18345.49 -18345.49 -18345.49 -18345.49 -18345.49 -18345.49
-18 -18652.99 -18652.99 -18652.99 -18652.99 -18652.99 -18652.99 -18652.99
-19 -18960.49 -18960.49 -18960.49 -18960.49 -18960.49 -18960.49 -18960.49
-20 -19267.99 -19267.99 -19267.99 -19267.99 -19267.99 -19267.99 -19267.99
-21 -19575.49 -19575.49 -19575.49 -19575.49 -19575.49 -19575.49 -19575.49
-22 -19882.99 -19882.99 -19882.99 -19882.99 -19882.99 -19882.99 -19882.99
-   Operator Cost      rlc3      rlc4      rlc5      rlc6      rlc7      rlc8
-17           810 -19155.49 -19155.49 -19155.49 -19155.49 -19155.49 -19155.49
-18           675 -19327.99 -19327.99 -19327.99 -19327.99 -19327.99 -19327.99
-19           540 -19500.49 -19500.49 -19500.49 -19500.49 -19500.49 -19500.49
-20           405 -19672.99 -19672.99 -19672.99 -19672.99 -19672.99 -19672.99
-21           270 -19845.49 -19845.49 -19845.49 -19845.49 -19845.49 -19845.49
-22           135 -20017.99 -20017.99 -20017.99 -20017.99 -20017.99 -20017.99
+      rolac3     rolac4     rolac5     rolac6    rolac7     rolac8    rolac9
+17 -13506.46  -9816.465  -7971.465  -6126.465 28928.535  -2436.465 338888.54
+18 -13468.32 -10393.320  -8855.820  -7318.320 21894.180  -4243.320 280194.18
+19 -13430.17 -10970.175  -9740.175  -8510.175 14859.825  -6050.175 221499.83
+20 -13392.03 -11547.030 -10624.530  -9702.030  7825.470  -7857.030 162805.47
+21 -13353.88 -12123.885 -11508.885 -10893.885   791.115  -9663.885 104111.12
+22 -13315.74 -12700.740 -12393.240 -12085.740 -6243.240 -11470.740  45416.76
+   Operator Cost      rlc3      rlc4       rlc5       rlc6      rlc7       rlc8
+17           810 -14316.46 -10626.46  -8781.465  -6936.465 28118.535  -3246.465
+18           675 -14143.32 -11068.32  -9530.820  -7993.320 21219.180  -4918.320
+19           540 -13970.17 -11510.17 -10280.175  -9050.175 14319.825  -6590.175
+20           405 -13797.03 -11952.03 -11029.530 -10107.030  7420.470  -8262.030
+21           270 -13623.88 -12393.88 -11778.885 -11163.885   521.115  -9933.885
+22           135 -13450.74 -12835.74 -12528.240 -12220.740 -6378.240 -11605.740
         rlc9
-17 -19155.49
-18 -19327.99
-19 -19500.49
-20 -19672.99
-21 -19845.49
-22 -20017.99</code></pre>
+17 338078.54
+18 279519.18
+19 220959.83
+20 162400.47
+21 103841.12
+22  45281.76</code></pre>
 </div>
 </div>
 </section>
@@ -1067,6 +1068,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Profit from solar energy system in agrivoltaic setting</p>
 <ul>
 <li>eprofit = profit from electricity after subtracting total cost (ttlcost) from total revenue (elcrev).</li>
+<li>Comments: Subtract annual maintenance cost and annualized CAPEX for 25 years at 5% interest rate.</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>solar_profit <span class="ot">&lt;-</span> energy_cost <span class="sc">%&gt;%</span> </span>
@@ -1478,48 +1480,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a>strawberry_profit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   yldvar  yield    rolac3    rolac4    rolac5    rolac6    rolac7    rolac8
-3     2.0 6150.0 -14040.49 -14040.49 -14040.49 -14040.49 -14040.49 -14040.49
-4     1.9 5842.5 -14347.99 -14347.99 -14347.99 -14347.99 -14347.99 -14347.99
-5     1.8 5535.0 -14655.49 -14655.49 -14655.49 -14655.49 -14655.49 -14655.49
-6     1.7 5227.5 -14962.99 -14962.99 -14962.99 -14962.99 -14962.99 -14962.99
-7     1.6 4920.0 -15270.49 -15270.49 -15270.49 -15270.49 -15270.49 -15270.49
-8     1.5 4612.5 -15577.99 -15577.99 -15577.99 -15577.99 -15577.99 -15577.99
-9     1.4 4305.0 -15885.49 -15885.49 -15885.49 -15885.49 -15885.49 -15885.49
-10    1.3 3997.5 -16192.99 -16192.99 -16192.99 -16192.99 -16192.99 -16192.99
-11    1.2 3690.0 -16500.49 -16500.49 -16500.49 -16500.49 -16500.49 -16500.49
-12    1.1 3382.5 -16807.99 -16807.99 -16807.99 -16807.99 -16807.99 -16807.99
-13    1.0 3075.0 -17115.49 -17115.49 -17115.49 -17115.49 -17115.49 -17115.49
-14    0.9 2767.5 -17422.99 -17422.99 -17422.99 -17422.99 -17422.99 -17422.99
-15    0.8 2460.0 -17730.49 -17730.49 -17730.49 -17730.49 -17730.49 -17730.49
-16    0.7 2152.5 -18037.99 -18037.99 -18037.99 -18037.99 -18037.99 -18037.99
-17    0.6 1845.0 -18345.49 -18345.49 -18345.49 -18345.49 -18345.49 -18345.49
-18    0.5 1537.5 -18652.99 -18652.99 -18652.99 -18652.99 -18652.99 -18652.99
-19    0.4 1230.0 -18960.49 -18960.49 -18960.49 -18960.49 -18960.49 -18960.49
-20    0.3  922.5 -19267.99 -19267.99 -19267.99 -19267.99 -19267.99 -19267.99
-21    0.2  615.0 -19575.49 -19575.49 -19575.49 -19575.49 -19575.49 -19575.49
-22    0.1  307.5 -19882.99 -19882.99 -19882.99 -19882.99 -19882.99 -19882.99
-      rolac9
-3  -14040.49
-4  -14347.99
-5  -14655.49
-6  -14962.99
-7  -15270.49
-8  -15577.99
-9  -15885.49
-10 -16192.99
-11 -16500.49
-12 -16807.99
-13 -17115.49
-14 -17422.99
-15 -17730.49
-16 -18037.99
-17 -18345.49
-18 -18652.99
-19 -18960.49
-20 -19267.99
-21 -19575.49
-22 -19882.99</code></pre>
+<pre><code>   yldvar  yield    rolac3     rolac4       rolac5     rolac6     rolac7
+3     2.0 6150.0 -14040.49  -1740.495   4409.50503  10559.505 127409.505
+4     1.9 5842.5 -14002.35  -2317.350   3525.15003   9367.650 120375.150
+5     1.8 5535.0 -13964.20  -2894.205   2640.79503   8175.795 113340.795
+6     1.7 5227.5 -13926.06  -3471.060   1756.44003   6983.940 106306.440
+7     1.6 4920.0 -13887.91  -4047.915    872.08503   5792.085  99272.085
+8     1.5 4612.5 -13849.77  -4624.770    -12.26997   4600.230  92237.730
+9     1.4 4305.0 -13811.62  -5201.625   -896.62497   3408.375  85203.375
+10    1.3 3997.5 -13773.48  -5778.480  -1780.97997   2216.520  78169.020
+11    1.2 3690.0 -13735.33  -6355.335  -2665.33497   1024.665  71134.665
+12    1.1 3382.5 -13697.19  -6932.190  -3549.68997   -167.190  64100.310
+13    1.0 3075.0 -13659.04  -7509.045  -4434.04497  -1359.045  57065.955
+14    0.9 2767.5 -13620.90  -8085.900  -5318.39997  -2550.900  50031.600
+15    0.8 2460.0 -13582.75  -8662.755  -6202.75497  -3742.755  42997.245
+16    0.7 2152.5 -13544.61  -9239.610  -7087.10997  -4934.610  35962.890
+17    0.6 1845.0 -13506.46  -9816.465  -7971.46497  -6126.465  28928.535
+18    0.5 1537.5 -13468.32 -10393.320  -8855.81997  -7318.320  21894.180
+19    0.4 1230.0 -13430.17 -10970.175  -9740.17497  -8510.175  14859.825
+20    0.3  922.5 -13392.03 -11547.030 -10624.52997  -9702.030   7825.470
+21    0.2  615.0 -13353.88 -12123.885 -11508.88497 -10893.885    791.115
+22    0.1  307.5 -13315.74 -12700.740 -12393.23997 -12085.740  -6243.240
+       rolac8     rolac9
+3   22859.505 1160609.51
+4   21052.650 1101915.15
+5   19245.795 1043220.80
+6   17438.940  984526.44
+7   15632.085  925832.09
+8   13825.230  867137.73
+9   12018.375  808443.38
+10  10211.520  749749.02
+11   8404.665  691054.67
+12   6597.810  632360.31
+13   4790.955  573665.96
+14   2984.100  514971.60
+15   1177.245  456277.25
+16   -629.610  397582.89
+17  -2436.465  338888.54
+18  -4243.320  280194.18
+19  -6050.175  221499.83
+20  -7857.030  162805.47
+21  -9663.885  104111.12
+22 -11470.740   45416.76</code></pre>
 </div>
 </div>
 <p>Convert data to long format:</p>
@@ -1550,20 +1552,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>  yldvar  yield Price    Profit
 1    2.0 6150.0     3 -14040.49
-2    1.9 5842.5     3 -14347.99
-3    1.8 5535.0     3 -14655.49
-4    1.7 5227.5     3 -14962.99
-5    1.6 4920.0     3 -15270.49
-6    1.5 4612.5     3 -15577.99</code></pre>
+2    1.9 5842.5     3 -14002.35
+3    1.8 5535.0     3 -13964.20
+4    1.7 5227.5     3 -13926.06
+5    1.6 4920.0     3 -13887.91
+6    1.5 4612.5     3 -13849.77</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    yldvar  yield Price    Profit
-135    0.6 1845.0     9 -18345.49
-136    0.5 1537.5     9 -18652.99
-137    0.4 1230.0     9 -18960.49
-138    0.3  922.5     9 -19267.99
-139    0.2  615.0     9 -19575.49
-140    0.1  307.5     9 -19882.99</code></pre>
+135    0.6 1845.0     9 338888.54
+136    0.5 1537.5     9 280194.18
+137    0.4 1230.0     9 221499.83
+138    0.3  922.5     9 162805.47
+139    0.2  615.0     9 104111.12
+140    0.1  307.5     9  45416.76</code></pre>
 </div>
 </div>
 </section>
@@ -1672,7 +1674,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Total profit from solar and crops for all combinations of AVs simulated.</p>
 <section id="profit-from-tomato-agrivoltaic-system" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="profit-from-tomato-agrivoltaic-system"><span class="header-section-number">7.1</span> Profit from tomato agrivoltaic system</h2>
-<p>Joint profit from tomato and solar energy production from 1 acre of land.</p>
+<p>Joint profit from tomato (tomato_long) and solar energy production (solar_profit) from 1 acre of land.</p>
 <p>WORK ON PROGRESS. NOT THE FINAL RESULT AND CODE</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="do">## | results='hide'</span></span>
@@ -1700,7 +1702,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="profit-from-strawberry-agrivoltaic-system" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="profit-from-strawberry-agrivoltaic-system"><span class="header-section-number">7.2</span> Profit from strawberry agrivoltaic system</h2>
-<p>Joint profit from strawberry and solar energy production from 1 acre of land.</p>
+<p>Joint profit from strawberry (stberry_long) and solar energy production (solar_profit) from 1 acre of land.</p>
 <p>WORK ON PROGRESS. NOT THE FINAL RESULT AND CODE</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb125"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="do">## | results='hide'</span></span>
@@ -1728,7 +1730,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="profit-from-squash-agrivoltaic-system" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="profit-from-squash-agrivoltaic-system"><span class="header-section-number">7.3</span> Profit from squash agrivoltaic system</h2>
-<p>Joint profit from squash and solar energy production from 1 acre of land.</p>
+<p>Joint profit from squash (squash_long) and solar energy production (solar_profit) from 1 acre of land.</p>
 <p>WORK ON PROGRESS. NOT THE FINAL RESULT AND CODE</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="do">## | results='hide'</span></span>

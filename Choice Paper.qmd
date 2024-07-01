@@ -163,6 +163,8 @@ head(tomato); tail(tomato)
 
 -   Numbers 3 to 9 in names are price ranges for strawberry.
 
+-   Comment: Fix revenue table. This calculation is incorrect.
+
 ```{r}
 strawberry <- read_xlsx("Parameters.xlsx",
                         sheet = "Strawberry",
@@ -529,6 +531,7 @@ head(energy_cost); tail(energy_cost)
 Profit from solar energy system in agrivoltaic setting
 
 -   eprofit = profit from electricity after subtracting total cost (ttlcost) from total revenue (elcrev).
+-   Comments: Subtract annual maintenance cost and annualized CAPEX for 25 years at 5% interest rate.
 
 ```{r}
 solar_profit <- energy_cost %>% 
@@ -687,7 +690,7 @@ Total profit from solar and crops for all combinations of AVs simulated.
 
 ## Profit from tomato agrivoltaic system
 
-Joint profit from tomato and solar energy production from 1 acre of land.
+Joint profit from tomato (tomato_long) and solar energy production (solar_profit) from 1 acre of land.
 
 WORK ON PROGRESS. NOT THE FINAL RESULT AND CODE
 
@@ -717,7 +720,7 @@ head(result_matrix); tail(result_matrix)
 
 ## Profit from strawberry agrivoltaic system
 
-Joint profit from strawberry and solar energy production from 1 acre of land.
+Joint profit from strawberry (stberry_long) and solar energy production (solar_profit) from 1 acre of land.
 
 WORK ON PROGRESS. NOT THE FINAL RESULT AND CODE
 
@@ -747,7 +750,7 @@ head(result_matrix); tail(result_matrix)
 
 ## Profit from squash agrivoltaic system
 
-Joint profit from squash and solar energy production from 1 acre of land.
+Joint profit from squash (squash_long) and solar energy production (solar_profit) from 1 acre of land.
 
 WORK ON PROGRESS. NOT THE FINAL RESULT AND CODE
 
