@@ -154,7 +154,8 @@ tomato <- read_xlsx("Parameters.xlsx",
   rename(yield = Yield,
          yldvar = `Yield Variation (%)`)
 dim(tomato)
-head(tomato); tail(tomato)
+head(tomato)
+tail(tomato)
 ```
 
 ## Strawberry
@@ -162,8 +163,6 @@ head(tomato); tail(tomato)
 -   Everything same as tomato.
 
 -   Numbers 3 to 9 in names are price ranges for strawberry.
-
--   Comment: Fix revenue table. This calculation is incorrect.
 
 ```{r}
 strawberry <- read_xlsx("Parameters.xlsx",
@@ -176,7 +175,8 @@ strawberry <- read_xlsx("Parameters.xlsx",
   rename(yield = Yield,
          yldvar = `Yield Variation (%)`)
 dim(strawberry)
-head(strawberry); tail(strawberry)
+head(strawberry)
+tail(strawberry)
 ```
 
 ## Squash
@@ -196,12 +196,15 @@ squash <- read_xlsx("Parameters.xlsx",
   rename(yield = Yield,
          yldvar = `Yield Variation (%)`)
 dim(squash)
-head(squash); tail(squash)
+head(squash)
+tail(squash)
 ```
 
 ## Electricity price
 
-Electricity price (\$/kWh) is retail electricity price range for Alabama based on retail electricity price in April 2023 and April 2024 taken from [DOE Database](https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_6_a). Retail electricity price range in Alabama was from 6.44 to 15.85 cents/kWh in April 2023 and April 2024 which represents industry, commercial, and residential prices.
+Electricity price ranges from 1 cents to 6 cents in 0.5 cent increment. Previously, I used AL retail electricity price as described below. It's no longer in use but I description below here for the record.
+
+Electricity price (\$/kWh) was retail electricity price range for Alabama based on retail electricity price in April 2023 and April 2024 taken from [DOE Database](https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_6_a). Retail electricity price range in Alabama was from 6.44 to 15.85 cents/kWh in April 2023 and April 2024 which represents industry, commercial, and residential prices.
 
 ```{r}
 elec_price <- read_xlsx("Parameters.xlsx",
@@ -215,6 +218,11 @@ elec_price
 
 -   Data taken from "[Capital Costs for Dual-Use Photovoltaic Installations: 2020 Benchmark](https://www.nrel.gov/docs/fy21osti/77811.pdf){.uri}" Table 1 and Figure 3.
 -   This data was used to estimate CAPEX.
+-   avtyps = agrivoltaic types.
+-   item = itemized component of system.
+-   cost = cost of each item.
+-   height = ground to panel clearance height (ft.)
+-   tcost = Total cost is the sum of all itemized cost for AV system. See figure 3 and table 1 in above document for more detail.
 
 ```{r}
 pvsc <- wb_read(file = "Parameters.xlsx",
@@ -228,7 +236,8 @@ pvsc <- wb_read(file = "Parameters.xlsx",
          height = `Panel Height (ft.)`,
          tcost = `Total Cost ($/W)`)
 dim(pvsc)
-head(pvsc); tail(pvsc)
+head(pvsc)
+tail(pvsc)
 ```
 
 ## Capex (NREL)
@@ -237,13 +246,11 @@ Variable Descriptions:
 
 -   Capex: Capital investment cost (\$/W) to develop solar energy system. Capex includes cost of physical structure, developer's overhead and EPC/Developer's net profit.
 
--   capex = f(height, tracker) using OLS.
+-   capex estimated as f(height, tracker) using OLS for 6.4 ft Tracking system.
 
 -   Height = ground to panel clearance in ft.
 
 -   array: Solar array. Tracker = Single axis sun tracking panels; Fixed = Non-tracking panels.
-
--   kwcapex = Capex converted to \$/kW.
 
 ```{r}
 capex <- read.table(file = "CAPEX.txt",
@@ -278,12 +285,13 @@ plottheme %>% ggplot(data = capex,
     color = "Array"
     ) +
   scale_x_continuous(limits = c(4.5, 8.5)) +
-  scale_y_continuous(limits = c(1.5, 2.5))
+  scale_y_continuous(limits = c(1.5, 2.5)) +
+  guides(color = guide_legend(reverse = TRUE))
 ```
 
 ## Panel Configuration
 
--   Panel configuration and DV system output (W)
+-   Panel configuration and DV system output (W).
 
 ```{r}
 panconf <- wb_read(file = "Parameters.xlsx",
@@ -299,8 +307,7 @@ panconf <- wb_read(file = "Parameters.xlsx",
   #        height = `Panel Height (ft.)`,
   #        tcost = `Total Cost ($/W)`)
 dim(panconf)
-#names(panconf)
-#panconf
+#head(panconf); tail(panconf)
 ```
 
 ## Energy output
@@ -323,7 +330,7 @@ Energy output was simulated using NREL [PV Watts Calculator](https://pvwatts.nre
 
 ```{r}
 energy_output <- read_xlsx("Parameters.xlsx",
-                              sheet = "Energy Output") %>% 
+                              sheet = "Energy Output Archived") %>% 
   rename(panels = TotalPanels,
          datalot = DataLot,
          al_regs = `Region of AL`,
@@ -338,7 +345,8 @@ energy_output <- read_xlsx("Parameters.xlsx",
            TRUE ~ array))
   #filter(datalot == 2)
 dim(energy_output)
-head(energy_output); tail(energy_output)
+head(energy_output)
+tail(energy_output)
 ```
 
 ### Energy output by solar panels counts
@@ -358,7 +366,8 @@ ggplot(data = energy_output,
   geom_line()+
   geom_point() +
   facet_grid(datalot~array) +
-  scale_x_discrete(limits = lox)
+  scale_x_discrete(limits = lox) +
+  guides(color = guide_legend(reverse = TRUE))
 ```
 
 ### Energy output by DC System Size
@@ -375,7 +384,8 @@ ggplot(data = energy_output,
   geom_line()+
   geom_point() +
   facet_grid(datalot~array) +
-  scale_x_discrete(limits = lox)
+  scale_x_discrete(limits = lox) +
+  guides(color = guide_legend(reverse = TRUE))
 ```
 
 # Revenue from energy
@@ -454,7 +464,8 @@ for (i in 1:nrow(matrix2)) {
 
 # Display the resulting matrix
 dim(result_matrix)
-head(result_matrix); tail(result_matrix)
+head(result_matrix)
+tail(result_matrix)
 ```
 
 ## Plotting revenue from energy production
@@ -476,7 +487,8 @@ for (i in unique(energy_revenue$elcprc)) {
   geom_line()+
   geom_point()+
   facet_grid(datalot~array) +
-  scale_x_discrete(limits = lox)
+  scale_x_discrete(limits = lox) +
+   guides(color = guide_legend(reverse = TRUE))
  cat("Electricity Price = ", i)
  print(a)
 }
@@ -523,7 +535,8 @@ energy_cost <- left_join(energy_cost,
                          by = c("array", "height")) %>% 
   mutate(ttlcost = capex*dc_kw) #Convert $ in kW
 dim(energy_cost)
-head(energy_cost); tail(energy_cost)
+head(energy_cost)
+tail(energy_cost)
 ```
 
 # Profit from solar
@@ -537,7 +550,8 @@ Profit from solar energy system in agrivoltaic setting
 solar_profit <- energy_cost %>% 
   mutate(eprofit = elcrev - ttlcost)
 dim(solar_profit)
-head(solar_profit); tail(solar_profit)
+head(solar_profit)
+tail(solar_profit)
 ```
 
 ## Plot profit from solar
@@ -562,7 +576,8 @@ for (i in unique(solar_profit$datalot)) {
       geom_line() +
       geom_point() +
       facet_grid(height ~ array) +
-      scale_x_discrete(limits = lox)
+      scale_x_discrete(limits = lox) +
+      guides(color = guide_legend(reverse = TRUE))
     cat("Datalot = ", i, "and ")
     cat("Electricity Price = ", j)
     print(b)
@@ -599,15 +614,51 @@ tomato_long <- melt(tomato_profit,
                 measure.vars = c("rolac17", "rolac18", "rolac19",
                                  "rolac20", "rolac21", "rolac22",
                                  "rolac23"),
-                variable.name = "Price",
-                value.name = "Profit")
+                variable.name = "price",
+                value.name = "profit")
 
 # Convert the 'Price' column to numeric by extracting the number
-tomato_long$Price <- as.numeric(gsub("rolac", "", tomato_long$Price))
+tomato_long$price <- as.numeric(gsub("rolac", "", tomato_long$price))
 
 # View the resulting data frame
 dim(tomato_long)
-head(tomato_long); tail(tomato_long)
+head(tomato_long)
+tail(tomato_long)
+```
+
+### Profit from tomato
+
+```{r}
+ggplot(data = tomato_long,
+       mapping = aes(x = price,
+                     y = profit,
+                     color = factor(yldvar),
+                     group = factor(yield))) +
+  geom_line() +
+  geom_point() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed",
+             color = "black") +
+  guides(color = guide_legend(reverse = TRUE))
+```
+
+```{r}
+ggplot(data = tomato_long,
+       mapping = aes(x = yield,
+                     y = profit,
+                     #fill = yield,
+                     color = factor(price),
+                     group = factor(price))) +
+  geom_line() +
+  geom_point() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed",
+             color = "black") +
+  # Vertical dashed line is 100% yield
+  geom_vline(xintercept = tomato_long$yield[11],
+             linetype = "dashed",
+             color = "black") +
+guides(color = guide_legend(reverse = TRUE))
 ```
 
 ## Strawberry
@@ -636,15 +687,50 @@ stberry_long <- melt(strawberry_profit,
                 measure.vars = c("rolac3", "rolac4", "rolac5",
                                  "rolac6", "rolac7", "rolac8",
                                  "rolac9"),
-                variable.name = "Price",
-                value.name = "Profit")
+                variable.name = "price",
+                value.name = "profit")
 
 # Convert the 'Price' column to numeric by extracting the number
-stberry_long$Price <- as.numeric(gsub("rolac", "", stberry_long$Price))
+stberry_long$price <- as.numeric(gsub("rolac", "", stberry_long$price))
 
 # View the resulting data frame
 dim(stberry_long)
-head(stberry_long); tail(stberry_long)
+head(stberry_long)
+tail(stberry_long)
+```
+
+### Plot Strawberry Profit
+
+```{r}
+ggplot(data = stberry_long,
+       mapping = aes(x = price,
+                     y = profit,
+                     color = factor(yldvar),
+                     group = factor(yield))) +
+  geom_line() +
+  geom_point() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed",
+             color = "black") +
+  guides(color = guide_legend(reverse = TRUE))
+```
+
+```{r}
+ggplot(data = stberry_long,
+       mapping = aes(x = yield,
+                     y = profit,
+                     color = factor(price),
+                     group = factor(price))) +
+  geom_line() +
+  geom_point() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed",
+             color = "black") +
+  #Vertical dashed line is 100% yield
+  geom_vline(xintercept = stberry_long$yield[11],
+             linetype = "dashed",
+             color = "black") +
+  guides(color = guide_legend(reverse = TRUE))
 ```
 
 ## Squash
@@ -673,15 +759,50 @@ squash_long <- melt(squash_profit,
                 measure.vars = c("rolac11", "rolac12", "rolac13",
                                  "rolac14", "rolac15", "rolac16",
                                  "rolac17"),
-                variable.name = "Price",
-                value.name = "Profit")
+                variable.name = "price",
+                value.name = "profit")
 
 # Convert the 'Price' column to numeric by extracting the number
-squash_long$Price <- as.numeric(gsub("rolac", "", squash_long$Price))
+squash_long$price <- as.numeric(gsub("rolac", "", squash_long$price))
 
 # View the resulting data frame
 dim(squash_long)
-head(squash_long); tail(squash_long)
+head(squash_long)
+tail(squash_long)
+```
+
+### Profit from squash:
+
+```{r}
+ggplot(data = squash_long,
+       mapping = aes(x = price,
+                     y = profit,
+                     color = factor(yldvar),
+                     group = factor(yield))) +
+  geom_line() +
+  geom_point() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed",
+             color = "black") +
+  guides(color = guide_legend(reverse = TRUE))
+```
+
+```{r}
+ggplot(data = squash_long,
+       mapping = aes(x = yield,
+                     y = profit,
+                     color = factor(price),
+                     group = factor(price))) +
+  geom_line() +
+  geom_point() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed",
+             color = "black") +
+  # Vertical dashed line is 100% yield
+    geom_vline(xintercept = squash_long$yield[11],
+             linetype = "dashed",
+             color = "black") +
+  guides(color = guide_legend(reverse = TRUE))
 ```
 
 # Profit from agrivoltaics
@@ -715,7 +836,8 @@ for (i in 1:nrow(matrix2)) {
 
 # Display the resulting matrix
 dim(result_matrix)
-head(result_matrix); tail(result_matrix)
+head(result_matrix)
+tail(result_matrix)
 ```
 
 ## Profit from strawberry agrivoltaic system
@@ -745,7 +867,8 @@ for (i in 1:nrow(matrix2)) {
 
 # Display the resulting matrix
 dim(result_matrix)
-head(result_matrix); tail(result_matrix)
+head(result_matrix)
+tail(result_matrix)
 ```
 
 ## Profit from squash agrivoltaic system
@@ -775,5 +898,6 @@ for (i in 1:nrow(matrix2)) {
 
 # Display the resulting matrix
 dim(result_matrix)
-head(result_matrix); tail(result_matrix)
+head(result_matrix)
+tail(result_matrix)
 ```
