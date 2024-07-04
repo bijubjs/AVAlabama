@@ -53,10 +53,30 @@ library(ggpubr, warn.conflicts = FALSE, quietly = TRUE) # Scatter plot
 library(gmodels,  warn.conflicts = FALSE, quietly = TRUE) # Crosstab
 library(reshape2, warn.conflicts = FALSE, quietly = TRUE) # Reshape data
 library(pacman,  warn.conflicts = FALSE, quietly = TRUE) # Package Management
+library(progress, warn.conflicts = FALSE, quietly = TRUE) #progress bar
 ```
 
 ```{r}
 pacman::p_loaded()
+```
+
+# Progress Bar
+
+```{r}
+####### Progress Bar #####
+pb = progress_bar$new(
+  format = "Processing data at :rate. Processed :bytes in :elapsed.",
+  clear = TRUE,
+  total = NA, 
+  width = 80)
+f = function() {
+  for (i in 1:100) {
+    pb$tick(sample(1:100 * 1000, 1))
+    Sys.sleep(2/100)
+  }
+  pb$tick(1e7)
+  #invisible()
+}
 ```
 
 ## Theme for plots
@@ -815,29 +835,41 @@ Joint profit from tomato (tomato_long) and solar energy production (solar_profit
 
 WORK ON PROGRESS. NOT THE FINAL RESULT AND CODE
 
-```{r, echo=TRUE, results='hide', error=TRUE, warning=TRUE}
+```{r, echo=TRUE, results='show', error=TRUE, warning=TRUE}
 ## | results='hide'
 # Sample data
 set.seed(123)
-matrix1 <- energy_output # dimension of matrix is 176*7
-matrix2 <- elec_price # dimension of matrix is 11*1
+# Initialize the result data frame
+#tomatoav_profit <- data.frame(matrix(nrow = 813120, ncol = 17))
+tomatoAV_profit <- data.frame(
+  matrix(nrow = nrow(tomato_long)*nrow(solar_profit),
+         ncol = 18))
 
-# Initializing the result matrix
-result_matrix <- data.frame(matrix(ncol = 9, nrow = 0))
-colnames(result_matrix) <- c(colnames(matrix1),  "elcrev", "elcprc")
+# Variable to keep track of the row index in the result matrix
+row_index <- 1
 
-# Loop to multiply first and second matrices
-for (i in 1:nrow(matrix2)) {
-  temp_matrix <- matrix1
-  temp_matrix$E_Prc <- matrix2[i, 1]
-  temp_matrix$E_Rev <- matrix2[i, 1] * matrix1[, 7]
-  result_matrix <- rbind(result_matrix, temp_matrix)
+# Loop through each value of the second matrix
+for (i in 1:nrow(tomato_long)) {
+  f() #Progress bar.
+  # Loop through each value of the second matrix
+  for (j in 1:nrow(solar_profit)) {
+    # First matrix, second matrix, combined two matrices.
+    new_row <- c(solar_profit[j, ], tomato_long[i, ], 
+                 solar_profit[j, 13] + tomato_long[i, 4])
+    # Assign the new row to the result matrix
+    tomatoAV_profit[row_index, ] <- new_row
+    # Increment the row index
+    row_index <- row_index + 1
+  }
 }
+# Name the columns
+colnames(tomatoAV_profit) <- c(colnames(solar_profit), 
+                               colnames(tomato_long),
+                               "tav_prft")
 
-# Display the resulting matrix
-dim(result_matrix)
-head(result_matrix)
-tail(result_matrix)
+# Display the result
+dim(tomatoAV_profit)
+head(tomatoAV_profit); tail(tomatoAV_profit)
 ```
 
 ## Profit from strawberry agrivoltaic system
@@ -850,25 +882,37 @@ WORK ON PROGRESS. NOT THE FINAL RESULT AND CODE
 ## | results='hide'
 # Sample data
 set.seed(123)
-matrix1 <- energy_output # dimension of matrix is 176*7
-matrix2 <- elec_price # dimension of matrix is 11*1
+# Initialize the result data frame
+#tomatoav_profit <- data.frame(matrix(nrow = 813120, ncol = 17))
+stbryAV_profit <- data.frame(
+  matrix(nrow = nrow(stberry_long)*nrow(solar_profit),
+         ncol = 18))
 
-# Initializing the result matrix
-result_matrix <- data.frame(matrix(ncol = 9, nrow = 0))
-colnames(result_matrix) <- c(colnames(matrix1),  "elcrev", "elcprc")
+# Variable to keep track of the row index in the result matrix
+row_index <- 1
 
-# Loop to multiply first and second matrices
-for (i in 1:nrow(matrix2)) {
-  temp_matrix <- matrix1
-  temp_matrix$E_Prc <- matrix2[i, 1]
-  temp_matrix$E_Rev <- matrix2[i, 1] * matrix1[, 7]
-  result_matrix <- rbind(result_matrix, temp_matrix)
+# Loop through each value of the second matrix
+for (i in 1:nrow(stberry_long)) {
+  f() #Progress bar.
+  # Loop through each value of the second matrix
+  for (j in 1:nrow(solar_profit)) {
+    # First matrix, second matrix, combined two matrices.
+    new_row <- c(solar_profit[j, ], stberry_long[i, ], 
+                 solar_profit[j, 13] + stberry_long[i, 4])
+    # Assign the new row to the result matrix
+    stbryAV_profit[row_index, ] <- new_row
+    # Increment the row index
+    row_index <- row_index + 1
+  }
 }
+# Name the columns
+colnames(stbryAV_profit) <- c(colnames(solar_profit), 
+                               colnames(stberry_long),
+                               "stav_prft")
 
-# Display the resulting matrix
-dim(result_matrix)
-head(result_matrix)
-tail(result_matrix)
+# Display the result
+dim(stbryAV_profit)
+head(stbryAV_profit); tail(stbryAV_profit)
 ```
 
 ## Profit from squash agrivoltaic system
@@ -881,23 +925,35 @@ WORK ON PROGRESS. NOT THE FINAL RESULT AND CODE
 ## | results='hide'
 # Sample data
 set.seed(123)
-matrix1 <- energy_output # dimension of matrix is 176*7
-matrix2 <- elec_price # dimension of matrix is 11*1
+# Initialize the result data frame
+#tomatoav_profit <- data.frame(matrix(nrow = 813120, ncol = 17))
+squashAV_profit <- data.frame(
+  matrix(nrow = nrow(squash_long)*nrow(solar_profit),
+         ncol = 18))
 
-# Initializing the result matrix
-result_matrix <- data.frame(matrix(ncol = 9, nrow = 0))
-colnames(result_matrix) <- c(colnames(matrix1),  "elcrev", "elcprc")
+# Variable to keep track of the row index in the result matrix
+row_index <- 1
 
-# Loop to multiply first and second matrices
-for (i in 1:nrow(matrix2)) {
-  temp_matrix <- matrix1
-  temp_matrix$E_Prc <- matrix2[i, 1]
-  temp_matrix$E_Rev <- matrix2[i, 1] * matrix1[, 7]
-  result_matrix <- rbind(result_matrix, temp_matrix)
+# Loop through each value of the second matrix
+for (i in 1:nrow(squash_long)) {
+  f() #Progress bar.
+  # Loop through each value of the second matrix
+  for (j in 1:nrow(solar_profit)) {
+    # First matrix, second matrix, combined two matrices.
+    new_row <- c(solar_profit[j, ], squash_long[i, ], 
+                 solar_profit[j, 13] + squash_long[i, 4])
+    # Assign the new row to the result matrix
+    squashAV_profit[row_index, ] <- new_row
+    # Increment the row index
+    row_index <- row_index + 1
+  }
 }
+# Name the columns
+colnames(squashAV_profit) <- c(colnames(solar_profit), 
+                               colnames(squash_long),
+                               "sqav_prft")
 
-# Display the resulting matrix
-dim(result_matrix)
-head(result_matrix)
-tail(result_matrix)
+# Display the result
+dim(squashAV_profit)
+head(squashAV_profit); tail(squashAV_profit)
 ```
