@@ -1,0 +1,13 @@
+name: TomaotAV
+title: TomaotAV
+username: biju9bjs
+account: biju9bjs
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 12287659
+bundleId: 8836107
+url: https://biju9bjs.shinyapps.io/TomaotAV/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .gitattributes|.RData|AV Profit.qmd|AV-Profit.pdf|CAPEX.txt|Enterprize Budget/S.Squash2021.pdf|Enterprize Budget/S.Squash2021.xlsx|Enterprize Budget/Strawberry-8.28.19.pdf|Enterprize Budget/Tomato2021.pdf|Enterprize Budget/Tomato2021.xlsx|Literatures/Horowitz, 2020. CAPEX AV.pdf|Literatures/Macknick, 2022. 5Cs AVs.pdf|Literatures/Mwebaze, 202Y.pdf|Manuscript/AV Configuration.pptx|Manuscript/Choice 06202024_MiaoEdits.docx|Manuscript/Choice 06202024.docx|Manuscript/Choice 06212024.docx|Parameters.xlsx|progit.pdf|PV Cost Backup.txt|PV Cost.ipynb|PV system Cost.txt|README.md|Results.xlsx|sbav_chtbl.csv|Simulation.html|Simulation.ipynb|Simulation.pdf|Simulation.qmd|sqav_chtbl.csv|tav_chtbl.csv

@@ -228,7 +228,7 @@ tail(squash)
 
 ## Electricity price
 
-Electricity price ranges from 1 cents to 6 cents in 0.5 cent increment. Previously, I used AL retail electricity price as described below. It's no longer in use but I description below here for the record.
+Electricity price ranges from 1 cents to 6 cents in 0.5 cent increment. Previously, I used AL retail electricity price as described below. It's no longer in use but I put description below for the record.
 
 Electricity price (\$/kWh) was retail electricity price range for Alabama based on retail electricity price in April 2023 and April 2024 taken from [DOE Database](https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_6_a). Retail electricity price range in Alabama was from 6.44 to 15.85 cents/kWh in April 2023 and April 2024 which represents industry, commercial, and residential prices.
 
@@ -521,7 +521,7 @@ tail(result_matrix)
 
 ### Breakdown by number of solar panels
 
-I am using data from simulation 1 for this visualization. This code plots one chart per electricity cost. There are 11 electricity cost resulting into 11 charts.
+I am using data from simulation 1 for this visualization. This code plots one chart per electricity cost. There are 11 electricity cost resulting into 11 charts. Electricity revenue is average revenue of first and second lots of simulation.
 
 ```{r}
 lox <- c("Northern", "Central", "Black Belt", "Southern")
@@ -577,15 +577,7 @@ for (i in unique(energy_revenue$elcprc)) {
 
 -   Cost of solar energy system in agrivoltaic setting.
 
--   I used DC system size (dc_kw) and capex (\$/W) to get total cost for each height and panel tracking system.
-
--   1 kw dc system size costs x\$ CAPEX for given height and tracking system.
-
--   y kw dc system size costs \$x\*y for given height and tracking system.
-
--   Use simulation 1 data and capex data to get solar system cost.
-
--   There should be 1936\*3 = 5808 rows in this dataset.
+-   I used DC system size (dc_kw) and capex (\$/w) to get total cost for each height and panel tracking system.
 
 -   height = height of solar panels; see capex dataset for details.
 

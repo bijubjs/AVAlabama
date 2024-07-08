@@ -58,7 +58,7 @@ library(gmodels,  warn.conflicts = FALSE, quietly = TRUE) # Crosstab
 library(reshape2, warn.conflicts = FALSE, quietly = TRUE) # Reshape data
 library(pacman,  warn.conflicts = FALSE, quietly = TRUE) # Package Management
 library(progress, warn.conflicts = FALSE, quietly = TRUE) #progress bar
-library(arrow, warn.conflicts = FALSE, quietly = TRUE) #progress bar
+library(arrow, warn.conflicts = FALSE, quietly = TRUE) #feather
 ```
 
 ```{r}
@@ -282,7 +282,7 @@ param_combinations <- expand.grid(elcprc = elcprc,
                                   array = array, 
                                   sprop = sprop)
 
-# Merge with tav_profit to get av_profit values for each combination
+# Merge with tav_profit to get tav_profit values for each combination
 merged_data <- merge(param_combinations, 
                      tav_profit, 
                      by = required_columns,
@@ -300,7 +300,7 @@ merged_data$row_name <- apply(
                      x[3], "_",
                      x[2], "_", x[1]))
 
-# Fill the matrix with av_profit values
+# Fill the matrix with tav_profit values
 for (i in seq_len(nrow(result_matrix))) {
   row_condition <- rownames(result_matrix)[i]
   row_data <- merged_data[
@@ -319,7 +319,6 @@ write.csv(as.data.frame(result_matrix),
           row.names = TRUE,
           col.names = TRUE,
           file = "tav_chtbl.csv")
-# Display the result matrix
 dim(as.data.frame(result_matrix))
 ```
 
@@ -334,6 +333,7 @@ dim(as.data.frame(result_matrix))
 -   Values displayed in the table are profit from Tomato AV system.
 
 ```{r}
+# Display the result matrix
 head(result_matrix)
 tail(result_matrix)
 ```
@@ -362,7 +362,7 @@ elcprc <- c(0.01, 0.03, 0.06)
 required_columns <- c("sprop", "array", "height", 
                       "al_regs", "yldvar", "price", "elcprc")
 
-# Check if the columns exist in tav_profit
+# Check if the columns exist in sbav_profit
 missing_columns <- setdiff(required_columns, 
                            names(sbav_profit))
 if (length(missing_columns) > 0) {
@@ -397,7 +397,7 @@ param_combinations <- expand.grid(elcprc = elcprc,
                                   array = array, 
                                   sprop = sprop)
 
-# Merge with tav_profit to get av_profit values for each combination
+# Merge with tav_profit to get sbav_profit values for each combination
 merged_data <- merge(param_combinations, 
                      sbav_profit, 
                      by = required_columns,
@@ -415,7 +415,7 @@ merged_data$row_name <- apply(
                      x[3], "_",
                      x[2], "_", x[1]))
 
-# Fill the matrix with av_profit values
+# Fill the matrix with sbav_profit values
 for (i in seq_len(nrow(result_matrix))) {
   row_condition <- rownames(result_matrix)[i]
   row_data <- merged_data[
@@ -434,7 +434,6 @@ write.csv(as.data.frame(result_matrix),
           row.names = TRUE,
           col.names = TRUE,
           file = "sbav_chtbl.csv")
-# Display the result matrix
 dim(as.data.frame(result_matrix))
 ```
 
@@ -449,6 +448,7 @@ dim(as.data.frame(result_matrix))
 -   Values displayed in the table are profit from Strawberry AV system.
 
 ```{r}
+# Display the result matrix
 head(result_matrix)
 tail(result_matrix)
 ```
@@ -477,7 +477,7 @@ elcprc <- c(0.01, 0.03, 0.06)
 required_columns <- c("sprop", "array", "height", 
                       "al_regs", "yldvar", "price", "elcprc")
 
-# Check if the columns exist in tav_profit
+# Check if the columns exist in sqav_profit
 missing_columns <- setdiff(required_columns, 
                            names(sqav_profit))
 if (length(missing_columns) > 0) {
@@ -512,7 +512,7 @@ param_combinations <- expand.grid(elcprc = elcprc,
                                   array = array, 
                                   sprop = sprop)
 
-# Merge with tav_profit to get av_profit values for each combination
+# Merge with tav_profit to get sqav_profit values for each combination
 merged_data <- merge(param_combinations, 
                      sqav_profit, 
                      by = required_columns,
@@ -530,7 +530,7 @@ merged_data$row_name <- apply(
                      x[3], "_",
                      x[2], "_", x[1]))
 
-# Fill the matrix with av_profit values
+# Fill the matrix with sqav_profit values
 for (i in seq_len(nrow(result_matrix))) {
   row_condition <- rownames(result_matrix)[i]
   row_data <- merged_data[
@@ -548,7 +548,6 @@ for (i in seq_len(nrow(result_matrix))) {
 write.csv(as.data.frame(result_matrix),
           row.names = TRUE,
           file = "sqav_chtbl.csv")
-# Display the result matrix
 dim(as.data.frame(result_matrix))
 ```
 
@@ -563,6 +562,7 @@ dim(as.data.frame(result_matrix))
 -   Values displayed in the table are profit from Squash AV system.
 
 ```{r}
+# Display the result matrix
 head(result_matrix)
 tail(result_matrix)
 ```
