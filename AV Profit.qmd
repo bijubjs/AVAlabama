@@ -37,12 +37,12 @@ options(
 
 Codes and output are suppressed. Errors and warnings are visible. No warning and no error means code is working as it should.
 
-```{r, echo=FALSE, results='hide', include = FALSE, error=TRUE, warning=TRUE}
-path_mac = "/Users/bmishra/Library/CloudStorage/OneDrive-AuburnUniversity/Collaboration/Ngbede M/Choice-paper"
-path_office = "Users\\bzm0094\\OneDrive - Auburn University\\Collaboration\\Ngbede M\\Choice-paper"
-ifelse(Sys.info()[6] == "bmishra", 
-       setwd(path_mac), 
-       setwd(path_office))
+```{r, echo=FALSE, results='hide', error=TRUE, warning=TRUE}
+# path_mac = "/Users/bmishra/Library/CloudStorage/OneDrive-AuburnUniversity/Collaboration/Ngbede M/Choice-paper"
+# path_office = "Users\\bzm0094\\OneDrive - Auburn University\\Collaboration\\Ngbede M\\Choice-paper"
+# ifelse(Sys.info()[6] == "bmishra", 
+#        setwd(path_mac), 
+#        setwd(path_office))
 ```
 
 ## Load libraries
@@ -63,27 +63,6 @@ library(arrow, warn.conflicts = FALSE, quietly = TRUE) #feather
 
 ```{r}
 pacman::p_loaded()
-```
-
-## Progress bar
-
-Tracking data processing progress.
-
-```{r}
-####### Progress Bar #####
-pb = progress_bar$new(
-  format = "Processing data at :rate. Processed :bytes in :elapsed.",
-  clear = TRUE,
-  total = NA, 
-  width = 80)
-f = function() {
-  for (i in 1:100) {
-    pb$tick(sample(1:100 * 1000, 1))
-    Sys.sleep(2/100)
-  }
-  pb$tick(1e7)
-  #invisible()
-}
 ```
 
 ## Theme for plots
@@ -156,7 +135,7 @@ Import necessary data.
 
 ## Tomato AV
 
-sprop = proportion of solar in agrivoltaic system (0 to 1 in 0.5 increment.0
+sprop = proportion of solar in agrivoltaic system (0 to 1 in 0.5 increment.)
 
 al_regs = four regions of Alabama. Northern, Central, Black Belt, Southern.
 
@@ -235,13 +214,13 @@ head(sqav_profit); tail(sqav_profit)
 
 ```{r}
 # Define the values for each variable
-sprop <- c(0, 0.25, 0.50, 0.75, 1.00)
-array <- c("Fixed", "Tracking")
-height <- c(4.6, 6.4, 8.2)
-yldvar <- c(0.10, 0.30, 0.50, 0.70, 1.00, 1.20, 1.50, 1.80, 2.00)
-al_regs <- c("Northern", "Central", "Black Belt", "Southern")
-price <- c(17, 20, 23)
-elcprc <- c(0.01, 0.03, 0.06)
+sprop <- c(0, 0.25, 0.50, 0.75, 1.00) # Land Proportion
+array <- c("Fixed", "Tracking") # Solar Array
+height <- c(4.6, 6.4, 8.2) # Panel height
+yldvar <- c(0.10, 0.30, 0.50, 0.70, 1.00, 1.20, 1.50, 1.80, 2.00) # Crop Yield Variation
+al_regs <- c("Northern", "Central", "Black Belt", "Southern") # Regions of AL
+price <- c(17, 20, 23) # Crop Price
+elcprc <- c(0.02, 0.03, 0.04) # Electricity Price
 
 # Define the required columns
 required_columns <- c("sprop", "array", "height", 
@@ -312,14 +291,16 @@ for (i in seq_len(nrow(result_matrix))) {
                           row_data$tav_profit, 2)
   }
 }
+tav_chtbl <- result_matrix #Table in Excel.
+rm(result_matrix)
 ```
 
 ```{r}
-write.csv(as.data.frame(result_matrix),
+write.csv(as.data.frame(tav_chtbl),
           row.names = TRUE,
           col.names = TRUE,
           file = "tav_chtbl.csv")
-dim(as.data.frame(result_matrix))
+dim(as.data.frame(tav_chtbl))
 ```
 
 -   Row naming: Electricity Price_Crop Price_Solar Proportion_Alabama Regions
@@ -334,16 +315,27 @@ dim(as.data.frame(result_matrix))
 
 ```{r}
 # Display the result matrix
-head(result_matrix)
-tail(result_matrix)
+head(tav_chtbl)
+tail(tav_chtbl)
 ```
 
-### Heatmap
+### Plotting Tomato Profit
 
 -   Result suppressed.
 
 ```{r, echo=FALSE, results='hide', warning=FALSE, error=TRUE}
-
+ggplot(data = tomato_long,
+       mapping = aes(x = price,
+                     y = profit,
+                     color = factor(yldvar),
+                     group = factor(yield))) +
+  geom_line() +
+  geom_point() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed",
+             color = "black") +
+  guides(color = guide_legend(ncol = 2,
+                              reverse = TRUE))
 ```
 
 ## Strawberry AV
@@ -356,7 +348,7 @@ height <- c(4.6, 6.4, 8.2)
 yldvar <- c(0.10, 0.30, 0.50, 0.70, 1.00, 1.20, 1.50, 1.80, 2.00)
 al_regs <- c("Northern", "Central", "Black Belt", "Southern")
 price <- c(3, 6, 9)
-elcprc <- c(0.01, 0.03, 0.06)
+elcprc <- c(0.02, 0.03, 0.04)
 
 # Define the required columns
 required_columns <- c("sprop", "array", "height", 
@@ -427,14 +419,16 @@ for (i in seq_len(nrow(result_matrix))) {
                           row_data$sbav_profit, 2)
   }
 }
+sbav_chtbl <- result_matrix #Table in Excel.
+rm(result_matrix)
 ```
 
 ```{r}
-write.csv(as.data.frame(result_matrix),
+write.csv(as.data.frame(sbav_chtbl),
           row.names = TRUE,
           col.names = TRUE,
           file = "sbav_chtbl.csv")
-dim(as.data.frame(result_matrix))
+dim(as.data.frame(sbav_chtbl))
 ```
 
 -   Row naming: Electricity Price_Crop Price_Solar Proportion_Alabama Regions
@@ -449,8 +443,8 @@ dim(as.data.frame(result_matrix))
 
 ```{r}
 # Display the result matrix
-head(result_matrix)
-tail(result_matrix)
+head(sbav_chtbl)
+tail(sbav_chtbl)
 ```
 
 ### Heatmap
@@ -471,7 +465,7 @@ height <- c(4.6, 6.4, 8.2)
 yldvar <- c(0.10, 0.30, 0.50, 0.70, 1.00, 1.20, 1.50, 1.80, 2.00)
 al_regs <- c("Northern", "Central", "Black Belt", "Southern")
 price <- c(11, 14, 17)
-elcprc <- c(0.01, 0.03, 0.06)
+elcprc <- c(0.02, 0.03, 0.04)
 
 # Define the required columns
 required_columns <- c("sprop", "array", "height", 
@@ -542,13 +536,15 @@ for (i in seq_len(nrow(result_matrix))) {
                           row_data$sqav_profit, 2)
   }
 }
+sqav_chtbl <- result_matrix #Table in Excel.
+rm(result_matrix)
 ```
 
 ```{r}
-write.csv(as.data.frame(result_matrix),
+write.csv(as.data.frame(sqav_chtbl),
           row.names = TRUE,
           file = "sqav_chtbl.csv")
-dim(as.data.frame(result_matrix))
+dim(as.data.frame(sqav_chtbl))
 ```
 
 -   Row naming: Electricity Price_Crop Price_Solar Proportion_Alabama Regions
@@ -563,8 +559,8 @@ dim(as.data.frame(result_matrix))
 
 ```{r}
 # Display the result matrix
-head(result_matrix)
-tail(result_matrix)
+head(sqav_chtbl)
+tail(sqav_chtbl)
 ```
 
 ### Heatmap
