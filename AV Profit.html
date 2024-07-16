@@ -101,11 +101,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#strawberry-av-1" id="toc-strawberry-av-1" class="nav-link" data-scroll-target="#strawberry-av-1"><span class="header-section-number">3.2</span> Strawberry AV</a>
   <ul class="collapse">
-  <li><a href="#heatmap" id="toc-heatmap" class="nav-link" data-scroll-target="#heatmap"><span class="header-section-number">3.2.1</span> Heatmap</a></li>
+  <li><a href="#plotting-strawberry-profit" id="toc-plotting-strawberry-profit" class="nav-link" data-scroll-target="#plotting-strawberry-profit"><span class="header-section-number">3.2.1</span> Plotting Strawberry Profit</a></li>
   </ul></li>
   <li><a href="#squash-av-1" id="toc-squash-av-1" class="nav-link" data-scroll-target="#squash-av-1"><span class="header-section-number">3.3</span> Squash AV</a>
   <ul class="collapse">
-  <li><a href="#heatmap-1" id="toc-heatmap-1" class="nav-link" data-scroll-target="#heatmap-1"><span class="header-section-number">3.3.1</span> Heatmap</a></li>
+  <li><a href="#plotting-squash-profit" id="toc-plotting-squash-profit" class="nav-link" data-scroll-target="#plotting-squash-profit"><span class="header-section-number">3.3.1</span> Plotting Squash Profit</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -162,51 +162,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'tidyr' was built under R version 4.3.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'stringr' was built under R version 4.3.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ dplyr     1.1.4     ✔ readr     2.1.5
 ✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.1
-✔ purrr     1.0.1     
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(likert,  <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co"># Likert Items</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(likert,  <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co"># Likert Items</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mice,  <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openxlsx2, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co"># Scatter plot</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gmodels,  <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co"># Crosstab</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co"># Reshape data</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pacman,  <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co"># Package Management</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(progress, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co">#progress bar</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co">#feather</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'likert' was built under R version 4.3.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mice,  <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'mice' was built under R version 4.3.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openxlsx2, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co"># Scatter plot</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gmodels,  <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co"># Crosstab</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'gmodels' was built under R version 4.3.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co"># Reshape data</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pacman,  <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co"># Package Management</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'pacman' was built under R version 4.3.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(progress, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co">#progress bar</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>) <span class="co">#feather</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'arrow' was built under R version 4.3.3</code></pre>
+<pre><code>Some features are not enabled in this build of Arrow. Run `arrow_info()` for more information.
+The repository you retrieved Arrow from did not include all of Arrow's features.
+You can install a fully-featured version by running:
+`install.packages('arrow', repos = 'https://apache.r-universe.dev')`.</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_loaded</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_loaded</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "arrow"     "progress"  "pacman"    "reshape2"  "gmodels"   "ggpubr"   
  [7] "openxlsx2" "mice"      "likert"    "xtable"    "psych"     "lubridate"
@@ -219,63 +204,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="1.4" class="anchored" data-anchor-id="theme-for-plots"><span class="header-section-number">1.4</span> Theme for plots</h2>
 <p>Setting theme for plots:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">####### Plotting Data: #####</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Map Theme:</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>plottheme <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mapping theme:</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">0</span>, </span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">r =</span> <span class="dv">0</span>, </span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>                             <span class="at">b =</span> <span class="dv">0</span>, </span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>                             <span class="at">l =</span> <span class="dv">0</span>, </span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>                             <span class="at">unit =</span> <span class="st">"cm"</span>),</span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, </span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">color =</span> <span class="st">"black"</span>,</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, </span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">color =</span> <span class="st">"black"</span>,</span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"lightgrey"</span>,</span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linetype =</span> <span class="dv">2</span>,</span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.x =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"lightgrey"</span>,</span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linetype =</span> <span class="dv">2</span>,</span>
-<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
-<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.y =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey"</span>,</span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linetype =</span> <span class="dv">2</span>,</span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey"</span>,</span>
-<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linetype =</span> <span class="dv">2</span>,</span>
-<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
-<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.x.top =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"white"</span>,</span>
-<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">linetype =</span> <span class="dv">2</span>,</span>
-<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
-<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.y.right =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"white"</span>,</span>
-<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">linetype =</span> <span class="dv">2</span>,</span>
-<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
-<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.x.bottom =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>,</span>
-<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linetype =</span> <span class="dv">1</span>,</span>
-<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
-<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.y.left =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>,</span>
-<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">linetype =</span> <span class="dv">1</span>,</span>
-<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
-<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Text formatting:</span></span>
-<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a>        <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"serif"</span>, <span class="co"># font</span></span>
-<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a>                            <span class="at">size =</span> <span class="dv">12</span>, <span class="co"># font size</span></span>
-<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>                            <span class="at">colour =</span> <span class="st">"black"</span><span class="co"># font color</span></span>
-<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a>        ),</span>
-<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.95</span>, <span class="sc">-</span><span class="fl">0.05</span>),</span>
-<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, </span>
-<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">fill =</span> <span class="cn">NA</span>, </span>
-<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">linewidth =</span> <span class="fl">0.05</span>, </span>
-<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">linetype =</span> <span class="dv">1</span>),</span>
-<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.justification =</span> <span class="st">"right"</span>,</span>
-<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.direction =</span> <span class="st">"horizontal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">####### Plotting Data: #####</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Map Theme:</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plottheme <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mapping theme:</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">0</span>, </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">r =</span> <span class="dv">0</span>, </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                             <span class="at">b =</span> <span class="dv">0</span>, </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                             <span class="at">l =</span> <span class="dv">0</span>, </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                             <span class="at">unit =</span> <span class="st">"cm"</span>),</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"lightgrey"</span>,</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linetype =</span> <span class="dv">2</span>,</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.x =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"lightgrey"</span>,</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linetype =</span> <span class="dv">2</span>,</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.y =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey"</span>,</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linetype =</span> <span class="dv">2</span>,</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey"</span>,</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linetype =</span> <span class="dv">2</span>,</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.x.top =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">linetype =</span> <span class="dv">2</span>,</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.y.right =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">linetype =</span> <span class="dv">2</span>,</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.x.bottom =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linetype =</span> <span class="dv">1</span>,</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.y.left =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">linetype =</span> <span class="dv">1</span>,</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">linewidth =</span> <span class="dv">0</span>),</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Text formatting:</span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>        <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"serif"</span>, <span class="co"># font</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>                            <span class="at">size =</span> <span class="dv">12</span>, <span class="co"># font size</span></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>                            <span class="at">colour =</span> <span class="st">"black"</span><span class="co"># font color</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.95</span>, <span class="sc">-</span><span class="fl">0.05</span>),</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">fill =</span> <span class="cn">NA</span>, </span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">linewidth =</span> <span class="fl">0.05</span>, </span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">linetype =</span> <span class="dv">1</span>),</span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.justification =</span> <span class="st">"right"</span>,</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.direction =</span> <span class="st">"horizontal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -305,58 +290,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>profit = profit from crops.</p>
 <p>tav_profit = total profit from solar and tomato.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>tav_profit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">read_feather</span>(<span class="at">file =</span> <span class="st">"tav_profit.feather"</span>))</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tav_profit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">read_feather</span>(<span class="at">file =</span> <span class="st">"tav_profit.feather"</span>))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#str(tav_profit)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#head(tav_profit); head(tav_profit)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 776160     21</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#str(tav_profit)</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tav_profit); <span class="fu">head</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  sprop    al_regs    array dc_kw panels energy elcprc elcrev height    capex
-1     0 Black Belt    Fixed     0      0      0   0.01      0    4.6 1.593333
-2     0 Black Belt    Fixed     0      0      0   0.01      0    6.4 1.850000
-3     0 Black Belt    Fixed     0      0      0   0.01      0    8.2 2.330000
-4     0 Black Belt Tracking     0      0      0   0.01      0    4.6 1.733333
-5     0 Black Belt Tracking     0      0      0   0.01      0    6.4 1.921667
-6     0 Black Belt Tracking     0      0      0   0.01      0    8.2 2.110000
-  ttlcost anncost moncost eprofit eannprof emonprof yldvar yield price   profit
-1       0       0       0       0        0        0      2  2720    17 21679.38
-2       0       0       0       0        0        0      2  2720    17 21679.38
-3       0       0       0       0        0        0      2  2720    17 21679.38
-4       0       0       0       0        0        0      2  2720    17 21679.38
-5       0       0       0       0        0        0      2  2720    17 21679.38
-6       0       0       0       0        0        0      2  2720    17 21679.38
-  tav_profit
-1   21679.38
-2   21679.38
-3   21679.38
-4   21679.38
-5   21679.38
-6   21679.38</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  sprop    al_regs    array dc_kw panels energy elcprc elcrev height    capex
-1     0 Black Belt    Fixed     0      0      0   0.01      0    4.6 1.593333
-2     0 Black Belt    Fixed     0      0      0   0.01      0    6.4 1.850000
-3     0 Black Belt    Fixed     0      0      0   0.01      0    8.2 2.330000
-4     0 Black Belt Tracking     0      0      0   0.01      0    4.6 1.733333
-5     0 Black Belt Tracking     0      0      0   0.01      0    6.4 1.921667
-6     0 Black Belt Tracking     0      0      0   0.01      0    8.2 2.110000
-  ttlcost anncost moncost eprofit eannprof emonprof yldvar yield price   profit
-1       0       0       0       0        0        0      2  2720    17 21679.38
-2       0       0       0       0        0        0      2  2720    17 21679.38
-3       0       0       0       0        0        0      2  2720    17 21679.38
-4       0       0       0       0        0        0      2  2720    17 21679.38
-5       0       0       0       0        0        0      2  2720    17 21679.38
-6       0       0       0       0        0        0      2  2720    17 21679.38
-  tav_profit
-1   21679.38
-2   21679.38
-3   21679.38
-4   21679.38
-5   21679.38
-6   21679.38</code></pre>
 </div>
 </div>
 </section>
@@ -365,58 +304,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>See tomato for variable descriptions.</p>
 <p>sbav_profit = total profit from solar and strawberry.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>sbav_profit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">read_feather</span>(<span class="at">file =</span> <span class="st">"sbav_profit.feather"</span>))</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sbav_profit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">read_feather</span>(<span class="at">file =</span> <span class="st">"sbav_profit.feather"</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#str(sbav_profit)</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#head(sbav_profit); tail(sbav_profit)</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 776160     21</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#str(sbav_profit)</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sbav_profit); <span class="fu">tail</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  sprop    al_regs    array dc_kw panels energy elcprc elcrev height    capex
-1     0 Black Belt    Fixed     0      0      0   0.01      0    4.6 1.593333
-2     0 Black Belt    Fixed     0      0      0   0.01      0    6.4 1.850000
-3     0 Black Belt    Fixed     0      0      0   0.01      0    8.2 2.330000
-4     0 Black Belt Tracking     0      0      0   0.01      0    4.6 1.733333
-5     0 Black Belt Tracking     0      0      0   0.01      0    6.4 1.921667
-6     0 Black Belt Tracking     0      0      0   0.01      0    8.2 2.110000
-  ttlcost anncost moncost eprofit eannprof emonprof yldvar yield price
-1       0       0       0       0        0        0      2  6150     3
-2       0       0       0       0        0        0      2  6150     3
-3       0       0       0       0        0        0      2  6150     3
-4       0       0       0       0        0        0      2  6150     3
-5       0       0       0       0        0        0      2  6150     3
-6       0       0       0       0        0        0      2  6150     3
-     profit sbav_profit
-1 -1740.495   -1740.495
-2 -1740.495   -1740.495
-3 -1740.495   -1740.495
-4 -1740.495   -1740.495
-5 -1740.495   -1740.495
-6 -1740.495   -1740.495</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       sprop  al_regs    array  dc_kw panels   energy elcprc   elcrev height
-776155     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    4.6
-776156     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    6.4
-776157     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    8.2
-776158     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    4.6
-776159     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    6.4
-776160     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    8.2
-          capex  ttlcost  anncost  moncost  eprofit eannprof emonprof yldvar
-776155 1.593333 675.1591 47.90419 3.946913 35248.07 35875.33 2989.656    0.1
-776156 1.850000 783.9190 55.62098 4.582712 35139.31 35867.61 2989.020    0.1
-776157 2.330000 987.3142 70.05237 5.771740 34935.92 35853.18 2987.831    0.1
-776158 1.733333 734.4827 52.11335 4.293713 40990.42 41672.79 3472.781    0.1
-776159 1.921667 814.2870 57.77567 4.760241 40910.61 41667.12 3472.315    0.1
-776160 2.110000 894.0914 63.43798 5.226769 40830.81 41661.46 3471.848    0.1
-       yield price    profit sbav_profit
-776155 307.5     9 -10855.74    25019.59
-776156 307.5     9 -10855.74    25011.87
-776157 307.5     9 -10855.74    24997.44
-776158 307.5     9 -10855.74    30817.05
-776159 307.5     9 -10855.74    30811.38
-776160 307.5     9 -10855.74    30805.72</code></pre>
 </div>
 </div>
 </section>
@@ -425,58 +318,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>See tomato for variable descriptions.</p>
 <p>sqav_profit = total profit from solar and squash.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>sqav_profit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">read_feather</span>(<span class="at">file =</span> <span class="st">"sqav_profit.feather"</span>))</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sqav_profit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">read_feather</span>(<span class="at">file =</span> <span class="st">"sqav_profit.feather"</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#str(sqav_profit)</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#head(sqav_profit); tail(sqav_profit)</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 776160     21</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#str(sqav_profit)</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sqav_profit); <span class="fu">tail</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  sprop    al_regs    array dc_kw panels energy elcprc elcrev height    capex
-1     0 Black Belt    Fixed     0      0      0   0.01      0    4.6 1.593333
-2     0 Black Belt    Fixed     0      0      0   0.01      0    6.4 1.850000
-3     0 Black Belt    Fixed     0      0      0   0.01      0    8.2 2.330000
-4     0 Black Belt Tracking     0      0      0   0.01      0    4.6 1.733333
-5     0 Black Belt Tracking     0      0      0   0.01      0    6.4 1.921667
-6     0 Black Belt Tracking     0      0      0   0.01      0    8.2 2.110000
-  ttlcost anncost moncost eprofit eannprof emonprof yldvar yield price   profit
-1       0       0       0       0        0        0      2  2180    11 10309.12
-2       0       0       0       0        0        0      2  2180    11 10309.12
-3       0       0       0       0        0        0      2  2180    11 10309.12
-4       0       0       0       0        0        0      2  2180    11 10309.12
-5       0       0       0       0        0        0      2  2180    11 10309.12
-6       0       0       0       0        0        0      2  2180    11 10309.12
-  sqav_profit
-1    10309.12
-2    10309.12
-3    10309.12
-4    10309.12
-5    10309.12
-6    10309.12</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       sprop  al_regs    array  dc_kw panels   energy elcprc   elcrev height
-776155     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    4.6
-776156     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    6.4
-776157     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    8.2
-776158     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    4.6
-776159     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    6.4
-776160     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    8.2
-          capex  ttlcost  anncost  moncost  eprofit eannprof emonprof yldvar
-776155 1.593333 675.1591 47.90419 3.946913 35248.07 35875.33 2989.656    0.1
-776156 1.850000 783.9190 55.62098 4.582712 35139.31 35867.61 2989.020    0.1
-776157 2.330000 987.3142 70.05237 5.771740 34935.92 35853.18 2987.831    0.1
-776158 1.733333 734.4827 52.11335 4.293713 40990.42 41672.79 3472.781    0.1
-776159 1.921667 814.2870 57.77567 4.760241 40910.61 41667.12 3472.315    0.1
-776160 2.110000 894.0914 63.43798 5.226769 40830.81 41661.46 3471.848    0.1
-       yield price    profit sqav_profit
-776155   109    17 -2370.133    33505.19
-776156   109    17 -2370.133    33497.48
-776157   109    17 -2370.133    33483.04
-776158   109    17 -2370.133    39302.65
-776159   109    17 -2370.133    39296.99
-776160   109    17 -2370.133    39291.33</code></pre>
 </div>
 </div>
 </section>
@@ -486,97 +333,97 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="tomato-av-1" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="tomato-av-1"><span class="header-section-number">3.1</span> Tomato AV</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the values for each variable</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>sprop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="fl">1.00</span>) <span class="co"># Land Proportion</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>array <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Fixed"</span>, <span class="st">"Tracking"</span>) <span class="co"># Solar Array</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>height <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">4.6</span>, <span class="fl">6.4</span>, <span class="fl">8.2</span>) <span class="co"># Panel height</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>yldvar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.10</span>, <span class="fl">0.30</span>, <span class="fl">0.50</span>, <span class="fl">0.70</span>, <span class="fl">1.00</span>, <span class="fl">1.20</span>, <span class="fl">1.50</span>, <span class="fl">1.80</span>, <span class="fl">2.00</span>) <span class="co"># Crop Yield Variation</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>al_regs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Northern"</span>, <span class="st">"Central"</span>, <span class="st">"Black Belt"</span>, <span class="st">"Southern"</span>) <span class="co"># Regions of AL</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>price <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">17</span>, <span class="dv">20</span>, <span class="dv">23</span>) <span class="co"># Crop Price</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>elcprc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.03</span>, <span class="fl">0.04</span>) <span class="co"># Electricity Price</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the required columns</span></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>required_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sprop"</span>, <span class="st">"array"</span>, <span class="st">"height"</span>, </span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"al_regs"</span>, <span class="st">"yldvar"</span>, <span class="st">"price"</span>, <span class="st">"elcprc"</span>)</span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the columns exist in tav_profit</span></span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>missing_columns <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(required_columns, </span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">names</span>(tav_profit))</span>
-<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(missing_columns) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">"Missing columns in tav_profit: "</span>,</span>
-<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>       <span class="fu">paste</span>(missing_columns, <span class="at">collapse =</span> <span class="st">", "</span>))</span>
-<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate column names using reversed order of expand.grid</span></span>
-<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>col_names <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">expand.grid</span>(height, array, sprop), <span class="dv">1</span>,</span>
-<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">3</span>], <span class="st">"%_"</span>, x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">1</span>]))</span>
-<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate row names using reversed order of expand.grid</span></span>
-<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>row_names <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">expand.grid</span>(elcprc, </span>
-<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>                               price,</span>
-<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a>                               yldvar, </span>
-<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>                               al_regs), <span class="dv">1</span>, </span>
-<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(x) <span class="fu">paste0</span>(x, <span class="at">collapse =</span> <span class="st">"_"</span>))</span>
-<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an empty matrix to store the results</span></span>
-<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a>result_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> <span class="fu">length</span>(row_names), </span>
-<span id="cb34-35"><a href="#cb34-35" aria-hidden="true" tabindex="-1"></a>                        <span class="at">ncol =</span> <span class="fu">length</span>(col_names))</span>
-<span id="cb34-36"><a href="#cb34-36" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(result_matrix) <span class="ot">&lt;-</span> col_names</span>
-<span id="cb34-37"><a href="#cb34-37" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(result_matrix) <span class="ot">&lt;-</span> row_names</span>
-<span id="cb34-38"><a href="#cb34-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-39"><a href="#cb34-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame with </span></span>
-<span id="cb34-40"><a href="#cb34-40" aria-hidden="true" tabindex="-1"></a><span class="co"># all combinations of parameters in reversed order</span></span>
-<span id="cb34-41"><a href="#cb34-41" aria-hidden="true" tabindex="-1"></a>param_combinations <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">elcprc =</span> elcprc, </span>
-<span id="cb34-42"><a href="#cb34-42" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">price =</span> price, </span>
-<span id="cb34-43"><a href="#cb34-43" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">yldvar =</span> yldvar, </span>
-<span id="cb34-44"><a href="#cb34-44" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">al_regs =</span> al_regs,</span>
-<span id="cb34-45"><a href="#cb34-45" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">height =</span> height, </span>
-<span id="cb34-46"><a href="#cb34-46" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">array =</span> array, </span>
-<span id="cb34-47"><a href="#cb34-47" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">sprop =</span> sprop)</span>
-<span id="cb34-48"><a href="#cb34-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-49"><a href="#cb34-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge with tav_profit to get tav_profit values for each combination</span></span>
-<span id="cb34-50"><a href="#cb34-50" aria-hidden="true" tabindex="-1"></a>merged_data <span class="ot">&lt;-</span> <span class="fu">merge</span>(param_combinations, </span>
-<span id="cb34-51"><a href="#cb34-51" aria-hidden="true" tabindex="-1"></a>                     tav_profit, </span>
-<span id="cb34-52"><a href="#cb34-52" aria-hidden="true" tabindex="-1"></a>                     <span class="at">by =</span> required_columns,</span>
-<span id="cb34-53"><a href="#cb34-53" aria-hidden="true" tabindex="-1"></a>                     <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb34-54"><a href="#cb34-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-55"><a href="#cb34-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape merged_data to fill result_matrix with </span></span>
-<span id="cb34-56"><a href="#cb34-56" aria-hidden="true" tabindex="-1"></a><span class="co"># reversed column and row names</span></span>
-<span id="cb34-57"><a href="#cb34-57" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>col_name <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
-<span id="cb34-58"><a href="#cb34-58" aria-hidden="true" tabindex="-1"></a>  merged_data[, <span class="fu">c</span>(<span class="st">"sprop"</span>, <span class="st">"array"</span>, <span class="st">"height"</span>)], <span class="dv">1</span>,</span>
-<span id="cb34-59"><a href="#cb34-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">1</span>], <span class="st">"%_"</span>, x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">3</span>]))</span>
-<span id="cb34-60"><a href="#cb34-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-61"><a href="#cb34-61" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>row_name <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
-<span id="cb34-62"><a href="#cb34-62" aria-hidden="true" tabindex="-1"></a>  merged_data[, <span class="fu">c</span>(<span class="st">"al_regs"</span>, <span class="st">"yldvar"</span>, <span class="st">"price"</span>, <span class="st">"elcprc"</span>)], <span class="dv">1</span>,</span>
-<span id="cb34-63"><a href="#cb34-63" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">4</span>], <span class="st">"_"</span>,</span>
-<span id="cb34-64"><a href="#cb34-64" aria-hidden="true" tabindex="-1"></a>                     x[<span class="dv">3</span>], <span class="st">"_"</span>,</span>
-<span id="cb34-65"><a href="#cb34-65" aria-hidden="true" tabindex="-1"></a>                     x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">1</span>]))</span>
-<span id="cb34-66"><a href="#cb34-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-67"><a href="#cb34-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill the matrix with tav_profit values</span></span>
-<span id="cb34-68"><a href="#cb34-68" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(result_matrix))) {</span>
-<span id="cb34-69"><a href="#cb34-69" aria-hidden="true" tabindex="-1"></a>  row_condition <span class="ot">&lt;-</span> <span class="fu">rownames</span>(result_matrix)[i]</span>
-<span id="cb34-70"><a href="#cb34-70" aria-hidden="true" tabindex="-1"></a>  row_data <span class="ot">&lt;-</span> merged_data[</span>
-<span id="cb34-71"><a href="#cb34-71" aria-hidden="true" tabindex="-1"></a>    merged_data<span class="sc">$</span>row_name <span class="sc">==</span> row_condition, ]</span>
-<span id="cb34-72"><a href="#cb34-72" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(row_data) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb34-73"><a href="#cb34-73" aria-hidden="true" tabindex="-1"></a>    result_matrix[i, </span>
-<span id="cb34-74"><a href="#cb34-74" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">match</span>(row_data<span class="sc">$</span>col_name, </span>
-<span id="cb34-75"><a href="#cb34-75" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">colnames</span>(result_matrix))] <span class="ot">&lt;-</span> <span class="fu">round</span>(</span>
-<span id="cb34-76"><a href="#cb34-76" aria-hidden="true" tabindex="-1"></a>                          row_data<span class="sc">$</span>tav_profit, <span class="dv">2</span>)</span>
-<span id="cb34-77"><a href="#cb34-77" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb34-78"><a href="#cb34-78" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb34-79"><a href="#cb34-79" aria-hidden="true" tabindex="-1"></a>tav_chtbl <span class="ot">&lt;-</span> result_matrix <span class="co">#Table in Excel.</span></span>
-<span id="cb34-80"><a href="#cb34-80" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(result_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the values for each variable</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sprop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="fl">1.00</span>) <span class="co"># Land Proportion</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>array <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Fixed"</span>, <span class="st">"Tracking"</span>) <span class="co"># Solar Array</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>height <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">4.6</span>, <span class="fl">6.4</span>, <span class="fl">8.2</span>) <span class="co"># Panel height</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>yldvar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.10</span>, <span class="fl">0.30</span>, <span class="fl">0.50</span>, <span class="fl">0.70</span>, <span class="fl">1.00</span>, <span class="fl">1.20</span>, <span class="fl">1.50</span>, <span class="fl">1.80</span>, <span class="fl">2.00</span>) <span class="co"># Crop Yield Variation</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>al_regs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Northern"</span>, <span class="st">"Central"</span>, <span class="st">"Black Belt"</span>, <span class="st">"Southern"</span>) <span class="co"># Regions of AL</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>price <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">17</span>, <span class="dv">20</span>, <span class="dv">23</span>) <span class="co"># Crop Price</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>elcprc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.03</span>, <span class="fl">0.04</span>) <span class="co"># Electricity Price</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the required columns</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>required_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sprop"</span>, <span class="st">"array"</span>, <span class="st">"height"</span>, </span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"al_regs"</span>, <span class="st">"yldvar"</span>, <span class="st">"price"</span>, <span class="st">"elcprc"</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the columns exist in tav_profit</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>missing_columns <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(required_columns, </span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">names</span>(tav_profit))</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(missing_columns) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">"Missing columns in tav_profit: "</span>,</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>       <span class="fu">paste</span>(missing_columns, <span class="at">collapse =</span> <span class="st">", "</span>))</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate column names using reversed order of expand.grid</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>col_names <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">expand.grid</span>(height, array, sprop), <span class="dv">1</span>,</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">3</span>], <span class="st">"%_"</span>, x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">1</span>]))</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate row names using reversed order of expand.grid</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>row_names <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">expand.grid</span>(elcprc, </span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>                               price,</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>                               yldvar, </span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>                               al_regs), <span class="dv">1</span>, </span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(x) <span class="fu">paste0</span>(x, <span class="at">collapse =</span> <span class="st">"_"</span>))</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an empty matrix to store the results</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>result_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> <span class="fu">length</span>(row_names), </span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>                        <span class="at">ncol =</span> <span class="fu">length</span>(col_names))</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(result_matrix) <span class="ot">&lt;-</span> col_names</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(result_matrix) <span class="ot">&lt;-</span> row_names</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame with </span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a><span class="co"># all combinations of parameters in reversed order</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>param_combinations <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">elcprc =</span> elcprc, </span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">price =</span> price, </span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">yldvar =</span> yldvar, </span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">al_regs =</span> al_regs,</span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">height =</span> height, </span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">array =</span> array, </span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">sprop =</span> sprop)</span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge with tav_profit to get tav_profit values for each combination</span></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>merged_data <span class="ot">&lt;-</span> <span class="fu">merge</span>(param_combinations, </span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>                     tav_profit, </span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>                     <span class="at">by =</span> required_columns,</span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>                     <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape merged_data to fill result_matrix with </span></span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a><span class="co"># reversed column and row names</span></span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>col_name <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>  merged_data[, <span class="fu">c</span>(<span class="st">"sprop"</span>, <span class="st">"array"</span>, <span class="st">"height"</span>)], <span class="dv">1</span>,</span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">1</span>], <span class="st">"%_"</span>, x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">3</span>]))</span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>row_name <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>  merged_data[, <span class="fu">c</span>(<span class="st">"al_regs"</span>, <span class="st">"yldvar"</span>, <span class="st">"price"</span>, <span class="st">"elcprc"</span>)], <span class="dv">1</span>,</span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">4</span>], <span class="st">"_"</span>,</span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>                     x[<span class="dv">3</span>], <span class="st">"_"</span>,</span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>                     x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">1</span>]))</span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill the matrix with tav_profit values</span></span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(result_matrix))) {</span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a>  row_condition <span class="ot">&lt;-</span> <span class="fu">rownames</span>(result_matrix)[i]</span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>  row_data <span class="ot">&lt;-</span> merged_data[</span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a>    merged_data<span class="sc">$</span>row_name <span class="sc">==</span> row_condition, ]</span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(row_data) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a>    result_matrix[i, </span>
+<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">match</span>(row_data<span class="sc">$</span>col_name, </span>
+<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">colnames</span>(result_matrix))] <span class="ot">&lt;-</span> <span class="fu">round</span>(</span>
+<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a>                          row_data<span class="sc">$</span>tav_profit, <span class="dv">2</span>)</span>
+<span id="cb15-77"><a href="#cb15-77" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-78"><a href="#cb15-78" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-79"><a href="#cb15-79" aria-hidden="true" tabindex="-1"></a>tav_chtbl <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(result_matrix) <span class="co">#Table in Excel.</span></span>
+<span id="cb15-80"><a href="#cb15-80" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(result_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">as.data.frame</span>(tav_chtbl),</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">col.names =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">"tav_chtbl.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">as.data.frame</span>(tav_chtbl),</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">col.names =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">"tav_chtbl.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in write.csv(as.data.frame(tav_chtbl), row.names = TRUE, col.names =
 TRUE, : attempt to set 'col.names' ignored</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">as.data.frame</span>(tav_chtbl))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(tav_chtbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 324  30</code></pre>
 </div>
@@ -589,162 +436,49 @@ TRUE, : attempt to set 'col.names' ignored</code></pre>
 <li><p>Values displayed in the table are profit from Tomato AV system.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the result matrix</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tav_chtbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the result matrix</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#head(tav_chtbl)</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#tail(tav_chtbl)</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                     0.00%_Fixed_4.6 0.00%_Fixed_6.4 0.00%_Fixed_8.2
-0.02_17_0.1_Northern        -8986.62        -8986.62        -8986.62
-0.03_17_0.1_Northern        -8986.62        -8986.62        -8986.62
-0.04_17_0.1_Northern        -8986.62        -8986.62        -8986.62
-0.02_20_0.1_Northern        -8578.62        -8578.62        -8578.62
-0.03_20_0.1_Northern        -8578.62        -8578.62        -8578.62
-0.04_20_0.1_Northern        -8578.62        -8578.62        -8578.62
-                     0.00%_Tracking_4.6 0.00%_Tracking_6.4 0.00%_Tracking_8.2
-0.02_17_0.1_Northern           -8986.62           -8986.62           -8986.62
-0.03_17_0.1_Northern           -8986.62           -8986.62           -8986.62
-0.04_17_0.1_Northern           -8986.62           -8986.62           -8986.62
-0.02_20_0.1_Northern           -8578.62           -8578.62           -8578.62
-0.03_20_0.1_Northern           -8578.62           -8578.62           -8578.62
-0.04_20_0.1_Northern           -8578.62           -8578.62           -8578.62
-                     0.25%_Fixed_4.6 0.25%_Fixed_6.4 0.25%_Fixed_8.2
-0.02_17_0.1_Northern        -6677.25        -6678.79        -6681.68
-0.03_17_0.1_Northern        -5517.77        -5519.32        -5522.20
-0.04_17_0.1_Northern        -4358.30        -4359.84        -4362.73
-0.02_20_0.1_Northern        -6269.25        -6270.79        -6273.68
-0.03_20_0.1_Northern        -5109.77        -5111.32        -5114.20
-0.04_20_0.1_Northern        -3950.30        -3951.84        -3954.73
-                     0.25%_Tracking_4.6 0.25%_Tracking_6.4 0.25%_Tracking_8.2
-0.02_17_0.1_Northern           -6337.15           -6338.28           -6339.42
-0.03_17_0.1_Northern           -5007.21           -5008.34           -5009.47
-0.04_17_0.1_Northern           -3677.26           -3678.39           -3679.53
-0.02_20_0.1_Northern           -5929.15           -5930.28           -5931.42
-0.03_20_0.1_Northern           -4599.21           -4600.34           -4601.47
-0.04_20_0.1_Northern           -3269.26           -3270.39           -3271.53
-                     0.50%_Fixed_4.6 0.50%_Fixed_6.4 0.50%_Fixed_8.2
-0.02_17_0.1_Northern        -3599.23        -3602.83        -3609.57
-0.03_17_0.1_Northern         -894.36         -897.96         -904.70
-0.04_17_0.1_Northern         1810.51         1806.91         1800.17
-0.02_20_0.1_Northern        -3191.23        -3194.83        -3201.57
-0.03_20_0.1_Northern         -486.36         -489.96         -496.70
-0.04_20_0.1_Northern         2218.51         2214.91         2208.17
-                     0.50%_Tracking_4.6 0.50%_Tracking_6.4 0.50%_Tracking_8.2
-0.02_17_0.1_Northern           -2805.24           -2807.88           -2810.52
-0.03_17_0.1_Northern             297.61             294.97             292.33
-0.04_17_0.1_Northern            3400.46            3397.82            3395.18
-0.02_20_0.1_Northern           -2397.24           -2399.88           -2402.52
-0.03_20_0.1_Northern             705.61             702.97             700.33
-0.04_20_0.1_Northern            3808.46            3805.82            3803.18
-                     0.75%_Fixed_4.6 0.75%_Fixed_6.4 0.75%_Fixed_8.2
-0.02_17_0.1_Northern         -520.64         -526.30         -536.88
-0.03_17_0.1_Northern         3729.92         3724.26         3713.68
-0.04_17_0.1_Northern         7980.47         7974.81         7964.23
-0.02_20_0.1_Northern         -112.64         -118.30         -128.88
-0.03_20_0.1_Northern         4137.92         4132.26         4121.68
-0.04_20_0.1_Northern         8388.47         8382.81         8372.23
-                     0.75%_Tracking_4.6 0.75%_Tracking_6.4 0.75%_Tracking_8.2
-0.02_17_0.1_Northern             726.90             722.74             718.59
-0.03_17_0.1_Northern            5602.76            5598.61            5594.46
-0.04_17_0.1_Northern           10478.63           10474.47           10470.32
-0.02_20_0.1_Northern            1134.90            1130.74            1126.59
-0.03_20_0.1_Northern            6010.76            6006.61            6002.46
-0.04_20_0.1_Northern           10886.63           10882.47           10878.32
-                     1.00%_Fixed_4.6 1.00%_Fixed_6.4 1.00%_Fixed_8.2
-0.02_17_0.1_Northern         2557.93         2550.21         2535.78
-0.03_17_0.1_Northern         8354.15         8346.44         8332.01
-0.04_17_0.1_Northern        14150.38        14142.66        14128.23
-0.02_20_0.1_Northern         2965.93         2958.21         2943.78
-0.03_20_0.1_Northern         8762.15         8754.44         8740.01
-0.04_20_0.1_Northern        14558.38        14550.66        14536.23
-                     1.00%_Tracking_4.6 1.00%_Tracking_6.4 1.00%_Tracking_8.2
-0.02_17_0.1_Northern            4259.03            4253.37            4247.70
-0.03_17_0.1_Northern           10907.91           10902.25           10896.58
-0.04_17_0.1_Northern           17556.79           17551.13           17545.46
-0.02_20_0.1_Northern            4667.03            4661.37            4655.70
-0.03_20_0.1_Northern           11315.91           11310.25           11304.58
-0.04_20_0.1_Northern           17964.79           17959.13           17953.46</code></pre>
+<pre><code> [1] "sprop"      "al_regs"    "array"      "dc_kw"      "panels"    
+ [6] "energy"     "elcprc"     "elcrev"     "height"     "capex"     
+[11] "ttlcost"    "anncost"    "moncost"    "eprofit"    "eannprof"  
+[16] "emonprof"   "yldvar"     "yield"      "price"      "profit"    
+[21] "tav_profit"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(tav_chtbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tav_chtbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                     0.00%_Fixed_4.6 0.00%_Fixed_6.4 0.00%_Fixed_8.2
-0.02_20_2.0_Southern        29839.38        29839.38        29839.38
-0.03_20_2.0_Southern        29839.38        29839.38        29839.38
-0.04_20_2.0_Southern        29839.38        29839.38        29839.38
-0.02_23_2.0_Southern        37999.38        37999.38        37999.38
-0.03_23_2.0_Southern        37999.38        37999.38        37999.38
-0.04_23_2.0_Southern        37999.38        37999.38        37999.38
-                     0.00%_Tracking_4.6 0.00%_Tracking_6.4 0.00%_Tracking_8.2
-0.02_20_2.0_Southern           29839.38           29839.38           29839.38
-0.03_20_2.0_Southern           29839.38           29839.38           29839.38
-0.04_20_2.0_Southern           29839.38           29839.38           29839.38
-0.02_23_2.0_Southern           37999.38           37999.38           37999.38
-0.03_23_2.0_Southern           37999.38           37999.38           37999.38
-0.04_23_2.0_Southern           37999.38           37999.38           37999.38
-                     0.25%_Fixed_4.6 0.25%_Fixed_6.4 0.25%_Fixed_8.2
-0.02_20_2.0_Southern        32225.21        32223.67        32220.78
-0.03_20_2.0_Southern        33422.92        33421.37        33418.49
-0.04_20_2.0_Southern        34620.62        34619.08        34616.19
-0.02_23_2.0_Southern        40385.21        40383.67        40380.78
-0.03_23_2.0_Southern        41582.92        41581.37        41578.49
-0.04_23_2.0_Southern        42780.62        42779.08        42776.19
-                     0.25%_Tracking_4.6 0.25%_Tracking_6.4 0.25%_Tracking_8.2
-0.02_20_2.0_Southern           32610.97           32609.84           32608.70
-0.03_20_2.0_Southern           34001.97           34000.84           33999.71
-0.04_20_2.0_Southern           35392.98           35391.85           35390.71
-0.02_23_2.0_Southern           40770.97           40769.84           40768.70
-0.03_23_2.0_Southern           42161.97           42160.84           42159.71
-0.04_23_2.0_Southern           43552.98           43551.85           43550.71
-                     0.50%_Fixed_4.6 0.50%_Fixed_6.4 0.50%_Fixed_8.2
-0.02_20_2.0_Southern        35405.02        35401.42        35394.68
-0.03_20_2.0_Southern        38199.01        38195.41        38188.68
-0.04_20_2.0_Southern        40993.01        40989.41        40982.67
-0.02_23_2.0_Southern        43565.02        43561.42        43554.68
-0.03_23_2.0_Southern        46359.01        46355.41        46348.68
-0.04_23_2.0_Southern        49153.01        49149.41        49142.67
-                     0.50%_Tracking_4.6 0.50%_Tracking_6.4 0.50%_Tracking_8.2
-0.02_20_2.0_Southern           36305.67           36303.03           36300.39
-0.03_20_2.0_Southern           39550.98           39548.34           39545.69
-0.04_20_2.0_Southern           42796.28           42793.64           42791.00
-0.02_23_2.0_Southern           44465.67           44463.03           44460.39
-0.03_23_2.0_Southern           47710.98           47708.34           47705.69
-0.04_23_2.0_Southern           50956.28           50953.64           50951.00
-                     0.75%_Fixed_4.6 0.75%_Fixed_6.4 0.75%_Fixed_8.2
-0.02_20_2.0_Southern        38585.46        38579.80        38569.22
-0.03_20_2.0_Southern        42976.07        42970.41        42959.83
-0.04_20_2.0_Southern        47366.67        47361.01        47350.43
-0.02_23_2.0_Southern        46745.46        46739.80        46729.22
-0.03_23_2.0_Southern        51136.07        51130.41        51119.83
-0.04_23_2.0_Southern        55526.67        55521.01        55510.43
-                     0.75%_Tracking_4.6 0.75%_Tracking_6.4 0.75%_Tracking_8.2
-0.02_20_2.0_Southern           40000.63           39996.47           39992.32
-0.03_20_2.0_Southern           45100.36           45096.20           45092.05
-0.04_20_2.0_Southern           50200.09           50195.93           50191.78
-0.02_23_2.0_Southern           48160.63           48156.47           48152.32
-0.03_23_2.0_Southern           53260.36           53256.20           53252.05
-0.04_23_2.0_Southern           58360.09           58355.93           58351.78
-                     1.00%_Fixed_4.6 1.00%_Fixed_6.4 1.00%_Fixed_8.2
-0.02_20_2.0_Southern        41765.89        41758.17        41743.74
-0.03_20_2.0_Southern        47753.09        47745.38        47730.95
-0.04_20_2.0_Southern        53740.30        53732.58        53718.15
-0.02_23_2.0_Southern        49925.89        49918.17        49903.74
-0.03_23_2.0_Southern        55913.09        55905.38        55890.95
-0.04_23_2.0_Southern        61900.30        61892.58        61878.15
-                     1.00%_Tracking_4.6 1.00%_Tracking_6.4 1.00%_Tracking_8.2
-0.02_20_2.0_Southern           43695.57           43689.91           43684.24
-0.03_20_2.0_Southern           50649.72           50644.06           50638.39
-0.04_20_2.0_Southern           57603.87           57598.21           57592.54
-0.02_23_2.0_Southern           51855.57           51849.91           51844.24
-0.03_23_2.0_Southern           58809.72           58804.06           58798.39
-0.04_23_2.0_Southern           65763.87           65758.21           65752.54</code></pre>
+<pre><code> [1] "0.00%_Fixed_4.6"    "0.00%_Fixed_6.4"    "0.00%_Fixed_8.2"   
+ [4] "0.00%_Tracking_4.6" "0.00%_Tracking_6.4" "0.00%_Tracking_8.2"
+ [7] "0.25%_Fixed_4.6"    "0.25%_Fixed_6.4"    "0.25%_Fixed_8.2"   
+[10] "0.25%_Tracking_4.6" "0.25%_Tracking_6.4" "0.25%_Tracking_8.2"
+[13] "0.50%_Fixed_4.6"    "0.50%_Fixed_6.4"    "0.50%_Fixed_8.2"   
+[16] "0.50%_Tracking_4.6" "0.50%_Tracking_6.4" "0.50%_Tracking_8.2"
+[19] "0.75%_Fixed_4.6"    "0.75%_Fixed_6.4"    "0.75%_Fixed_8.2"   
+[22] "0.75%_Tracking_4.6" "0.75%_Tracking_6.4" "0.75%_Tracking_8.2"
+[25] "1.00%_Fixed_4.6"    "1.00%_Fixed_6.4"    "1.00%_Fixed_8.2"   
+[28] "1.00%_Tracking_4.6" "1.00%_Tracking_6.4" "1.00%_Tracking_8.2"</code></pre>
 </div>
 </div>
 <section id="plotting-tomato-profit" class="level3" data-number="3.1.1">
 <h3 data-number="3.1.1" class="anchored" data-anchor-id="plotting-tomato-profit"><span class="header-section-number">3.1.1</span> Plotting Tomato Profit</h3>
-<ul>
-<li>Result suppressed.</li>
-</ul>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>tavp_plot <span class="ot">&lt;-</span> tav_profit</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tav_plot,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> pprop,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> tav_profit,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="fu">factor</span>(yldvar),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">group =</span> <span class="fu">factor</span>(yield))) <span class="sc">+</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>                              <span class="at">reverse =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
-<pre><code>Error in eval(expr, envir, enclos): object 'tomato_long' not found</code></pre>
+<pre><code>Error in ggplot(data = tav_plot, mapping = aes(x = pprop, y = tav_profit, : object 'tav_plot' not found</code></pre>
 </div>
 </div>
 </section>
@@ -752,99 +486,112 @@ TRUE, : attempt to set 'col.names' ignored</code></pre>
 <section id="strawberry-av-1" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="strawberry-av-1"><span class="header-section-number">3.2</span> Strawberry AV</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the values for each variable</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>sprop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="fl">1.00</span>)</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>array <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Fixed"</span>, <span class="st">"Tracking"</span>)</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>height <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">4.6</span>, <span class="fl">6.4</span>, <span class="fl">8.2</span>)</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>yldvar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.10</span>, <span class="fl">0.30</span>, <span class="fl">0.50</span>, <span class="fl">0.70</span>, <span class="fl">1.00</span>, <span class="fl">1.20</span>, <span class="fl">1.50</span>, <span class="fl">1.80</span>, <span class="fl">2.00</span>)</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>al_regs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Northern"</span>, <span class="st">"Central"</span>, <span class="st">"Black Belt"</span>, <span class="st">"Southern"</span>)</span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>price <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">9</span>)</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>elcprc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.03</span>, <span class="fl">0.04</span>)</span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the required columns</span></span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>required_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sprop"</span>, <span class="st">"array"</span>, <span class="st">"height"</span>, </span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"al_regs"</span>, <span class="st">"yldvar"</span>, <span class="st">"price"</span>, <span class="st">"elcprc"</span>)</span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the columns exist in sbav_profit</span></span>
-<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>missing_columns <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(required_columns, </span>
-<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">names</span>(sbav_profit))</span>
-<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(missing_columns) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">"Missing columns in sbav_profit: "</span>,</span>
-<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>       <span class="fu">paste</span>(missing_columns, <span class="at">collapse =</span> <span class="st">", "</span>))</span>
-<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate column names using reversed order of expand.grid</span></span>
-<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a>col_names <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">expand.grid</span>(height, array, sprop), <span class="dv">1</span>,</span>
-<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">3</span>], <span class="st">"%_"</span>, x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">1</span>]))</span>
-<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate row names using reversed order of expand.grid</span></span>
-<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a>row_names <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">expand.grid</span>(elcprc, </span>
-<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a>                               price,</span>
-<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a>                               yldvar, </span>
-<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a>                               al_regs), <span class="dv">1</span>, </span>
-<span id="cb44-31"><a href="#cb44-31" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(x) <span class="fu">paste0</span>(x, <span class="at">collapse =</span> <span class="st">"_"</span>))</span>
-<span id="cb44-32"><a href="#cb44-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-33"><a href="#cb44-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an empty matrix to store the results</span></span>
-<span id="cb44-34"><a href="#cb44-34" aria-hidden="true" tabindex="-1"></a>result_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> <span class="fu">length</span>(row_names), </span>
-<span id="cb44-35"><a href="#cb44-35" aria-hidden="true" tabindex="-1"></a>                        <span class="at">ncol =</span> <span class="fu">length</span>(col_names))</span>
-<span id="cb44-36"><a href="#cb44-36" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(result_matrix) <span class="ot">&lt;-</span> col_names</span>
-<span id="cb44-37"><a href="#cb44-37" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(result_matrix) <span class="ot">&lt;-</span> row_names</span>
-<span id="cb44-38"><a href="#cb44-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-39"><a href="#cb44-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame with </span></span>
-<span id="cb44-40"><a href="#cb44-40" aria-hidden="true" tabindex="-1"></a><span class="co"># all combinations of parameters in reversed order</span></span>
-<span id="cb44-41"><a href="#cb44-41" aria-hidden="true" tabindex="-1"></a>param_combinations <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">elcprc =</span> elcprc, </span>
-<span id="cb44-42"><a href="#cb44-42" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">price =</span> price, </span>
-<span id="cb44-43"><a href="#cb44-43" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">yldvar =</span> yldvar, </span>
-<span id="cb44-44"><a href="#cb44-44" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">al_regs =</span> al_regs,</span>
-<span id="cb44-45"><a href="#cb44-45" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">height =</span> height, </span>
-<span id="cb44-46"><a href="#cb44-46" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">array =</span> array, </span>
-<span id="cb44-47"><a href="#cb44-47" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">sprop =</span> sprop)</span>
-<span id="cb44-48"><a href="#cb44-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-49"><a href="#cb44-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge with tav_profit to get sbav_profit values for each combination</span></span>
-<span id="cb44-50"><a href="#cb44-50" aria-hidden="true" tabindex="-1"></a>merged_data <span class="ot">&lt;-</span> <span class="fu">merge</span>(param_combinations, </span>
-<span id="cb44-51"><a href="#cb44-51" aria-hidden="true" tabindex="-1"></a>                     sbav_profit, </span>
-<span id="cb44-52"><a href="#cb44-52" aria-hidden="true" tabindex="-1"></a>                     <span class="at">by =</span> required_columns,</span>
-<span id="cb44-53"><a href="#cb44-53" aria-hidden="true" tabindex="-1"></a>                     <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb44-54"><a href="#cb44-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-55"><a href="#cb44-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape merged_data to fill result_matrix with </span></span>
-<span id="cb44-56"><a href="#cb44-56" aria-hidden="true" tabindex="-1"></a><span class="co"># reversed column and row names</span></span>
-<span id="cb44-57"><a href="#cb44-57" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>col_name <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
-<span id="cb44-58"><a href="#cb44-58" aria-hidden="true" tabindex="-1"></a>  merged_data[, <span class="fu">c</span>(<span class="st">"sprop"</span>, <span class="st">"array"</span>, <span class="st">"height"</span>)], <span class="dv">1</span>,</span>
-<span id="cb44-59"><a href="#cb44-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">1</span>], <span class="st">"%_"</span>, x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">3</span>]))</span>
-<span id="cb44-60"><a href="#cb44-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-61"><a href="#cb44-61" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>row_name <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
-<span id="cb44-62"><a href="#cb44-62" aria-hidden="true" tabindex="-1"></a>  merged_data[, <span class="fu">c</span>(<span class="st">"al_regs"</span>, <span class="st">"yldvar"</span>, <span class="st">"price"</span>, <span class="st">"elcprc"</span>)], <span class="dv">1</span>,</span>
-<span id="cb44-63"><a href="#cb44-63" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">4</span>], <span class="st">"_"</span>,</span>
-<span id="cb44-64"><a href="#cb44-64" aria-hidden="true" tabindex="-1"></a>                     x[<span class="dv">3</span>], <span class="st">"_"</span>,</span>
-<span id="cb44-65"><a href="#cb44-65" aria-hidden="true" tabindex="-1"></a>                     x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">1</span>]))</span>
-<span id="cb44-66"><a href="#cb44-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-67"><a href="#cb44-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill the matrix with sbav_profit values</span></span>
-<span id="cb44-68"><a href="#cb44-68" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(result_matrix))) {</span>
-<span id="cb44-69"><a href="#cb44-69" aria-hidden="true" tabindex="-1"></a>  row_condition <span class="ot">&lt;-</span> <span class="fu">rownames</span>(result_matrix)[i]</span>
-<span id="cb44-70"><a href="#cb44-70" aria-hidden="true" tabindex="-1"></a>  row_data <span class="ot">&lt;-</span> merged_data[</span>
-<span id="cb44-71"><a href="#cb44-71" aria-hidden="true" tabindex="-1"></a>    merged_data<span class="sc">$</span>row_name <span class="sc">==</span> row_condition, ]</span>
-<span id="cb44-72"><a href="#cb44-72" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(row_data) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb44-73"><a href="#cb44-73" aria-hidden="true" tabindex="-1"></a>    result_matrix[i, </span>
-<span id="cb44-74"><a href="#cb44-74" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">match</span>(row_data<span class="sc">$</span>col_name, </span>
-<span id="cb44-75"><a href="#cb44-75" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">colnames</span>(result_matrix))] <span class="ot">&lt;-</span> <span class="fu">round</span>(</span>
-<span id="cb44-76"><a href="#cb44-76" aria-hidden="true" tabindex="-1"></a>                          row_data<span class="sc">$</span>sbav_profit, <span class="dv">2</span>)</span>
-<span id="cb44-77"><a href="#cb44-77" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb44-78"><a href="#cb44-78" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb44-79"><a href="#cb44-79" aria-hidden="true" tabindex="-1"></a>sbav_chtbl <span class="ot">&lt;-</span> result_matrix <span class="co">#Table in Excel.</span></span>
-<span id="cb44-80"><a href="#cb44-80" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(result_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the values for each variable</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>sprop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="fl">1.00</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>array <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Fixed"</span>, <span class="st">"Tracking"</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>height <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">4.6</span>, <span class="fl">6.4</span>, <span class="fl">8.2</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>yldvar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.10</span>, <span class="fl">0.30</span>, <span class="fl">0.50</span>, <span class="fl">0.70</span>, <span class="fl">1.00</span>, <span class="fl">1.20</span>, <span class="fl">1.50</span>, <span class="fl">1.80</span>, <span class="fl">2.00</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>al_regs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Northern"</span>, <span class="st">"Central"</span>, <span class="st">"Black Belt"</span>, <span class="st">"Southern"</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>price <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">9</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>elcprc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.03</span>, <span class="fl">0.04</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the required columns</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>required_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sprop"</span>, <span class="st">"array"</span>, <span class="st">"height"</span>, </span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"al_regs"</span>, <span class="st">"yldvar"</span>, <span class="st">"price"</span>, <span class="st">"elcprc"</span>)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the columns exist in sbav_profit</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>missing_columns <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(required_columns, </span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">names</span>(sbav_profit))</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(missing_columns) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">"Missing columns in sbav_profit: "</span>,</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>       <span class="fu">paste</span>(missing_columns, <span class="at">collapse =</span> <span class="st">", "</span>))</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate column names using reversed order of expand.grid</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>col_names <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">expand.grid</span>(height, array, sprop), <span class="dv">1</span>,</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">3</span>], <span class="st">"%_"</span>, x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">1</span>]))</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate row names using reversed order of expand.grid</span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>row_names <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">expand.grid</span>(elcprc, </span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>                               price,</span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>                               yldvar, </span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>                               al_regs), <span class="dv">1</span>, </span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(x) <span class="fu">paste0</span>(x, <span class="at">collapse =</span> <span class="st">"_"</span>))</span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an empty matrix to store the results</span></span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>result_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> <span class="fu">length</span>(row_names), </span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>                        <span class="at">ncol =</span> <span class="fu">length</span>(col_names))</span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(result_matrix) <span class="ot">&lt;-</span> col_names</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(result_matrix) <span class="ot">&lt;-</span> row_names</span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame with</span></span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a><span class="co"># all combinations of parameters in reversed order</span></span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a>param_combinations <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">elcprc =</span> elcprc, </span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">price =</span> price, </span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">yldvar =</span> yldvar, </span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">al_regs =</span> al_regs,</span>
+<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">height =</span> height, </span>
+<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">array =</span> array, </span>
+<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">sprop =</span> sprop)</span>
+<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge with tav_profit to get sbav_profit values for each combination</span></span>
+<span id="cb26-50"><a href="#cb26-50" aria-hidden="true" tabindex="-1"></a>merged_data <span class="ot">&lt;-</span> <span class="fu">merge</span>(param_combinations, </span>
+<span id="cb26-51"><a href="#cb26-51" aria-hidden="true" tabindex="-1"></a>                     sbav_profit, </span>
+<span id="cb26-52"><a href="#cb26-52" aria-hidden="true" tabindex="-1"></a>                     <span class="at">by =</span> required_columns,</span>
+<span id="cb26-53"><a href="#cb26-53" aria-hidden="true" tabindex="-1"></a>                     <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-54"><a href="#cb26-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-55"><a href="#cb26-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape merged_data to fill result_matrix with </span></span>
+<span id="cb26-56"><a href="#cb26-56" aria-hidden="true" tabindex="-1"></a><span class="co"># reversed column and row names</span></span>
+<span id="cb26-57"><a href="#cb26-57" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>col_name <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
+<span id="cb26-58"><a href="#cb26-58" aria-hidden="true" tabindex="-1"></a>  merged_data[, <span class="fu">c</span>(<span class="st">"sprop"</span>, <span class="st">"array"</span>, <span class="st">"height"</span>)], <span class="dv">1</span>,</span>
+<span id="cb26-59"><a href="#cb26-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">1</span>], <span class="st">"%_"</span>, x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">3</span>]))</span>
+<span id="cb26-60"><a href="#cb26-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-61"><a href="#cb26-61" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>row_name <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
+<span id="cb26-62"><a href="#cb26-62" aria-hidden="true" tabindex="-1"></a>  merged_data[, <span class="fu">c</span>(<span class="st">"al_regs"</span>, <span class="st">"yldvar"</span>, <span class="st">"price"</span>, <span class="st">"elcprc"</span>)], <span class="dv">1</span>,</span>
+<span id="cb26-63"><a href="#cb26-63" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">4</span>], <span class="st">"_"</span>,</span>
+<span id="cb26-64"><a href="#cb26-64" aria-hidden="true" tabindex="-1"></a>                     x[<span class="dv">3</span>], <span class="st">"_"</span>,</span>
+<span id="cb26-65"><a href="#cb26-65" aria-hidden="true" tabindex="-1"></a>                     x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">1</span>]))</span>
+<span id="cb26-66"><a href="#cb26-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-67"><a href="#cb26-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill the matrix with sbav_profit values</span></span>
+<span id="cb26-68"><a href="#cb26-68" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(result_matrix))) {</span>
+<span id="cb26-69"><a href="#cb26-69" aria-hidden="true" tabindex="-1"></a>  row_condition <span class="ot">&lt;-</span> <span class="fu">rownames</span>(result_matrix)[i]</span>
+<span id="cb26-70"><a href="#cb26-70" aria-hidden="true" tabindex="-1"></a>  row_data <span class="ot">&lt;-</span> merged_data[</span>
+<span id="cb26-71"><a href="#cb26-71" aria-hidden="true" tabindex="-1"></a>    merged_data<span class="sc">$</span>row_name <span class="sc">==</span> row_condition, ]</span>
+<span id="cb26-72"><a href="#cb26-72" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(row_data) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb26-73"><a href="#cb26-73" aria-hidden="true" tabindex="-1"></a>    result_matrix[i, </span>
+<span id="cb26-74"><a href="#cb26-74" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">match</span>(row_data<span class="sc">$</span>col_name, </span>
+<span id="cb26-75"><a href="#cb26-75" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">colnames</span>(result_matrix))] <span class="ot">&lt;-</span> <span class="fu">round</span>(</span>
+<span id="cb26-76"><a href="#cb26-76" aria-hidden="true" tabindex="-1"></a>                          row_data<span class="sc">$</span>sbav_profit, <span class="dv">2</span>)</span>
+<span id="cb26-77"><a href="#cb26-77" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb26-78"><a href="#cb26-78" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-79"><a href="#cb26-79" aria-hidden="true" tabindex="-1"></a>sbav_chtbl <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(result_matrix) <span class="co">#Table in Excel.</span></span>
+<span id="cb26-80"><a href="#cb26-80" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(result_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">as.data.frame</span>(sbav_chtbl),</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">col.names =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">"sbav_chtbl.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">as.data.frame</span>(sbav_chtbl),</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">col.names =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">"sbav_chtbl.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in write.csv(as.data.frame(sbav_chtbl), row.names = TRUE, col.names =
 TRUE, : attempt to set 'col.names' ignored</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">as.data.frame</span>(sbav_chtbl))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(sbav_chtbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 324  30</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(sbav_chtbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "0.00%_Fixed_4.6"    "0.00%_Fixed_6.4"    "0.00%_Fixed_8.2"   
+ [4] "0.00%_Tracking_4.6" "0.00%_Tracking_6.4" "0.00%_Tracking_8.2"
+ [7] "0.25%_Fixed_4.6"    "0.25%_Fixed_6.4"    "0.25%_Fixed_8.2"   
+[10] "0.25%_Tracking_4.6" "0.25%_Tracking_6.4" "0.25%_Tracking_8.2"
+[13] "0.50%_Fixed_4.6"    "0.50%_Fixed_6.4"    "0.50%_Fixed_8.2"   
+[16] "0.50%_Tracking_4.6" "0.50%_Tracking_6.4" "0.50%_Tracking_8.2"
+[19] "0.75%_Fixed_4.6"    "0.75%_Fixed_6.4"    "0.75%_Fixed_8.2"   
+[22] "0.75%_Tracking_4.6" "0.75%_Tracking_6.4" "0.75%_Tracking_8.2"
+[25] "1.00%_Fixed_4.6"    "1.00%_Fixed_6.4"    "1.00%_Fixed_8.2"   
+[28] "1.00%_Tracking_4.6" "1.00%_Tracking_6.4" "1.00%_Tracking_8.2"</code></pre>
 </div>
 </div>
 <ul>
@@ -855,156 +602,20 @@ TRUE, : attempt to set 'col.names' ignored</code></pre>
 <li><p>Values displayed in the table are profit from Strawberry AV system.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the result matrix</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sbav_chtbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the result matrix</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co">#head(sbav_chtbl)</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co">#tail(sbav_chtbl)</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                    0.00%_Fixed_4.6 0.00%_Fixed_6.4 0.00%_Fixed_8.2
-0.02_3_0.1_Northern       -12700.74       -12700.74       -12700.74
-0.03_3_0.1_Northern       -12700.74       -12700.74       -12700.74
-0.04_3_0.1_Northern       -12700.74       -12700.74       -12700.74
-0.02_6_0.1_Northern       -11778.24       -11778.24       -11778.24
-0.03_6_0.1_Northern       -11778.24       -11778.24       -11778.24
-0.04_6_0.1_Northern       -11778.24       -11778.24       -11778.24
-                    0.00%_Tracking_4.6 0.00%_Tracking_6.4 0.00%_Tracking_8.2
-0.02_3_0.1_Northern          -12700.74          -12700.74          -12700.74
-0.03_3_0.1_Northern          -12700.74          -12700.74          -12700.74
-0.04_3_0.1_Northern          -12700.74          -12700.74          -12700.74
-0.02_6_0.1_Northern          -11778.24          -11778.24          -11778.24
-0.03_6_0.1_Northern          -11778.24          -11778.24          -11778.24
-0.04_6_0.1_Northern          -11778.24          -11778.24          -11778.24
-                    0.25%_Fixed_4.6 0.25%_Fixed_6.4 0.25%_Fixed_8.2
-0.02_3_0.1_Northern       -10391.37       -10392.91       -10395.80
-0.03_3_0.1_Northern        -9231.90        -9233.44        -9236.33
-0.04_3_0.1_Northern        -8072.42        -8073.96        -8076.85
-0.02_6_0.1_Northern        -9468.87        -9470.41        -9473.30
-0.03_6_0.1_Northern        -8309.40        -8310.94        -8313.83
-0.04_6_0.1_Northern        -7149.92        -7151.46        -7154.35
-                    0.25%_Tracking_4.6 0.25%_Tracking_6.4 0.25%_Tracking_8.2
-0.02_3_0.1_Northern          -10051.27          -10052.41          -10053.54
-0.03_3_0.1_Northern           -8721.33           -8722.46           -8723.59
-0.04_3_0.1_Northern           -7391.38           -7392.52           -7393.65
-0.02_6_0.1_Northern           -9128.77           -9129.91           -9131.04
-0.03_6_0.1_Northern           -7798.83           -7799.96           -7801.09
-0.04_6_0.1_Northern           -6468.88           -6470.02           -6471.15
-                    0.50%_Fixed_4.6 0.50%_Fixed_6.4 0.50%_Fixed_8.2
-0.02_3_0.1_Northern        -7313.35        -7316.96        -7323.69
-0.03_3_0.1_Northern        -4608.48        -4612.09        -4618.82
-0.04_3_0.1_Northern        -1903.61        -1907.22        -1913.95
-0.02_6_0.1_Northern        -6390.85        -6394.46        -6401.19
-0.03_6_0.1_Northern        -3685.98        -3689.59        -3696.32
-0.04_6_0.1_Northern         -981.11         -984.72         -991.45
-                    0.50%_Tracking_4.6 0.50%_Tracking_6.4 0.50%_Tracking_8.2
-0.02_3_0.1_Northern           -6519.36           -6522.00           -6524.64
-0.03_3_0.1_Northern           -3416.51           -3419.15           -3421.79
-0.04_3_0.1_Northern            -313.66            -316.30            -318.94
-0.02_6_0.1_Northern           -5596.86           -5599.50           -5602.14
-0.03_6_0.1_Northern           -2494.01           -2496.65           -2499.29
-0.04_6_0.1_Northern             608.84             606.20             603.56
-                    0.75%_Fixed_4.6 0.75%_Fixed_6.4 0.75%_Fixed_8.2
-0.02_3_0.1_Northern        -4234.76        -4240.42        -4251.00
-0.03_3_0.1_Northern           15.80           10.14           -0.45
-0.04_3_0.1_Northern         4266.35         4260.69         4250.11
-0.02_6_0.1_Northern        -3312.26        -3317.92        -3328.50
-0.03_6_0.1_Northern          938.30          932.64          922.05
-0.04_6_0.1_Northern         5188.85         5183.19         5172.61
-                    0.75%_Tracking_4.6 0.75%_Tracking_6.4 0.75%_Tracking_8.2
-0.02_3_0.1_Northern           -2987.23           -2991.38           -2995.53
-0.03_3_0.1_Northern            1888.64            1884.49            1880.33
-0.04_3_0.1_Northern            6764.50            6760.35            6756.20
-0.02_6_0.1_Northern           -2064.73           -2068.88           -2073.03
-0.03_6_0.1_Northern            2811.14            2806.99            2802.83
-0.04_6_0.1_Northern            7687.00            7682.85            7678.70
-                    1.00%_Fixed_4.6 1.00%_Fixed_6.4 1.00%_Fixed_8.2
-0.02_3_0.1_Northern        -1156.19        -1163.91        -1178.34
-0.03_3_0.1_Northern         4640.03         4632.31         4617.88
-0.04_3_0.1_Northern        10436.26        10428.54        10414.11
-0.02_6_0.1_Northern         -233.69         -241.41         -255.84
-0.03_6_0.1_Northern         5562.53         5554.81         5540.38
-0.04_6_0.1_Northern        11358.76        11351.04        11336.61
-                    1.00%_Tracking_4.6 1.00%_Tracking_6.4 1.00%_Tracking_8.2
-0.02_3_0.1_Northern             544.91             539.24             533.58
-0.03_3_0.1_Northern            7193.79            7188.12            7182.46
-0.04_3_0.1_Northern           13842.67           13837.00           13831.34
-0.02_6_0.1_Northern            1467.41            1461.74            1456.08
-0.03_6_0.1_Northern            8116.29            8110.62            8104.96
-0.04_6_0.1_Northern           14765.17           14759.50           14753.84</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(sbav_chtbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                    0.00%_Fixed_4.6 0.00%_Fixed_6.4 0.00%_Fixed_8.2
-0.02_6_2.0_Southern        16709.51        16709.51        16709.51
-0.03_6_2.0_Southern        16709.51        16709.51        16709.51
-0.04_6_2.0_Southern        16709.51        16709.51        16709.51
-0.02_9_2.0_Southern        35159.51        35159.51        35159.51
-0.03_9_2.0_Southern        35159.51        35159.51        35159.51
-0.04_9_2.0_Southern        35159.51        35159.51        35159.51
-                    0.00%_Tracking_4.6 0.00%_Tracking_6.4 0.00%_Tracking_8.2
-0.02_6_2.0_Southern           16709.51           16709.51           16709.51
-0.03_6_2.0_Southern           16709.51           16709.51           16709.51
-0.04_6_2.0_Southern           16709.51           16709.51           16709.51
-0.02_9_2.0_Southern           35159.51           35159.51           35159.51
-0.03_9_2.0_Southern           35159.51           35159.51           35159.51
-0.04_9_2.0_Southern           35159.51           35159.51           35159.51
-                    0.25%_Fixed_4.6 0.25%_Fixed_6.4 0.25%_Fixed_8.2
-0.02_6_2.0_Southern        19095.33        19093.79        19090.90
-0.03_6_2.0_Southern        20293.04        20291.50        20288.61
-0.04_6_2.0_Southern        21490.74        21489.20        21486.31
-0.02_9_2.0_Southern        37545.33        37543.79        37540.90
-0.03_9_2.0_Southern        38743.04        38741.50        38738.61
-0.04_9_2.0_Southern        39940.74        39939.20        39936.31
-                    0.25%_Tracking_4.6 0.25%_Tracking_6.4 0.25%_Tracking_8.2
-0.02_6_2.0_Southern           19481.09           19479.96           19478.83
-0.03_6_2.0_Southern           20872.10           20870.96           20869.83
-0.04_6_2.0_Southern           22263.10           22261.97           22260.84
-0.02_9_2.0_Southern           37931.09           37929.96           37928.83
-0.03_9_2.0_Southern           39322.10           39320.96           39319.83
-0.04_9_2.0_Southern           40713.10           40711.97           40710.84
-                    0.50%_Fixed_4.6 0.50%_Fixed_6.4 0.50%_Fixed_8.2
-0.02_6_2.0_Southern        22275.14        22271.54        22264.80
-0.03_6_2.0_Southern        25069.14        25065.53        25058.80
-0.04_6_2.0_Southern        27863.13        27859.53        27852.79
-0.02_9_2.0_Southern        40725.14        40721.54        40714.80
-0.03_9_2.0_Southern        43519.14        43515.53        43508.80
-0.04_9_2.0_Southern        46313.13        46309.53        46302.79
-                    0.50%_Tracking_4.6 0.50%_Tracking_6.4 0.50%_Tracking_8.2
-0.02_6_2.0_Southern           23175.80           23173.15           23170.51
-0.03_6_2.0_Southern           26421.10           26418.46           26415.82
-0.04_6_2.0_Southern           29666.41           29663.76           29661.12
-0.02_9_2.0_Southern           41625.80           41623.15           41620.51
-0.03_9_2.0_Southern           44871.10           44868.46           44865.82
-0.04_9_2.0_Southern           48116.41           48113.76           48111.12
-                    0.75%_Fixed_4.6 0.75%_Fixed_6.4 0.75%_Fixed_8.2
-0.02_6_2.0_Southern        25455.59        25449.93        25439.34
-0.03_6_2.0_Southern        29846.19        29840.53        29829.95
-0.04_6_2.0_Southern        34236.80        34231.14        34220.55
-0.02_9_2.0_Southern        43905.59        43899.93        43889.34
-0.03_9_2.0_Southern        48296.19        48290.53        48279.95
-0.04_9_2.0_Southern        52686.80        52681.14        52670.55
-                    0.75%_Tracking_4.6 0.75%_Tracking_6.4 0.75%_Tracking_8.2
-0.02_6_2.0_Southern           26870.75           26866.60           26862.44
-0.03_6_2.0_Southern           31970.48           31966.33           31962.17
-0.04_6_2.0_Southern           37070.21           37066.06           37061.90
-0.02_9_2.0_Southern           45320.75           45316.60           45312.44
-0.03_9_2.0_Southern           50420.48           50416.33           50412.17
-0.04_9_2.0_Southern           55520.21           55516.06           55511.90
-                    1.00%_Fixed_4.6 1.00%_Fixed_6.4 1.00%_Fixed_8.2
-0.02_6_2.0_Southern        28636.01        28628.29        28613.86
-0.03_6_2.0_Southern        34623.22        34615.50        34601.07
-0.04_6_2.0_Southern        40610.42        40602.70        40588.27
-0.02_9_2.0_Southern        47086.01        47078.29        47063.86
-0.03_9_2.0_Southern        53073.22        53065.50        53051.07
-0.04_9_2.0_Southern        59060.42        59052.70        59038.27
-                    1.00%_Tracking_4.6 1.00%_Tracking_6.4 1.00%_Tracking_8.2
-0.02_6_2.0_Southern           30565.69           30560.03           30554.37
-0.03_6_2.0_Southern           37519.84           37514.18           37508.52
-0.04_6_2.0_Southern           44473.99           44468.33           44462.67
-0.02_9_2.0_Southern           49015.69           49010.03           49004.37
-0.03_9_2.0_Southern           55969.84           55964.18           55958.52
-0.04_9_2.0_Southern           62923.99           62918.33           62912.67</code></pre>
+<pre><code> [1] "sprop"       "al_regs"     "array"       "dc_kw"       "panels"     
+ [6] "energy"      "elcprc"      "elcrev"      "height"      "capex"      
+[11] "ttlcost"     "anncost"     "moncost"     "eprofit"     "eannprof"   
+[16] "emonprof"    "yldvar"      "yield"       "price"       "profit"     
+[21] "sbav_profit"</code></pre>
 </div>
 </div>
-<section id="heatmap" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="heatmap"><span class="header-section-number">3.2.1</span> Heatmap</h3>
+<section id="plotting-strawberry-profit" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="plotting-strawberry-profit"><span class="header-section-number">3.2.1</span> Plotting Strawberry Profit</h3>
 <ul>
 <li>Result suppressed.</li>
 </ul>
@@ -1013,92 +624,92 @@ TRUE, : attempt to set 'col.names' ignored</code></pre>
 <section id="squash-av-1" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="squash-av-1"><span class="header-section-number">3.3</span> Squash AV</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the values for each variable</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>sprop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="fl">1.00</span>)</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>array <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Fixed"</span>, <span class="st">"Tracking"</span>)</span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>height <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">4.6</span>, <span class="fl">6.4</span>, <span class="fl">8.2</span>)</span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>yldvar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.10</span>, <span class="fl">0.30</span>, <span class="fl">0.50</span>, <span class="fl">0.70</span>, <span class="fl">1.00</span>, <span class="fl">1.20</span>, <span class="fl">1.50</span>, <span class="fl">1.80</span>, <span class="fl">2.00</span>)</span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>al_regs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Northern"</span>, <span class="st">"Central"</span>, <span class="st">"Black Belt"</span>, <span class="st">"Southern"</span>)</span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>price <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">11</span>, <span class="dv">14</span>, <span class="dv">17</span>)</span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>elcprc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.03</span>, <span class="fl">0.04</span>)</span>
-<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the required columns</span></span>
-<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>required_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sprop"</span>, <span class="st">"array"</span>, <span class="st">"height"</span>, </span>
-<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"al_regs"</span>, <span class="st">"yldvar"</span>, <span class="st">"price"</span>, <span class="st">"elcprc"</span>)</span>
-<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the columns exist in sqav_profit</span></span>
-<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>missing_columns <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(required_columns, </span>
-<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">names</span>(sqav_profit))</span>
-<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(missing_columns) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">"Missing columns in sqav_profit: "</span>,</span>
-<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>       <span class="fu">paste</span>(missing_columns, <span class="at">collapse =</span> <span class="st">", "</span>))</span>
-<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-22"><a href="#cb53-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate column names using reversed order of expand.grid</span></span>
-<span id="cb53-23"><a href="#cb53-23" aria-hidden="true" tabindex="-1"></a>col_names <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">expand.grid</span>(height, array, sprop), <span class="dv">1</span>,</span>
-<span id="cb53-24"><a href="#cb53-24" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">3</span>], <span class="st">"%_"</span>, x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">1</span>]))</span>
-<span id="cb53-25"><a href="#cb53-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-26"><a href="#cb53-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate row names using reversed order of expand.grid</span></span>
-<span id="cb53-27"><a href="#cb53-27" aria-hidden="true" tabindex="-1"></a>row_names <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">expand.grid</span>(elcprc, </span>
-<span id="cb53-28"><a href="#cb53-28" aria-hidden="true" tabindex="-1"></a>                               price,</span>
-<span id="cb53-29"><a href="#cb53-29" aria-hidden="true" tabindex="-1"></a>                               yldvar, </span>
-<span id="cb53-30"><a href="#cb53-30" aria-hidden="true" tabindex="-1"></a>                               al_regs), <span class="dv">1</span>, </span>
-<span id="cb53-31"><a href="#cb53-31" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(x) <span class="fu">paste0</span>(x, <span class="at">collapse =</span> <span class="st">"_"</span>))</span>
-<span id="cb53-32"><a href="#cb53-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-33"><a href="#cb53-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an empty matrix to store the results</span></span>
-<span id="cb53-34"><a href="#cb53-34" aria-hidden="true" tabindex="-1"></a>result_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> <span class="fu">length</span>(row_names), </span>
-<span id="cb53-35"><a href="#cb53-35" aria-hidden="true" tabindex="-1"></a>                        <span class="at">ncol =</span> <span class="fu">length</span>(col_names))</span>
-<span id="cb53-36"><a href="#cb53-36" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(result_matrix) <span class="ot">&lt;-</span> col_names</span>
-<span id="cb53-37"><a href="#cb53-37" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(result_matrix) <span class="ot">&lt;-</span> row_names</span>
-<span id="cb53-38"><a href="#cb53-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-39"><a href="#cb53-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame with </span></span>
-<span id="cb53-40"><a href="#cb53-40" aria-hidden="true" tabindex="-1"></a><span class="co"># all combinations of parameters in reversed order</span></span>
-<span id="cb53-41"><a href="#cb53-41" aria-hidden="true" tabindex="-1"></a>param_combinations <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">elcprc =</span> elcprc, </span>
-<span id="cb53-42"><a href="#cb53-42" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">price =</span> price, </span>
-<span id="cb53-43"><a href="#cb53-43" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">yldvar =</span> yldvar, </span>
-<span id="cb53-44"><a href="#cb53-44" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">al_regs =</span> al_regs,</span>
-<span id="cb53-45"><a href="#cb53-45" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">height =</span> height, </span>
-<span id="cb53-46"><a href="#cb53-46" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">array =</span> array, </span>
-<span id="cb53-47"><a href="#cb53-47" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">sprop =</span> sprop)</span>
-<span id="cb53-48"><a href="#cb53-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-49"><a href="#cb53-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge with tav_profit to get sqav_profit values for each combination</span></span>
-<span id="cb53-50"><a href="#cb53-50" aria-hidden="true" tabindex="-1"></a>merged_data <span class="ot">&lt;-</span> <span class="fu">merge</span>(param_combinations, </span>
-<span id="cb53-51"><a href="#cb53-51" aria-hidden="true" tabindex="-1"></a>                     sqav_profit, </span>
-<span id="cb53-52"><a href="#cb53-52" aria-hidden="true" tabindex="-1"></a>                     <span class="at">by =</span> required_columns,</span>
-<span id="cb53-53"><a href="#cb53-53" aria-hidden="true" tabindex="-1"></a>                     <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb53-54"><a href="#cb53-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-55"><a href="#cb53-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape merged_data to fill result_matrix with </span></span>
-<span id="cb53-56"><a href="#cb53-56" aria-hidden="true" tabindex="-1"></a><span class="co"># reversed column and row names</span></span>
-<span id="cb53-57"><a href="#cb53-57" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>col_name <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
-<span id="cb53-58"><a href="#cb53-58" aria-hidden="true" tabindex="-1"></a>  merged_data[, <span class="fu">c</span>(<span class="st">"sprop"</span>, <span class="st">"array"</span>, <span class="st">"height"</span>)], <span class="dv">1</span>,</span>
-<span id="cb53-59"><a href="#cb53-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">1</span>], <span class="st">"%_"</span>, x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">3</span>]))</span>
-<span id="cb53-60"><a href="#cb53-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-61"><a href="#cb53-61" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>row_name <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
-<span id="cb53-62"><a href="#cb53-62" aria-hidden="true" tabindex="-1"></a>  merged_data[, <span class="fu">c</span>(<span class="st">"al_regs"</span>, <span class="st">"yldvar"</span>, <span class="st">"price"</span>, <span class="st">"elcprc"</span>)], <span class="dv">1</span>,</span>
-<span id="cb53-63"><a href="#cb53-63" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">4</span>], <span class="st">"_"</span>,</span>
-<span id="cb53-64"><a href="#cb53-64" aria-hidden="true" tabindex="-1"></a>                     x[<span class="dv">3</span>], <span class="st">"_"</span>,</span>
-<span id="cb53-65"><a href="#cb53-65" aria-hidden="true" tabindex="-1"></a>                     x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">1</span>]))</span>
-<span id="cb53-66"><a href="#cb53-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-67"><a href="#cb53-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill the matrix with sqav_profit values</span></span>
-<span id="cb53-68"><a href="#cb53-68" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(result_matrix))) {</span>
-<span id="cb53-69"><a href="#cb53-69" aria-hidden="true" tabindex="-1"></a>  row_condition <span class="ot">&lt;-</span> <span class="fu">rownames</span>(result_matrix)[i]</span>
-<span id="cb53-70"><a href="#cb53-70" aria-hidden="true" tabindex="-1"></a>  row_data <span class="ot">&lt;-</span> merged_data[</span>
-<span id="cb53-71"><a href="#cb53-71" aria-hidden="true" tabindex="-1"></a>    merged_data<span class="sc">$</span>row_name <span class="sc">==</span> row_condition, ]</span>
-<span id="cb53-72"><a href="#cb53-72" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(row_data) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb53-73"><a href="#cb53-73" aria-hidden="true" tabindex="-1"></a>    result_matrix[i, </span>
-<span id="cb53-74"><a href="#cb53-74" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">match</span>(row_data<span class="sc">$</span>col_name, </span>
-<span id="cb53-75"><a href="#cb53-75" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">colnames</span>(result_matrix))] <span class="ot">&lt;-</span> <span class="fu">round</span>(</span>
-<span id="cb53-76"><a href="#cb53-76" aria-hidden="true" tabindex="-1"></a>                          row_data<span class="sc">$</span>sqav_profit, <span class="dv">2</span>)</span>
-<span id="cb53-77"><a href="#cb53-77" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb53-78"><a href="#cb53-78" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb53-79"><a href="#cb53-79" aria-hidden="true" tabindex="-1"></a>sqav_chtbl <span class="ot">&lt;-</span> result_matrix <span class="co">#Table in Excel.</span></span>
-<span id="cb53-80"><a href="#cb53-80" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(result_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the values for each variable</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>sprop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="fl">1.00</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>array <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Fixed"</span>, <span class="st">"Tracking"</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>height <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">4.6</span>, <span class="fl">6.4</span>, <span class="fl">8.2</span>)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>yldvar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.10</span>, <span class="fl">0.30</span>, <span class="fl">0.50</span>, <span class="fl">0.70</span>, <span class="fl">1.00</span>, <span class="fl">1.20</span>, <span class="fl">1.50</span>, <span class="fl">1.80</span>, <span class="fl">2.00</span>)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>al_regs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Northern"</span>, <span class="st">"Central"</span>, <span class="st">"Black Belt"</span>, <span class="st">"Southern"</span>)</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>price <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">11</span>, <span class="dv">14</span>, <span class="dv">17</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>elcprc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.03</span>, <span class="fl">0.04</span>)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the required columns</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>required_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sprop"</span>, <span class="st">"array"</span>, <span class="st">"height"</span>, </span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"al_regs"</span>, <span class="st">"yldvar"</span>, <span class="st">"price"</span>, <span class="st">"elcprc"</span>)</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the columns exist in sqav_profit</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>missing_columns <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(required_columns, </span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">names</span>(sqav_profit))</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(missing_columns) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">"Missing columns in sqav_profit: "</span>,</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>       <span class="fu">paste</span>(missing_columns, <span class="at">collapse =</span> <span class="st">", "</span>))</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate column names using reversed order of expand.grid</span></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>col_names <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">expand.grid</span>(height, array, sprop), <span class="dv">1</span>,</span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">3</span>], <span class="st">"%_"</span>, x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">1</span>]))</span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate row names using reversed order of expand.grid</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>row_names <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">expand.grid</span>(elcprc, </span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>                               price,</span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>                               yldvar, </span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>                               al_regs), <span class="dv">1</span>, </span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(x) <span class="fu">paste0</span>(x, <span class="at">collapse =</span> <span class="st">"_"</span>))</span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an empty matrix to store the results</span></span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a>result_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> <span class="fu">length</span>(row_names), </span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a>                        <span class="at">ncol =</span> <span class="fu">length</span>(col_names))</span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(result_matrix) <span class="ot">&lt;-</span> col_names</span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(result_matrix) <span class="ot">&lt;-</span> row_names</span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame with </span></span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a><span class="co"># all combinations of parameters in reversed order</span></span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a>param_combinations <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">elcprc =</span> elcprc, </span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">price =</span> price, </span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">yldvar =</span> yldvar, </span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">al_regs =</span> al_regs,</span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">height =</span> height, </span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">array =</span> array, </span>
+<span id="cb35-47"><a href="#cb35-47" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">sprop =</span> sprop)</span>
+<span id="cb35-48"><a href="#cb35-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-49"><a href="#cb35-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge with tav_profit to get sqav_profit values for each combination</span></span>
+<span id="cb35-50"><a href="#cb35-50" aria-hidden="true" tabindex="-1"></a>merged_data <span class="ot">&lt;-</span> <span class="fu">merge</span>(param_combinations, </span>
+<span id="cb35-51"><a href="#cb35-51" aria-hidden="true" tabindex="-1"></a>                     sqav_profit, </span>
+<span id="cb35-52"><a href="#cb35-52" aria-hidden="true" tabindex="-1"></a>                     <span class="at">by =</span> required_columns,</span>
+<span id="cb35-53"><a href="#cb35-53" aria-hidden="true" tabindex="-1"></a>                     <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb35-54"><a href="#cb35-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-55"><a href="#cb35-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape merged_data to fill result_matrix with </span></span>
+<span id="cb35-56"><a href="#cb35-56" aria-hidden="true" tabindex="-1"></a><span class="co"># reversed column and row names</span></span>
+<span id="cb35-57"><a href="#cb35-57" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>col_name <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
+<span id="cb35-58"><a href="#cb35-58" aria-hidden="true" tabindex="-1"></a>  merged_data[, <span class="fu">c</span>(<span class="st">"sprop"</span>, <span class="st">"array"</span>, <span class="st">"height"</span>)], <span class="dv">1</span>,</span>
+<span id="cb35-59"><a href="#cb35-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">1</span>], <span class="st">"%_"</span>, x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">3</span>]))</span>
+<span id="cb35-60"><a href="#cb35-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-61"><a href="#cb35-61" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>row_name <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
+<span id="cb35-62"><a href="#cb35-62" aria-hidden="true" tabindex="-1"></a>  merged_data[, <span class="fu">c</span>(<span class="st">"al_regs"</span>, <span class="st">"yldvar"</span>, <span class="st">"price"</span>, <span class="st">"elcprc"</span>)], <span class="dv">1</span>,</span>
+<span id="cb35-63"><a href="#cb35-63" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">paste0</span>(x[<span class="dv">4</span>], <span class="st">"_"</span>,</span>
+<span id="cb35-64"><a href="#cb35-64" aria-hidden="true" tabindex="-1"></a>                     x[<span class="dv">3</span>], <span class="st">"_"</span>,</span>
+<span id="cb35-65"><a href="#cb35-65" aria-hidden="true" tabindex="-1"></a>                     x[<span class="dv">2</span>], <span class="st">"_"</span>, x[<span class="dv">1</span>]))</span>
+<span id="cb35-66"><a href="#cb35-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-67"><a href="#cb35-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill the matrix with sqav_profit values</span></span>
+<span id="cb35-68"><a href="#cb35-68" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(result_matrix))) {</span>
+<span id="cb35-69"><a href="#cb35-69" aria-hidden="true" tabindex="-1"></a>  row_condition <span class="ot">&lt;-</span> <span class="fu">rownames</span>(result_matrix)[i]</span>
+<span id="cb35-70"><a href="#cb35-70" aria-hidden="true" tabindex="-1"></a>  row_data <span class="ot">&lt;-</span> merged_data[</span>
+<span id="cb35-71"><a href="#cb35-71" aria-hidden="true" tabindex="-1"></a>    merged_data<span class="sc">$</span>row_name <span class="sc">==</span> row_condition, ]</span>
+<span id="cb35-72"><a href="#cb35-72" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(row_data) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb35-73"><a href="#cb35-73" aria-hidden="true" tabindex="-1"></a>    result_matrix[i, </span>
+<span id="cb35-74"><a href="#cb35-74" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">match</span>(row_data<span class="sc">$</span>col_name, </span>
+<span id="cb35-75"><a href="#cb35-75" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">colnames</span>(result_matrix))] <span class="ot">&lt;-</span> <span class="fu">round</span>(</span>
+<span id="cb35-76"><a href="#cb35-76" aria-hidden="true" tabindex="-1"></a>                          row_data<span class="sc">$</span>sqav_profit, <span class="dv">2</span>)</span>
+<span id="cb35-77"><a href="#cb35-77" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb35-78"><a href="#cb35-78" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb35-79"><a href="#cb35-79" aria-hidden="true" tabindex="-1"></a>sqav_chtbl <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(result_matrix) <span class="co">#Table in Excel.</span></span>
+<span id="cb35-80"><a href="#cb35-80" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(result_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">as.data.frame</span>(sqav_chtbl),</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">"sqav_chtbl.csv"</span>)</span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">as.data.frame</span>(sqav_chtbl))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">as.data.frame</span>(sqav_chtbl),</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">"sqav_chtbl.csv"</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(sqav_chtbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 324  30</code></pre>
 </div>
@@ -1111,156 +722,20 @@ TRUE, : attempt to set 'col.names' ignored</code></pre>
 <li><p>Values displayed in the table are profit from Squash AV system.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the result matrix</span></span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sqav_chtbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the result matrix</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co">#head(sqav_chtbl)</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co">#tail(sqav_chtbl)</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                     0.00%_Fixed_4.6 0.00%_Fixed_6.4 0.00%_Fixed_8.2
-0.02_11_0.1_Northern        -3024.13        -3024.13        -3024.13
-0.03_11_0.1_Northern        -3024.13        -3024.13        -3024.13
-0.04_11_0.1_Northern        -3024.13        -3024.13        -3024.13
-0.02_14_0.1_Northern        -2697.13        -2697.13        -2697.13
-0.03_14_0.1_Northern        -2697.13        -2697.13        -2697.13
-0.04_14_0.1_Northern        -2697.13        -2697.13        -2697.13
-                     0.00%_Tracking_4.6 0.00%_Tracking_6.4 0.00%_Tracking_8.2
-0.02_11_0.1_Northern           -3024.13           -3024.13           -3024.13
-0.03_11_0.1_Northern           -3024.13           -3024.13           -3024.13
-0.04_11_0.1_Northern           -3024.13           -3024.13           -3024.13
-0.02_14_0.1_Northern           -2697.13           -2697.13           -2697.13
-0.03_14_0.1_Northern           -2697.13           -2697.13           -2697.13
-0.04_14_0.1_Northern           -2697.13           -2697.13           -2697.13
-                     0.25%_Fixed_4.6 0.25%_Fixed_6.4 0.25%_Fixed_8.2
-0.02_11_0.1_Northern         -714.76         -716.31         -719.19
-0.03_11_0.1_Northern          444.71          443.17          440.28
-0.04_11_0.1_Northern         1604.19         1602.64         1599.76
-0.02_14_0.1_Northern         -387.76         -389.31         -392.19
-0.03_14_0.1_Northern          771.71          770.17          767.28
-0.04_14_0.1_Northern         1931.19         1929.64         1926.76
-                     0.25%_Tracking_4.6 0.25%_Tracking_6.4 0.25%_Tracking_8.2
-0.02_11_0.1_Northern            -374.67            -375.80            -376.93
-0.03_11_0.1_Northern             955.28             954.15             953.01
-0.04_11_0.1_Northern            2285.22            2284.09            2282.96
-0.02_14_0.1_Northern             -47.67             -48.80             -49.93
-0.03_14_0.1_Northern            1282.28            1281.15            1280.01
-0.04_14_0.1_Northern            2612.22            2611.09            2609.96
-                     0.50%_Fixed_4.6 0.50%_Fixed_6.4 0.50%_Fixed_8.2
-0.02_11_0.1_Northern         2363.25         2359.65         2352.92
-0.03_11_0.1_Northern         5068.12         5064.52         5057.79
-0.04_11_0.1_Northern         7772.99         7769.39         7762.66
-0.02_14_0.1_Northern         2690.25         2686.65         2679.92
-0.03_14_0.1_Northern         5395.12         5391.52         5384.79
-0.04_14_0.1_Northern         8099.99         8096.39         8089.66
-                     0.50%_Tracking_4.6 0.50%_Tracking_6.4 0.50%_Tracking_8.2
-0.02_11_0.1_Northern            3157.25            3154.61            3151.96
-0.03_11_0.1_Northern            6260.10            6257.46            6254.81
-0.04_11_0.1_Northern            9362.95            9360.31            9357.66
-0.02_14_0.1_Northern            3484.25            3481.61            3478.96
-0.03_14_0.1_Northern            6587.10            6584.46            6581.81
-0.04_14_0.1_Northern            9689.95            9687.31            9684.66
-                     0.75%_Fixed_4.6 0.75%_Fixed_6.4 0.75%_Fixed_8.2
-0.02_11_0.1_Northern         5441.85         5436.19         5425.61
-0.03_11_0.1_Northern         9692.40         9686.74         9676.16
-0.04_11_0.1_Northern        13942.96        13937.30        13926.72
-0.02_14_0.1_Northern         5768.85         5763.19         5752.61
-0.03_14_0.1_Northern        10019.40        10013.74        10003.16
-0.04_14_0.1_Northern        14269.96        14264.30        14253.72
-                     0.75%_Tracking_4.6 0.75%_Tracking_6.4 0.75%_Tracking_8.2
-0.02_11_0.1_Northern            6689.38            6685.23            6681.08
-0.03_11_0.1_Northern           11565.25           11561.09           11556.94
-0.04_11_0.1_Northern           16441.11           16436.96           16432.81
-0.02_14_0.1_Northern            7016.38            7012.23            7008.08
-0.03_14_0.1_Northern           11892.25           11888.09           11883.94
-0.04_14_0.1_Northern           16768.11           16763.96           16759.81
-                     1.00%_Fixed_4.6 1.00%_Fixed_6.4 1.00%_Fixed_8.2
-0.02_11_0.1_Northern         8520.41         8512.70         8498.26
-0.03_11_0.1_Northern        14316.64        14308.92        14294.49
-0.04_11_0.1_Northern        20112.86        20105.15        20090.71
-0.02_14_0.1_Northern         8847.41         8839.70         8825.26
-0.03_14_0.1_Northern        14643.64        14635.92        14621.49
-0.04_14_0.1_Northern        20439.86        20432.15        20417.71
-                     1.00%_Tracking_4.6 1.00%_Tracking_6.4 1.00%_Tracking_8.2
-0.02_11_0.1_Northern           10221.51           10215.85           10210.19
-0.03_11_0.1_Northern           16870.39           16864.73           16859.07
-0.04_11_0.1_Northern           23519.27           23513.61           23507.95
-0.02_14_0.1_Northern           10548.51           10542.85           10537.19
-0.03_14_0.1_Northern           17197.39           17191.73           17186.07
-0.04_14_0.1_Northern           23846.27           23840.61           23834.95</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(sqav_chtbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                     0.00%_Fixed_4.6 0.00%_Fixed_6.4 0.00%_Fixed_8.2
-0.02_14_2.0_Southern        16849.12        16849.12        16849.12
-0.03_14_2.0_Southern        16849.12        16849.12        16849.12
-0.04_14_2.0_Southern        16849.12        16849.12        16849.12
-0.02_17_2.0_Southern        23389.12        23389.12        23389.12
-0.03_17_2.0_Southern        23389.12        23389.12        23389.12
-0.04_17_2.0_Southern        23389.12        23389.12        23389.12
-                     0.00%_Tracking_4.6 0.00%_Tracking_6.4 0.00%_Tracking_8.2
-0.02_14_2.0_Southern           16849.12           16849.12           16849.12
-0.03_14_2.0_Southern           16849.12           16849.12           16849.12
-0.04_14_2.0_Southern           16849.12           16849.12           16849.12
-0.02_17_2.0_Southern           23389.12           23389.12           23389.12
-0.03_17_2.0_Southern           23389.12           23389.12           23389.12
-0.04_17_2.0_Southern           23389.12           23389.12           23389.12
-                     0.25%_Fixed_4.6 0.25%_Fixed_6.4 0.25%_Fixed_8.2
-0.02_14_2.0_Southern        19234.95        19233.40        19230.52
-0.03_14_2.0_Southern        20432.65        20431.11        20428.22
-0.04_14_2.0_Southern        21630.36        21628.81        21625.93
-0.02_17_2.0_Southern        25774.95        25773.40        25770.52
-0.03_17_2.0_Southern        26972.65        26971.11        26968.22
-0.04_17_2.0_Southern        28170.36        28168.81        28165.93
-                     0.25%_Tracking_4.6 0.25%_Tracking_6.4 0.25%_Tracking_8.2
-0.02_14_2.0_Southern           19620.70           19619.57           19618.44
-0.03_14_2.0_Southern           21011.71           21010.58           21009.44
-0.04_14_2.0_Southern           22402.71           22401.58           22400.45
-0.02_17_2.0_Southern           26160.70           26159.57           26158.44
-0.03_17_2.0_Southern           27551.71           27550.58           27549.44
-0.04_17_2.0_Southern           28942.71           28941.58           28940.45
-                     0.50%_Fixed_4.6 0.50%_Fixed_6.4 0.50%_Fixed_8.2
-0.02_14_2.0_Southern        22414.75        22411.15        22404.42
-0.03_14_2.0_Southern        25208.75        25205.15        25198.41
-0.04_14_2.0_Southern        28002.74        27999.14        27992.41
-0.02_17_2.0_Southern        28954.75        28951.15        28944.42
-0.03_17_2.0_Southern        31748.75        31745.15        31738.41
-0.04_17_2.0_Southern        34542.74        34539.14        34532.41
-                     0.50%_Tracking_4.6 0.50%_Tracking_6.4 0.50%_Tracking_8.2
-0.02_14_2.0_Southern           23315.41           23312.77           23310.12
-0.03_14_2.0_Southern           26560.71           26558.07           26555.43
-0.04_14_2.0_Southern           29806.02           29803.38           29800.73
-0.02_17_2.0_Southern           29855.41           29852.77           29850.12
-0.03_17_2.0_Southern           33100.71           33098.07           33095.43
-0.04_17_2.0_Southern           36346.02           36343.38           36340.73
-                     0.75%_Fixed_4.6 0.75%_Fixed_6.4 0.75%_Fixed_8.2
-0.02_14_2.0_Southern        25595.20        25589.54        25578.96
-0.03_14_2.0_Southern        29985.80        29980.14        29969.56
-0.04_14_2.0_Southern        34376.41        34370.75        34360.17
-0.02_17_2.0_Southern        32135.20        32129.54        32118.96
-0.03_17_2.0_Southern        36525.80        36520.14        36509.56
-0.04_17_2.0_Southern        40916.41        40910.75        40900.17
-                     0.75%_Tracking_4.6 0.75%_Tracking_6.4 0.75%_Tracking_8.2
-0.02_14_2.0_Southern           27010.36           27006.21           27002.06
-0.03_14_2.0_Southern           32110.09           32105.94           32101.79
-0.04_14_2.0_Southern           37209.82           37205.67           37201.52
-0.02_17_2.0_Southern           33550.36           33546.21           33542.06
-0.03_17_2.0_Southern           38650.09           38645.94           38641.79
-0.04_17_2.0_Southern           43749.82           43745.67           43741.52
-                     1.00%_Fixed_4.6 1.00%_Fixed_6.4 1.00%_Fixed_8.2
-0.02_14_2.0_Southern        28775.62        28767.91        28753.47
-0.03_14_2.0_Southern        34762.83        34755.11        34740.68
-0.04_14_2.0_Southern        40750.03        40742.32        40727.88
-0.02_17_2.0_Southern        35315.62        35307.91        35293.47
-0.03_17_2.0_Southern        41302.83        41295.11        41280.68
-0.04_17_2.0_Southern        47290.03        47282.32        47267.88
-                     1.00%_Tracking_4.6 1.00%_Tracking_6.4 1.00%_Tracking_8.2
-0.02_14_2.0_Southern           30705.30           30699.64           30693.98
-0.03_14_2.0_Southern           37659.45           37653.79           37648.13
-0.04_14_2.0_Southern           44613.60           44607.94           44602.28
-0.02_17_2.0_Southern           37245.30           37239.64           37233.98
-0.03_17_2.0_Southern           44199.45           44193.79           44188.13
-0.04_17_2.0_Southern           51153.60           51147.94           51142.28</code></pre>
+<pre><code> [1] "sprop"       "al_regs"     "array"       "dc_kw"       "panels"     
+ [6] "energy"      "elcprc"      "elcrev"      "height"      "capex"      
+[11] "ttlcost"     "anncost"     "moncost"     "eprofit"     "eannprof"   
+[16] "emonprof"    "yldvar"      "yield"       "price"       "profit"     
+[21] "sqav_profit"</code></pre>
 </div>
 </div>
-<section id="heatmap-1" class="level3" data-number="3.3.1">
-<h3 data-number="3.3.1" class="anchored" data-anchor-id="heatmap-1"><span class="header-section-number">3.3.1</span> Heatmap</h3>
+<section id="plotting-squash-profit" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="plotting-squash-profit"><span class="header-section-number">3.3.1</span> Plotting Squash Profit</h3>
 <ul>
 <li>Result suppressed.</li>
 </ul>

@@ -1,0 +1,947 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{5}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={AV Profit},
+  pdfauthor={Bijesh Mishra, Ph.D.},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{AV Profit}
+\author{Bijesh Mishra, Ph.D.}
+\date{}
+
+\begin{document}
+\maketitle
+
+\renewcommand*\contentsname{Table of contents}
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+\newpage
+
+Analysis in this file start by loading data saved after simulating
+tomato, strawberry, and squash AV profits. See simulation file for more
+details. The result tables I have here are quite big. Results are
+summarized in separate excel file (Results.xlsx).
+
+\section{Setting Up}\label{setting-up}
+
+\subsection{Housekeeping}\label{housekeeping}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# \#| echo: TRUE}
+\FunctionTok{rm}\NormalTok{(}\AttributeTok{list =} \FunctionTok{ls}\NormalTok{()) }\CommentTok{\# Clean the environment.}
+\FunctionTok{options}\NormalTok{(}
+  \AttributeTok{warn=}\DecValTok{0}\NormalTok{, }\CommentTok{\# Warnings. options(warn={-}1) / options(warn=0)}
+  \AttributeTok{scipen=}\DecValTok{999} \CommentTok{\# No scientific notations.}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Working directory}\label{working-directory}
+
+Codes and output are suppressed. Errors and warnings are visible. No
+warning and no error means code is working as it should.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{path\_mac }\OtherTok{=} \StringTok{"/Users/bmishra/Library/CloudStorage/OneDrive{-}AuburnUniversity/Collaboration/Ngbede M/Choice{-}paper"}
+\NormalTok{path\_office }\OtherTok{=} \StringTok{"Users}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bzm0094}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{OneDrive {-} Auburn University}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Collaboration}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Ngbede M}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Choice{-}paper"}
+\FunctionTok{ifelse}\NormalTok{(}\FunctionTok{Sys.info}\NormalTok{()[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{==} \StringTok{"bmishra"}\NormalTok{,}
+       \FunctionTok{setwd}\NormalTok{(path\_mac),}
+       \FunctionTok{setwd}\NormalTok{(path\_office))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Load libraries}\label{load-libraries}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse, }\AttributeTok{warn.conflicts =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+-- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+v dplyr     1.1.4     v readr     2.1.5
+v forcats   1.0.0     v stringr   1.5.1
+v ggplot2   3.5.1     v tibble    3.2.1
+v lubridate 1.9.3     v tidyr     1.3.1
+v purrr     1.0.2     
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(psych, }\AttributeTok{warn.conflicts =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(likert,  }\AttributeTok{warn.conflicts =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{) }\CommentTok{\# Likert Items}
+\FunctionTok{library}\NormalTok{(mice,  }\AttributeTok{warn.conflicts =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(openxlsx2, }\AttributeTok{warn.conflicts =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(ggpubr, }\AttributeTok{warn.conflicts =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{) }\CommentTok{\# Scatter plot}
+\FunctionTok{library}\NormalTok{(gmodels,  }\AttributeTok{warn.conflicts =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{) }\CommentTok{\# Crosstab}
+\FunctionTok{library}\NormalTok{(reshape2, }\AttributeTok{warn.conflicts =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{) }\CommentTok{\# Reshape data}
+\FunctionTok{library}\NormalTok{(pacman,  }\AttributeTok{warn.conflicts =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{) }\CommentTok{\# Package Management}
+\FunctionTok{library}\NormalTok{(progress, }\AttributeTok{warn.conflicts =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{) }\CommentTok{\#progress bar}
+\FunctionTok{library}\NormalTok{(arrow, }\AttributeTok{warn.conflicts =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{) }\CommentTok{\#feather}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Some features are not enabled in this build of Arrow. Run `arrow_info()` for more information.
+The repository you retrieved Arrow from did not include all of Arrow's features.
+You can install a fully-featured version by running:
+`install.packages('arrow', repos = 'https://apache.r-universe.dev')`.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pacman}\SpecialCharTok{::}\FunctionTok{p\_loaded}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ [1] "arrow"     "progress"  "pacman"    "reshape2"  "gmodels"   "ggpubr"   
+ [7] "openxlsx2" "mice"      "likert"    "xtable"    "psych"     "lubridate"
+[13] "forcats"   "stringr"   "dplyr"     "purrr"     "readr"     "tidyr"    
+[19] "tibble"    "ggplot2"   "tidyverse"
+\end{verbatim}
+
+\subsection{Theme for plots}\label{theme-for-plots}
+
+Setting theme for plots:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#\#\#\#\#\# Plotting Data: \#\#\#\#\#}
+\CommentTok{\# Map Theme:}
+\NormalTok{plottheme }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{() }\SpecialCharTok{+}
+  \CommentTok{\# Mapping theme:}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{axis.ticks =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{axis.text =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{panel.border =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{plot.margin =} \FunctionTok{margin}\NormalTok{(}\AttributeTok{t =} \DecValTok{0}\NormalTok{, }
+                             \AttributeTok{r =} \DecValTok{0}\NormalTok{, }
+                             \AttributeTok{b =} \DecValTok{0}\NormalTok{, }
+                             \AttributeTok{l =} \DecValTok{0}\NormalTok{, }
+                             \AttributeTok{unit =} \StringTok{"cm"}\NormalTok{),}
+        \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+        \AttributeTok{plot.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"white"}\NormalTok{, }
+                                       \AttributeTok{color =} \StringTok{"black"}\NormalTok{,}
+                                       \AttributeTok{linewidth =} \DecValTok{0}\NormalTok{),}
+        \AttributeTok{panel.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"white"}\NormalTok{, }
+                                        \AttributeTok{color =} \StringTok{"black"}\NormalTok{,}
+                                        \AttributeTok{linewidth =} \DecValTok{0}\NormalTok{),}
+        \AttributeTok{panel.grid.major.x =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"lightgrey"}\NormalTok{,}
+                                          \AttributeTok{linetype =} \DecValTok{2}\NormalTok{,}
+                                          \AttributeTok{linewidth =} \DecValTok{0}\NormalTok{),}
+        \AttributeTok{panel.grid.minor.x =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"lightgrey"}\NormalTok{,}
+                                          \AttributeTok{linetype =} \DecValTok{2}\NormalTok{,}
+                                          \AttributeTok{linewidth =} \DecValTok{0}\NormalTok{),}
+        \AttributeTok{panel.grid.major.y =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"grey"}\NormalTok{,}
+                                          \AttributeTok{linetype =} \DecValTok{2}\NormalTok{,}
+                                          \AttributeTok{linewidth =} \DecValTok{0}\NormalTok{),}
+        \AttributeTok{panel.grid.minor.y =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"grey"}\NormalTok{,}
+                                          \AttributeTok{linetype =} \DecValTok{2}\NormalTok{,}
+                                          \AttributeTok{linewidth =} \DecValTok{0}\NormalTok{),}
+        \AttributeTok{axis.line.x.top =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"white"}\NormalTok{,}
+                                       \AttributeTok{linetype =} \DecValTok{2}\NormalTok{,}
+                                       \AttributeTok{linewidth =} \DecValTok{0}\NormalTok{),}
+        \AttributeTok{axis.line.y.right =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"white"}\NormalTok{,}
+                                         \AttributeTok{linetype =} \DecValTok{2}\NormalTok{,}
+                                         \AttributeTok{linewidth =} \DecValTok{0}\NormalTok{),}
+        \AttributeTok{axis.line.x.bottom =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"black"}\NormalTok{,}
+                                          \AttributeTok{linetype =} \DecValTok{1}\NormalTok{,}
+                                          \AttributeTok{linewidth =} \DecValTok{0}\NormalTok{),}
+        \AttributeTok{axis.line.y.left =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"black"}\NormalTok{,}
+                                        \AttributeTok{linetype =} \DecValTok{1}\NormalTok{,}
+                                        \AttributeTok{linewidth =} \DecValTok{0}\NormalTok{),}
+        \CommentTok{\# Text formatting:}
+        \AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{family =} \StringTok{"serif"}\NormalTok{, }\CommentTok{\# font}
+                            \AttributeTok{size =} \DecValTok{12}\NormalTok{, }\CommentTok{\# font size}
+                            \AttributeTok{colour =} \StringTok{"black"}\CommentTok{\# font color}
+\NormalTok{        ),}
+        \AttributeTok{legend.position =} \FunctionTok{c}\NormalTok{(}\FloatTok{0.95}\NormalTok{, }\SpecialCharTok{{-}}\FloatTok{0.05}\NormalTok{),}
+        \AttributeTok{legend.key =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{color =} \StringTok{"black"}\NormalTok{, }
+                                  \AttributeTok{fill =} \ConstantTok{NA}\NormalTok{, }
+                                  \AttributeTok{linewidth =} \FloatTok{0.05}\NormalTok{, }
+                                  \AttributeTok{linetype =} \DecValTok{1}\NormalTok{),}
+        \AttributeTok{legend.justification =} \StringTok{"right"}\NormalTok{,}
+        \AttributeTok{legend.direction =} \StringTok{"horizontal"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: A numeric `legend.position` argument in `theme()` was deprecated in ggplot2
+3.5.0.
+i Please use the `legend.position.inside` argument of `theme()` instead.
+\end{verbatim}
+
+\section{Import data}\label{import-data}
+
+Import necessary data.
+
+\subsection{Tomato AV}\label{tomato-av}
+
+sprop = proportion of solar in agrivoltaic system (0 to 1 in 0.5
+increment.)
+
+al\_regs = four regions of Alabama. Northern, Central, Black Belt,
+Southern.
+
+array = Solar array; Sun tracking (Tracking) and non-tracking (Fixed).
+
+dc\_kw = DC system size (kW) See
+\href{https://pvwatts.nrel.gov/pvwatts.php}{PVWatts® Calculator}.
+
+panels = number of solar panels.
+
+energy = total energy generated from solar system. See:
+\href{https://pvwatts.nrel.gov/pvwatts.php}{PVWatts® Calculator}.
+
+elecprc = electricity price (1 cents to 6 cents).
+
+height = clearance height of solar panels. 4.6 ft., 6.4 ft., and 8.2 ft.
+
+capex = AV system capex per kW. See:
+\href{https://www.nrel.gov/docs/fy21osti/77811.pdf}{Capex Cost for AV}
+table 1 and table 3.
+
+ttlcost = total solar system cost in AV. See:
+\href{https://www.nrel.gov/docs/fy21osti/77811.pdf}{Capex Cost for AV}
+table 1 and table 3.
+
+anncost = annualized total cost.
+
+moncost = monthly total cost.
+
+eprofit = profit from electricity.
+
+eannprof = annualized total profit from electricity.
+
+emonprof = monthly total profit from electricity.
+
+yldvar = crop yield variation (10\% to 200\%)
+
+yield = crop yield variation based on yldvar.
+
+price = crop yield price per bucket.
+
+profit = profit from crops.
+
+tav\_profit = total profit from solar and tomato.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tav\_profit }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{read\_feather}\NormalTok{(}\AttributeTok{file =} \StringTok{"tav\_profit.feather"}\NormalTok{))}
+\FunctionTok{dim}\NormalTok{(tav\_profit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 776160     21
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#str(tav\_profit)}
+\CommentTok{\#head(tav\_profit); head(tav\_profit)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Strawberry AV}\label{strawberry-av}
+
+See tomato for variable descriptions.
+
+sbav\_profit = total profit from solar and strawberry.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sbav\_profit }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{read\_feather}\NormalTok{(}\AttributeTok{file =} \StringTok{"sbav\_profit.feather"}\NormalTok{))}
+\FunctionTok{dim}\NormalTok{(sbav\_profit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 776160     21
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#str(sbav\_profit)}
+\CommentTok{\#head(sbav\_profit); tail(sbav\_profit)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Squash AV}\label{squash-av}
+
+See tomato for variable descriptions.
+
+sqav\_profit = total profit from solar and squash.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sqav\_profit }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{read\_feather}\NormalTok{(}\AttributeTok{file =} \StringTok{"sqav\_profit.feather"}\NormalTok{))}
+\FunctionTok{dim}\NormalTok{(sqav\_profit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 776160     21
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#str(sqav\_profit)}
+\CommentTok{\#head(sqav\_profit); tail(sqav\_profit)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Tabulating Results}\label{tabulating-results}
+
+\subsection{Tomato AV}\label{tomato-av-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Define the values for each variable}
+\NormalTok{sprop }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.25}\NormalTok{, }\FloatTok{0.50}\NormalTok{, }\FloatTok{0.75}\NormalTok{, }\FloatTok{1.00}\NormalTok{) }\CommentTok{\# Land Proportion}
+\NormalTok{array }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Fixed"}\NormalTok{, }\StringTok{"Tracking"}\NormalTok{) }\CommentTok{\# Solar Array}
+\NormalTok{height }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{4.6}\NormalTok{, }\FloatTok{6.4}\NormalTok{, }\FloatTok{8.2}\NormalTok{) }\CommentTok{\# Panel height}
+\NormalTok{yldvar }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.10}\NormalTok{, }\FloatTok{0.30}\NormalTok{, }\FloatTok{0.50}\NormalTok{, }\FloatTok{0.70}\NormalTok{, }\FloatTok{1.00}\NormalTok{, }\FloatTok{1.20}\NormalTok{, }\FloatTok{1.50}\NormalTok{, }\FloatTok{1.80}\NormalTok{, }\FloatTok{2.00}\NormalTok{) }\CommentTok{\# Crop Yield Variation}
+\NormalTok{al\_regs }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Northern"}\NormalTok{, }\StringTok{"Central"}\NormalTok{, }\StringTok{"Black Belt"}\NormalTok{, }\StringTok{"Southern"}\NormalTok{) }\CommentTok{\# Regions of AL}
+\NormalTok{price }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{17}\NormalTok{, }\DecValTok{20}\NormalTok{, }\DecValTok{23}\NormalTok{) }\CommentTok{\# Crop Price}
+\NormalTok{elcprc }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.02}\NormalTok{, }\FloatTok{0.03}\NormalTok{, }\FloatTok{0.04}\NormalTok{) }\CommentTok{\# Electricity Price}
+
+\CommentTok{\# Define the required columns}
+\NormalTok{required\_columns }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"sprop"}\NormalTok{, }\StringTok{"array"}\NormalTok{, }\StringTok{"height"}\NormalTok{, }
+                      \StringTok{"al\_regs"}\NormalTok{, }\StringTok{"yldvar"}\NormalTok{, }\StringTok{"price"}\NormalTok{, }\StringTok{"elcprc"}\NormalTok{)}
+
+\CommentTok{\# Check if the columns exist in tav\_profit}
+\NormalTok{missing\_columns }\OtherTok{\textless{}{-}} \FunctionTok{setdiff}\NormalTok{(required\_columns, }
+                           \FunctionTok{names}\NormalTok{(tav\_profit))}
+\ControlFlowTok{if}\NormalTok{ (}\FunctionTok{length}\NormalTok{(missing\_columns) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) \{}
+  \FunctionTok{stop}\NormalTok{(}\StringTok{"Missing columns in tav\_profit: "}\NormalTok{,}
+       \FunctionTok{paste}\NormalTok{(missing\_columns, }\AttributeTok{collapse =} \StringTok{", "}\NormalTok{))}
+\NormalTok{\}}
+
+\CommentTok{\# Generate column names using reversed order of expand.grid}
+\NormalTok{col\_names }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}\FunctionTok{expand.grid}\NormalTok{(height, array, sprop), }\DecValTok{1}\NormalTok{,}
+                   \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{paste0}\NormalTok{(x[}\DecValTok{3}\NormalTok{], }\StringTok{"\%\_"}\NormalTok{, x[}\DecValTok{2}\NormalTok{], }\StringTok{"\_"}\NormalTok{, x[}\DecValTok{1}\NormalTok{]))}
+
+\CommentTok{\# Generate row names using reversed order of expand.grid}
+\NormalTok{row\_names }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}\FunctionTok{expand.grid}\NormalTok{(elcprc, }
+\NormalTok{                               price,}
+\NormalTok{                               yldvar, }
+\NormalTok{                               al\_regs), }\DecValTok{1}\NormalTok{, }
+                   \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{paste0}\NormalTok{(x, }\AttributeTok{collapse =} \StringTok{"\_"}\NormalTok{))}
+
+\CommentTok{\# Create an empty matrix to store the results}
+\NormalTok{result\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\AttributeTok{nrow =} \FunctionTok{length}\NormalTok{(row\_names), }
+                        \AttributeTok{ncol =} \FunctionTok{length}\NormalTok{(col\_names))}
+\FunctionTok{colnames}\NormalTok{(result\_matrix) }\OtherTok{\textless{}{-}}\NormalTok{ col\_names}
+\FunctionTok{rownames}\NormalTok{(result\_matrix) }\OtherTok{\textless{}{-}}\NormalTok{ row\_names}
+
+\CommentTok{\# Create a data frame with }
+\CommentTok{\# all combinations of parameters in reversed order}
+\NormalTok{param\_combinations }\OtherTok{\textless{}{-}} \FunctionTok{expand.grid}\NormalTok{(}\AttributeTok{elcprc =}\NormalTok{ elcprc, }
+                                  \AttributeTok{price =}\NormalTok{ price, }
+                                  \AttributeTok{yldvar =}\NormalTok{ yldvar, }
+                                  \AttributeTok{al\_regs =}\NormalTok{ al\_regs,}
+                                  \AttributeTok{height =}\NormalTok{ height, }
+                                  \AttributeTok{array =}\NormalTok{ array, }
+                                  \AttributeTok{sprop =}\NormalTok{ sprop)}
+
+\CommentTok{\# Merge with tav\_profit to get tav\_profit values for each combination}
+\NormalTok{merged\_data }\OtherTok{\textless{}{-}} \FunctionTok{merge}\NormalTok{(param\_combinations, }
+\NormalTok{                     tav\_profit, }
+                     \AttributeTok{by =}\NormalTok{ required\_columns,}
+                     \AttributeTok{all.x =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# Reshape merged\_data to fill result\_matrix with }
+\CommentTok{\# reversed column and row names}
+\NormalTok{merged\_data}\SpecialCharTok{$}\NormalTok{col\_name }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}
+\NormalTok{  merged\_data[, }\FunctionTok{c}\NormalTok{(}\StringTok{"sprop"}\NormalTok{, }\StringTok{"array"}\NormalTok{, }\StringTok{"height"}\NormalTok{)], }\DecValTok{1}\NormalTok{,}
+  \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{paste0}\NormalTok{(x[}\DecValTok{1}\NormalTok{], }\StringTok{"\%\_"}\NormalTok{, x[}\DecValTok{2}\NormalTok{], }\StringTok{"\_"}\NormalTok{, x[}\DecValTok{3}\NormalTok{]))}
+
+\NormalTok{merged\_data}\SpecialCharTok{$}\NormalTok{row\_name }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}
+\NormalTok{  merged\_data[, }\FunctionTok{c}\NormalTok{(}\StringTok{"al\_regs"}\NormalTok{, }\StringTok{"yldvar"}\NormalTok{, }\StringTok{"price"}\NormalTok{, }\StringTok{"elcprc"}\NormalTok{)], }\DecValTok{1}\NormalTok{,}
+  \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{paste0}\NormalTok{(x[}\DecValTok{4}\NormalTok{], }\StringTok{"\_"}\NormalTok{,}
+\NormalTok{                     x[}\DecValTok{3}\NormalTok{], }\StringTok{"\_"}\NormalTok{,}
+\NormalTok{                     x[}\DecValTok{2}\NormalTok{], }\StringTok{"\_"}\NormalTok{, x[}\DecValTok{1}\NormalTok{]))}
+
+\CommentTok{\# Fill the matrix with tav\_profit values}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \FunctionTok{seq\_len}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(result\_matrix))) \{}
+\NormalTok{  row\_condition }\OtherTok{\textless{}{-}} \FunctionTok{rownames}\NormalTok{(result\_matrix)[i]}
+\NormalTok{  row\_data }\OtherTok{\textless{}{-}}\NormalTok{ merged\_data[}
+\NormalTok{    merged\_data}\SpecialCharTok{$}\NormalTok{row\_name }\SpecialCharTok{==}\NormalTok{ row\_condition, ]}
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{nrow}\NormalTok{(row\_data) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) \{}
+\NormalTok{    result\_matrix[i, }
+                  \FunctionTok{match}\NormalTok{(row\_data}\SpecialCharTok{$}\NormalTok{col\_name, }
+                        \FunctionTok{colnames}\NormalTok{(result\_matrix))] }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}
+\NormalTok{                          row\_data}\SpecialCharTok{$}\NormalTok{tav\_profit, }\DecValTok{2}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\}}
+\NormalTok{tav\_chtbl }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(result\_matrix) }\CommentTok{\#Table in Excel.}
+\FunctionTok{rm}\NormalTok{(result\_matrix)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{write.csv}\NormalTok{(}\FunctionTok{as.data.frame}\NormalTok{(tav\_chtbl),}
+          \AttributeTok{row.names =} \ConstantTok{TRUE}\NormalTok{,}
+          \AttributeTok{col.names =} \ConstantTok{TRUE}\NormalTok{,}
+          \AttributeTok{file =} \StringTok{"tav\_chtbl.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in write.csv(as.data.frame(tav_chtbl), row.names = TRUE, col.names =
+TRUE, : attempt to set 'col.names' ignored
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{dim}\NormalTok{(tav\_chtbl)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 324  30
+\end{verbatim}
+
+\begin{itemize}
+\item
+  Row naming: Electricity Price\_Crop Price\_Solar Proportion\_Alabama
+  Regions
+\item
+  Column naming: Solar Proportion\_Array Types\_Solar Panel Height.
+\item
+  Solar Proportion can be converted to total number of panels.
+\item
+  Only selected values from each variables are extracted for tabulation
+  purpose.
+\item
+  Values displayed in the table are profit from Tomato AV system.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Display the result matrix}
+\CommentTok{\#head(tav\_chtbl)}
+\CommentTok{\#tail(tav\_chtbl)}
+\FunctionTok{names}\NormalTok{(tav\_profit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ [1] "sprop"      "al_regs"    "array"      "dc_kw"      "panels"    
+ [6] "energy"     "elcprc"     "elcrev"     "height"     "capex"     
+[11] "ttlcost"    "anncost"    "moncost"    "eprofit"    "eannprof"  
+[16] "emonprof"   "yldvar"     "yield"      "price"      "profit"    
+[21] "tav_profit"
+\end{verbatim}
+
+\subsubsection{Plotting Tomato Profit}\label{plotting-tomato-profit}
+
+\begin{itemize}
+\tightlist
+\item
+  Result suppressed.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tavp\_plot }\OtherTok{\textless{}{-}}\NormalTok{ tav\_profit}
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ tav\_plot,}
+       \AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ pprop,}
+                     \AttributeTok{y =}\NormalTok{ tav\_profit,}
+                     \AttributeTok{color =} \FunctionTok{factor}\NormalTok{(yldvar),}
+                     \AttributeTok{group =} \FunctionTok{factor}\NormalTok{(yield))) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =} \DecValTok{0}\NormalTok{,}
+             \AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{,}
+             \AttributeTok{color =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{guides}\NormalTok{(}\AttributeTok{color =} \FunctionTok{guide\_legend}\NormalTok{(}\AttributeTok{ncol =} \DecValTok{2}\NormalTok{,}
+                              \AttributeTok{reverse =} \ConstantTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Error in ggplot(data = tav_plot, mapping = aes(x = pprop, y = tav_profit, : object 'tav_plot' not found
+\end{verbatim}
+
+\subsection{Strawberry AV}\label{strawberry-av-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Define the values for each variable}
+\NormalTok{sprop }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.25}\NormalTok{, }\FloatTok{0.50}\NormalTok{, }\FloatTok{0.75}\NormalTok{, }\FloatTok{1.00}\NormalTok{)}
+\NormalTok{array }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Fixed"}\NormalTok{, }\StringTok{"Tracking"}\NormalTok{)}
+\NormalTok{height }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{4.6}\NormalTok{, }\FloatTok{6.4}\NormalTok{, }\FloatTok{8.2}\NormalTok{)}
+\NormalTok{yldvar }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.10}\NormalTok{, }\FloatTok{0.30}\NormalTok{, }\FloatTok{0.50}\NormalTok{, }\FloatTok{0.70}\NormalTok{, }\FloatTok{1.00}\NormalTok{, }\FloatTok{1.20}\NormalTok{, }\FloatTok{1.50}\NormalTok{, }\FloatTok{1.80}\NormalTok{, }\FloatTok{2.00}\NormalTok{)}
+\NormalTok{al\_regs }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Northern"}\NormalTok{, }\StringTok{"Central"}\NormalTok{, }\StringTok{"Black Belt"}\NormalTok{, }\StringTok{"Southern"}\NormalTok{)}
+\NormalTok{price }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{9}\NormalTok{)}
+\NormalTok{elcprc }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.02}\NormalTok{, }\FloatTok{0.03}\NormalTok{, }\FloatTok{0.04}\NormalTok{)}
+
+\CommentTok{\# Define the required columns}
+\NormalTok{required\_columns }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"sprop"}\NormalTok{, }\StringTok{"array"}\NormalTok{, }\StringTok{"height"}\NormalTok{, }
+                      \StringTok{"al\_regs"}\NormalTok{, }\StringTok{"yldvar"}\NormalTok{, }\StringTok{"price"}\NormalTok{, }\StringTok{"elcprc"}\NormalTok{)}
+
+\CommentTok{\# Check if the columns exist in sbav\_profit}
+\NormalTok{missing\_columns }\OtherTok{\textless{}{-}} \FunctionTok{setdiff}\NormalTok{(required\_columns, }
+                           \FunctionTok{names}\NormalTok{(sbav\_profit))}
+\ControlFlowTok{if}\NormalTok{ (}\FunctionTok{length}\NormalTok{(missing\_columns) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) \{}
+  \FunctionTok{stop}\NormalTok{(}\StringTok{"Missing columns in sbav\_profit: "}\NormalTok{,}
+       \FunctionTok{paste}\NormalTok{(missing\_columns, }\AttributeTok{collapse =} \StringTok{", "}\NormalTok{))}
+\NormalTok{\}}
+
+\CommentTok{\# Generate column names using reversed order of expand.grid}
+\NormalTok{col\_names }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}\FunctionTok{expand.grid}\NormalTok{(height, array, sprop), }\DecValTok{1}\NormalTok{,}
+                   \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{paste0}\NormalTok{(x[}\DecValTok{3}\NormalTok{], }\StringTok{"\%\_"}\NormalTok{, x[}\DecValTok{2}\NormalTok{], }\StringTok{"\_"}\NormalTok{, x[}\DecValTok{1}\NormalTok{]))}
+
+\CommentTok{\# Generate row names using reversed order of expand.grid}
+\NormalTok{row\_names }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}\FunctionTok{expand.grid}\NormalTok{(elcprc, }
+\NormalTok{                               price,}
+\NormalTok{                               yldvar, }
+\NormalTok{                               al\_regs), }\DecValTok{1}\NormalTok{, }
+                   \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{paste0}\NormalTok{(x, }\AttributeTok{collapse =} \StringTok{"\_"}\NormalTok{))}
+
+\CommentTok{\# Create an empty matrix to store the results}
+\NormalTok{result\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\AttributeTok{nrow =} \FunctionTok{length}\NormalTok{(row\_names), }
+                        \AttributeTok{ncol =} \FunctionTok{length}\NormalTok{(col\_names))}
+\FunctionTok{colnames}\NormalTok{(result\_matrix) }\OtherTok{\textless{}{-}}\NormalTok{ col\_names}
+\FunctionTok{rownames}\NormalTok{(result\_matrix) }\OtherTok{\textless{}{-}}\NormalTok{ row\_names}
+
+\CommentTok{\# Create a data frame with}
+\CommentTok{\# all combinations of parameters in reversed order}
+\NormalTok{param\_combinations }\OtherTok{\textless{}{-}} \FunctionTok{expand.grid}\NormalTok{(}\AttributeTok{elcprc =}\NormalTok{ elcprc, }
+                                  \AttributeTok{price =}\NormalTok{ price, }
+                                  \AttributeTok{yldvar =}\NormalTok{ yldvar, }
+                                  \AttributeTok{al\_regs =}\NormalTok{ al\_regs,}
+                                  \AttributeTok{height =}\NormalTok{ height, }
+                                  \AttributeTok{array =}\NormalTok{ array, }
+                                  \AttributeTok{sprop =}\NormalTok{ sprop)}
+
+\CommentTok{\# Merge with tav\_profit to get sbav\_profit values for each combination}
+\NormalTok{merged\_data }\OtherTok{\textless{}{-}} \FunctionTok{merge}\NormalTok{(param\_combinations, }
+\NormalTok{                     sbav\_profit, }
+                     \AttributeTok{by =}\NormalTok{ required\_columns,}
+                     \AttributeTok{all.x =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# Reshape merged\_data to fill result\_matrix with }
+\CommentTok{\# reversed column and row names}
+\NormalTok{merged\_data}\SpecialCharTok{$}\NormalTok{col\_name }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}
+\NormalTok{  merged\_data[, }\FunctionTok{c}\NormalTok{(}\StringTok{"sprop"}\NormalTok{, }\StringTok{"array"}\NormalTok{, }\StringTok{"height"}\NormalTok{)], }\DecValTok{1}\NormalTok{,}
+  \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{paste0}\NormalTok{(x[}\DecValTok{1}\NormalTok{], }\StringTok{"\%\_"}\NormalTok{, x[}\DecValTok{2}\NormalTok{], }\StringTok{"\_"}\NormalTok{, x[}\DecValTok{3}\NormalTok{]))}
+
+\NormalTok{merged\_data}\SpecialCharTok{$}\NormalTok{row\_name }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}
+\NormalTok{  merged\_data[, }\FunctionTok{c}\NormalTok{(}\StringTok{"al\_regs"}\NormalTok{, }\StringTok{"yldvar"}\NormalTok{, }\StringTok{"price"}\NormalTok{, }\StringTok{"elcprc"}\NormalTok{)], }\DecValTok{1}\NormalTok{,}
+  \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{paste0}\NormalTok{(x[}\DecValTok{4}\NormalTok{], }\StringTok{"\_"}\NormalTok{,}
+\NormalTok{                     x[}\DecValTok{3}\NormalTok{], }\StringTok{"\_"}\NormalTok{,}
+\NormalTok{                     x[}\DecValTok{2}\NormalTok{], }\StringTok{"\_"}\NormalTok{, x[}\DecValTok{1}\NormalTok{]))}
+
+\CommentTok{\# Fill the matrix with sbav\_profit values}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \FunctionTok{seq\_len}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(result\_matrix))) \{}
+\NormalTok{  row\_condition }\OtherTok{\textless{}{-}} \FunctionTok{rownames}\NormalTok{(result\_matrix)[i]}
+\NormalTok{  row\_data }\OtherTok{\textless{}{-}}\NormalTok{ merged\_data[}
+\NormalTok{    merged\_data}\SpecialCharTok{$}\NormalTok{row\_name }\SpecialCharTok{==}\NormalTok{ row\_condition, ]}
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{nrow}\NormalTok{(row\_data) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) \{}
+\NormalTok{    result\_matrix[i, }
+                  \FunctionTok{match}\NormalTok{(row\_data}\SpecialCharTok{$}\NormalTok{col\_name, }
+                        \FunctionTok{colnames}\NormalTok{(result\_matrix))] }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}
+\NormalTok{                          row\_data}\SpecialCharTok{$}\NormalTok{sbav\_profit, }\DecValTok{2}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\}}
+\NormalTok{sbav\_chtbl }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(result\_matrix) }\CommentTok{\#Table in Excel.}
+\FunctionTok{rm}\NormalTok{(result\_matrix)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{write.csv}\NormalTok{(}\FunctionTok{as.data.frame}\NormalTok{(sbav\_chtbl),}
+          \AttributeTok{row.names =} \ConstantTok{TRUE}\NormalTok{,}
+          \AttributeTok{col.names =} \ConstantTok{TRUE}\NormalTok{,}
+          \AttributeTok{file =} \StringTok{"sbav\_chtbl.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in write.csv(as.data.frame(sbav_chtbl), row.names = TRUE, col.names =
+TRUE, : attempt to set 'col.names' ignored
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{dim}\NormalTok{(sbav\_chtbl)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 324  30
+\end{verbatim}
+
+\begin{itemize}
+\item
+  Row naming: Electricity Price\_Crop Price\_Solar Proportion\_Alabama
+  Regions
+\item
+  Column naming: Solar Proportion\_Array Types\_Solar Panel Height.
+\item
+  Solar Proportion can be converted to total number of panels.
+\item
+  Only selected values from each variables are extracted for tabulation
+  purpose.
+\item
+  Values displayed in the table are profit from Strawberry AV system.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Display the result matrix}
+\CommentTok{\#head(sbav\_chtbl)}
+\CommentTok{\#tail(sbav\_chtbl)}
+\FunctionTok{names}\NormalTok{(sbav\_profit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ [1] "sprop"       "al_regs"     "array"       "dc_kw"       "panels"     
+ [6] "energy"      "elcprc"      "elcrev"      "height"      "capex"      
+[11] "ttlcost"     "anncost"     "moncost"     "eprofit"     "eannprof"   
+[16] "emonprof"    "yldvar"      "yield"       "price"       "profit"     
+[21] "sbav_profit"
+\end{verbatim}
+
+\subsubsection{Plotting Strawberry
+Profit}\label{plotting-strawberry-profit}
+
+\begin{itemize}
+\tightlist
+\item
+  Result suppressed.
+\end{itemize}
+
+\subsection{Squash AV}\label{squash-av-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Define the values for each variable}
+\NormalTok{sprop }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.25}\NormalTok{, }\FloatTok{0.50}\NormalTok{, }\FloatTok{0.75}\NormalTok{, }\FloatTok{1.00}\NormalTok{)}
+\NormalTok{array }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Fixed"}\NormalTok{, }\StringTok{"Tracking"}\NormalTok{)}
+\NormalTok{height }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{4.6}\NormalTok{, }\FloatTok{6.4}\NormalTok{, }\FloatTok{8.2}\NormalTok{)}
+\NormalTok{yldvar }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.10}\NormalTok{, }\FloatTok{0.30}\NormalTok{, }\FloatTok{0.50}\NormalTok{, }\FloatTok{0.70}\NormalTok{, }\FloatTok{1.00}\NormalTok{, }\FloatTok{1.20}\NormalTok{, }\FloatTok{1.50}\NormalTok{, }\FloatTok{1.80}\NormalTok{, }\FloatTok{2.00}\NormalTok{)}
+\NormalTok{al\_regs }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Northern"}\NormalTok{, }\StringTok{"Central"}\NormalTok{, }\StringTok{"Black Belt"}\NormalTok{, }\StringTok{"Southern"}\NormalTok{)}
+\NormalTok{price }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{11}\NormalTok{, }\DecValTok{14}\NormalTok{, }\DecValTok{17}\NormalTok{)}
+\NormalTok{elcprc }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.02}\NormalTok{, }\FloatTok{0.03}\NormalTok{, }\FloatTok{0.04}\NormalTok{)}
+
+\CommentTok{\# Define the required columns}
+\NormalTok{required\_columns }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"sprop"}\NormalTok{, }\StringTok{"array"}\NormalTok{, }\StringTok{"height"}\NormalTok{, }
+                      \StringTok{"al\_regs"}\NormalTok{, }\StringTok{"yldvar"}\NormalTok{, }\StringTok{"price"}\NormalTok{, }\StringTok{"elcprc"}\NormalTok{)}
+
+\CommentTok{\# Check if the columns exist in sqav\_profit}
+\NormalTok{missing\_columns }\OtherTok{\textless{}{-}} \FunctionTok{setdiff}\NormalTok{(required\_columns, }
+                           \FunctionTok{names}\NormalTok{(sqav\_profit))}
+\ControlFlowTok{if}\NormalTok{ (}\FunctionTok{length}\NormalTok{(missing\_columns) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) \{}
+  \FunctionTok{stop}\NormalTok{(}\StringTok{"Missing columns in sqav\_profit: "}\NormalTok{,}
+       \FunctionTok{paste}\NormalTok{(missing\_columns, }\AttributeTok{collapse =} \StringTok{", "}\NormalTok{))}
+\NormalTok{\}}
+
+\CommentTok{\# Generate column names using reversed order of expand.grid}
+\NormalTok{col\_names }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}\FunctionTok{expand.grid}\NormalTok{(height, array, sprop), }\DecValTok{1}\NormalTok{,}
+                   \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{paste0}\NormalTok{(x[}\DecValTok{3}\NormalTok{], }\StringTok{"\%\_"}\NormalTok{, x[}\DecValTok{2}\NormalTok{], }\StringTok{"\_"}\NormalTok{, x[}\DecValTok{1}\NormalTok{]))}
+
+\CommentTok{\# Generate row names using reversed order of expand.grid}
+\NormalTok{row\_names }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}\FunctionTok{expand.grid}\NormalTok{(elcprc, }
+\NormalTok{                               price,}
+\NormalTok{                               yldvar, }
+\NormalTok{                               al\_regs), }\DecValTok{1}\NormalTok{, }
+                   \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{paste0}\NormalTok{(x, }\AttributeTok{collapse =} \StringTok{"\_"}\NormalTok{))}
+
+\CommentTok{\# Create an empty matrix to store the results}
+\NormalTok{result\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\AttributeTok{nrow =} \FunctionTok{length}\NormalTok{(row\_names), }
+                        \AttributeTok{ncol =} \FunctionTok{length}\NormalTok{(col\_names))}
+\FunctionTok{colnames}\NormalTok{(result\_matrix) }\OtherTok{\textless{}{-}}\NormalTok{ col\_names}
+\FunctionTok{rownames}\NormalTok{(result\_matrix) }\OtherTok{\textless{}{-}}\NormalTok{ row\_names}
+
+\CommentTok{\# Create a data frame with }
+\CommentTok{\# all combinations of parameters in reversed order}
+\NormalTok{param\_combinations }\OtherTok{\textless{}{-}} \FunctionTok{expand.grid}\NormalTok{(}\AttributeTok{elcprc =}\NormalTok{ elcprc, }
+                                  \AttributeTok{price =}\NormalTok{ price, }
+                                  \AttributeTok{yldvar =}\NormalTok{ yldvar, }
+                                  \AttributeTok{al\_regs =}\NormalTok{ al\_regs,}
+                                  \AttributeTok{height =}\NormalTok{ height, }
+                                  \AttributeTok{array =}\NormalTok{ array, }
+                                  \AttributeTok{sprop =}\NormalTok{ sprop)}
+
+\CommentTok{\# Merge with tav\_profit to get sqav\_profit values for each combination}
+\NormalTok{merged\_data }\OtherTok{\textless{}{-}} \FunctionTok{merge}\NormalTok{(param\_combinations, }
+\NormalTok{                     sqav\_profit, }
+                     \AttributeTok{by =}\NormalTok{ required\_columns,}
+                     \AttributeTok{all.x =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# Reshape merged\_data to fill result\_matrix with }
+\CommentTok{\# reversed column and row names}
+\NormalTok{merged\_data}\SpecialCharTok{$}\NormalTok{col\_name }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}
+\NormalTok{  merged\_data[, }\FunctionTok{c}\NormalTok{(}\StringTok{"sprop"}\NormalTok{, }\StringTok{"array"}\NormalTok{, }\StringTok{"height"}\NormalTok{)], }\DecValTok{1}\NormalTok{,}
+  \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{paste0}\NormalTok{(x[}\DecValTok{1}\NormalTok{], }\StringTok{"\%\_"}\NormalTok{, x[}\DecValTok{2}\NormalTok{], }\StringTok{"\_"}\NormalTok{, x[}\DecValTok{3}\NormalTok{]))}
+
+\NormalTok{merged\_data}\SpecialCharTok{$}\NormalTok{row\_name }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}
+\NormalTok{  merged\_data[, }\FunctionTok{c}\NormalTok{(}\StringTok{"al\_regs"}\NormalTok{, }\StringTok{"yldvar"}\NormalTok{, }\StringTok{"price"}\NormalTok{, }\StringTok{"elcprc"}\NormalTok{)], }\DecValTok{1}\NormalTok{,}
+  \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{paste0}\NormalTok{(x[}\DecValTok{4}\NormalTok{], }\StringTok{"\_"}\NormalTok{,}
+\NormalTok{                     x[}\DecValTok{3}\NormalTok{], }\StringTok{"\_"}\NormalTok{,}
+\NormalTok{                     x[}\DecValTok{2}\NormalTok{], }\StringTok{"\_"}\NormalTok{, x[}\DecValTok{1}\NormalTok{]))}
+
+\CommentTok{\# Fill the matrix with sqav\_profit values}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \FunctionTok{seq\_len}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(result\_matrix))) \{}
+\NormalTok{  row\_condition }\OtherTok{\textless{}{-}} \FunctionTok{rownames}\NormalTok{(result\_matrix)[i]}
+\NormalTok{  row\_data }\OtherTok{\textless{}{-}}\NormalTok{ merged\_data[}
+\NormalTok{    merged\_data}\SpecialCharTok{$}\NormalTok{row\_name }\SpecialCharTok{==}\NormalTok{ row\_condition, ]}
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{nrow}\NormalTok{(row\_data) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) \{}
+\NormalTok{    result\_matrix[i, }
+                  \FunctionTok{match}\NormalTok{(row\_data}\SpecialCharTok{$}\NormalTok{col\_name, }
+                        \FunctionTok{colnames}\NormalTok{(result\_matrix))] }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}
+\NormalTok{                          row\_data}\SpecialCharTok{$}\NormalTok{sqav\_profit, }\DecValTok{2}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\}}
+\NormalTok{sqav\_chtbl }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(result\_matrix) }\CommentTok{\#Table in Excel.}
+\FunctionTok{rm}\NormalTok{(result\_matrix)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{write.csv}\NormalTok{(}\FunctionTok{as.data.frame}\NormalTok{(sqav\_chtbl),}
+          \AttributeTok{row.names =} \ConstantTok{TRUE}\NormalTok{,}
+          \AttributeTok{file =} \StringTok{"sqav\_chtbl.csv"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(sqav\_chtbl)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 324  30
+\end{verbatim}
+
+\begin{itemize}
+\item
+  Row naming: Electricity Price\_Crop Price\_Solar Proportion\_Alabama
+  Regions
+\item
+  Column naming: Solar Proportion\_Array Types\_Solar Panel Height.
+\item
+  Solar Proportion can be converted to total number of panels.
+\item
+  Only selected values from each variables are extracted for tabulation
+  purpose.
+\item
+  Values displayed in the table are profit from Squash AV system.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Display the result matrix}
+\CommentTok{\#head(sqav\_chtbl)}
+\CommentTok{\#tail(sqav\_chtbl)}
+\FunctionTok{names}\NormalTok{(sqav\_profit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ [1] "sprop"       "al_regs"     "array"       "dc_kw"       "panels"     
+ [6] "energy"      "elcprc"      "elcrev"      "height"      "capex"      
+[11] "ttlcost"     "anncost"     "moncost"     "eprofit"     "eannprof"   
+[16] "emonprof"    "yldvar"      "yield"       "price"       "profit"     
+[21] "sqav_profit"
+\end{verbatim}
+
+\subsubsection{Plotting Squash Profit}\label{plotting-squash-profit}
+
+\begin{itemize}
+\tightlist
+\item
+  Result suppressed.
+\end{itemize}
+
+
+
+\end{document}

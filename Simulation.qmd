@@ -36,12 +36,12 @@ options(
 
 Codes and output are suppressed. Errors and warnings are visible. No warning and no error means code is working as it should.
 
-```{r, echo=FALSE, results='hide', include = FALSE, error=TRUE, warning=TRUE}
-# path_mac = "/Users/bmishra/Library/CloudStorage/OneDrive-AuburnUniversity/Collaboration/Ngbede M/Choice-paper"
-# path_office = "C:\\Users\\bzm0094\\OneDrive - Auburn University\\Collaboration\\Ngbede M\\Choice-paper"
-# ifelse(Sys.info()[6] == "bmishra", 
-#        setwd(path_mac), 
-#        setwd(path_office))
+```{r, echo=FALSE, include = FALSE, eval=FALSE, error=TRUE, warning=TRUE}
+path_mac = "/Users/bmishra/Library/CloudStorage/OneDrive-AuburnUniversity/Collaboration/Ngbede M/Choice-paper"
+path_office = "C:\\Users\\bzm0094\\OneDrive - Auburn University\\Collaboration\\Ngbede M\\Choice-paper"
+ifelse(Sys.info()[6] == "bmishra",
+       setwd(path_mac),
+       setwd(path_office))
 ```
 
 ## Load libraries
