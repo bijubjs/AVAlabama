@@ -57,12 +57,15 @@ library(ggpubr, warn.conflicts = FALSE, quietly = TRUE) # Scatter plot
 library(gmodels,  warn.conflicts = FALSE, quietly = TRUE) # Crosstab
 library(reshape2, warn.conflicts = FALSE, quietly = TRUE) # Reshape data
 library(pacman,  warn.conflicts = FALSE, quietly = TRUE) # Package Management
-library(progress, warn.conflicts = FALSE, quietly = TRUE) #progress bar
-library(arrow, warn.conflicts = FALSE, quietly = TRUE) #feather
+library(progress, warn.conflicts = FALSE, quietly = TRUE) # Progress bar
+library(arrow, warn.conflicts = FALSE, quietly = TRUE) # Feather
+library(plot3D, warn.conflicts = FALSE, quietly = TRUE)
+library(plotly, warn.conflicts = FALSE, quietly = TRUE) # 3D plotting
+library(lattice, warn.conflicts = FALSE, quietly = TRUE)
 ```
 
 ```{r}
-pacman::p_loaded()
+#pacman::p_loaded()
 ```
 
 ## Theme for plots
@@ -135,45 +138,51 @@ Import necessary data.
 
 ## Tomato AV
 
-sprop = proportion of solar in agrivoltaic system (0 to 1 in 0.5 increment.)
+Parameters defining agrivoltaic systems:
 
-al_regs = four regions of Alabama. Northern, Central, Black Belt, Southern.
+-   sprop = proportion of solar in agrivoltaic system (0 to 1 in 0.5 increment.) Length = 21.
 
-array = Solar array; Sun tracking (Tracking) and non-tracking (Fixed).
+-   al_regs = four regions of Alabama. Northern, Central, Black Belt, Southern. Length = 4.
 
-dc_kw = DC system size (kW) See [PVWatts® Calculator](https://pvwatts.nrel.gov/pvwatts.php).
+-   array = Solar array; Sun tracking (Tracking) and non-tracking (Fixed). Length = 2.
 
-panels = number of solar panels.
+-   elecprc = electricity price (1 cents to 6 cents). Length = 6.
 
-energy = total energy generated from solar system. See: [PVWatts® Calculator](https://pvwatts.nrel.gov/pvwatts.php).
+-   height = clearance height of solar panels. 4.6 ft., 6.4 ft., and 8.2 ft. Length = 3.
 
-elecprc = electricity price (1 cents to 6 cents).
+-   yldvar = crop yield variation (10% to 200%) = Length 21.
 
-height = clearance height of solar panels. 4.6 ft., 6.4 ft., and 8.2 ft.
+-   yield = crop yield variation based on yldvar. (same as yldvar) = Length = 21.
 
-capex = AV system capex per kW. See: [Capex Cost for AV](https://www.nrel.gov/docs/fy21osti/77811.pdf) table 1 and table 3.
+Calculated results using above parameters:
 
-ttlcost = total solar system cost in AV. See: [Capex Cost for AV](https://www.nrel.gov/docs/fy21osti/77811.pdf) table 1 and table 3.
+-   dc_kw = DC system size (kW) See [PVWatts® Calculator](https://pvwatts.nrel.gov/pvwatts.php).
 
-anncost = annualized total cost.
+-   panels = number of solar panels.
 
-moncost = monthly total cost.
+-   energy = total energy generated from solar system. See: [PVWatts® Calculator](https://pvwatts.nrel.gov/pvwatts.php).
 
-eprofit = profit from electricity.
+-   capex = AV system capex per kW. See: [Capex Cost for AV](https://www.nrel.gov/docs/fy21osti/77811.pdf) table 1 and table 3.
 
-eannprof = annualized total profit from electricity.
+-   ttlcost = total solar system cost in AV. See: [Capex Cost for AV](https://www.nrel.gov/docs/fy21osti/77811.pdf) table 1 and table 3.
 
-emonprof = monthly total profit from electricity.
+-   anncost = annualized total cost.
 
-yldvar = crop yield variation (10% to 200%)
+-   moncost = monthly total cost.
 
-yield = crop yield variation based on yldvar.
+-   price = crop yield price per bucket.
 
-price = crop yield price per bucket.
+-   eprofit = profit from electricity.
 
-profit = profit from crops.
+Result of Interests:
 
-tav_profit = total profit from solar and tomato.
+-   eannprof = annualized total profit from electricity.
+
+-   emonprof = monthly total profit from electricity.
+
+-   profit = profit from crops.
+
+-   tav_profit = total profit from solar and tomato.
 
 ```{r}
 tav_profit <- as.data.frame(read_feather(file = "tav_profit.feather"))
@@ -208,7 +217,7 @@ sqav_profit <- as.data.frame(read_feather(file = "sqav_profit.feather"))
 dim(sqav_profit)
 ```
 
-# Tabulating Results
+# Tabulating and Plotting Results
 
 ## Tomato AV
 
@@ -298,7 +307,7 @@ rm(result_matrix)
 ```{r}
 write.csv(as.data.frame(tav_chtbl),
           row.names = TRUE,
-          col.names = TRUE,
+          #col.names = TRUE,
           file = "tav_chtbl.csv")
 dim(tav_chtbl)
 ```
@@ -320,28 +329,134 @@ dim(tav_chtbl)
 names(tav_profit)
 ```
 
-### Plotting Tomato Profit
+### Plotting Tomato Profits by Solar Proportions
 
-```{r, eval=TRUE, warning=TRUE, error=TRUE, cache=TRUE}
+You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
+
+```{r, echo = FALSE, eval=FALSE, results = 'hide', warning=TRUE, error=TRUE, cache=TRUE}
+# Inefficient code, supressed.
 lox <- c("Northern", "Central", "Black Belt", "Southern")
-array_levs = c("Single Axis Rotation", "Fixed Open Rack")
-tav_plot <- tav_profit
-ggplot(data = tav_plot,
+array_levs <- c("Single Axis Rotation", "Fixed Open Rack")
+for (i in unique(tav_profit$yield)) {
+  for (j in unique(tav_profit$price)) {
+    for (k in unique(tav_profit$elcprc)) {
+      tav_plot = tav_profit %>% 
+        filter(yield == i, price == j, elcprc == k)
+      tomato_plot <-ggplot(data = tav_plot,
        mapping = aes(x = sprop,
                      y = tav_profit,
                      color = factor(al_regs),
                      group = factor(al_regs))) +
   geom_line() +
   geom_point() +
-  facet_grid(height~array) +
-  #scale_x_discrete(limits = lox,
-  #                 labels = c("North", "Center", "B Belt", "South")) +
-  # geom_hline(yintercept = 0,
-  #            linetype = "dashed",
-  #            color = "black") +
+  facet_grid(array~height) +
   guides(color = guide_legend(ncol = 1,
                               reverse = TRUE))
+print(tomato_plot)
+#ggsave(file = "tomato_plot.png")
+    }
+  }
+}
+```
 
+```{r, eval=TRUE, warning=TRUE, error=TRUE, cache=TRUE}
+lox <- c("Northern", "Central", "Black Belt", "Southern")
+array_levs <- c("Single Axis Rotation", "Fixed Open Rack")
+combinations <- expand.grid(
+  yldvar = c(0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield proportion
+  price = c(17, 20, 23), # Tomato price
+  elcprc = c(0.03, 0.04, 0.05) #Electricity price
+)
+
+# Iterate over the combinations and create the plots
+for (combo in seq_len(nrow(combinations))) {
+  filtered_data <- tav_profit %>%
+    filter(
+      yldvar == combinations$yldvar[combo],
+      price == combinations$price[combo],
+      elcprc == combinations$elcprc[combo]
+    )
+  
+  tav_sp_plot <- ggplot(data = filtered_data,
+                        mapping = aes(x = al_regs,
+                                      y = tav_profit,
+                                      color = factor(sprop),
+                                      group = factor(sprop))) +
+    geom_line() +
+    geom_point() +
+    facet_grid(height ~ array) +
+    guides(color = guide_legend(ncol = 1, reverse = TRUE)) +
+    scale_x_discrete(limits = lox,
+                     labels = c("North", "Center", "B Belt", "South")) +
+    guides(color = guide_legend(ncol = 2, reverse = TRUE))
+  
+  # Add horizontal line at y = 0 if y has both positive and negative values
+  if (min(filtered_data$tav_profit) < 0
+      & max(filtered_data$tav_profit) > 0) {
+    tav_sp_plot <- tav_sp_plot + 
+      geom_hline(yintercept = 0,
+                 size = 1,
+                 linetype = "dotted", 
+                 color = "black")
+    }
+    
+  print(combinations[combo,])
+  print(tav_sp_plot)
+  ggsave(file = paste0("Plots/tav_sp_", combo, ".png"))
+}
+```
+
+### Plotting Tomato Profits by Yield Variation
+
+You can see plot breakdown based on solar proportion, crop price, and electricity price. You can see variation for all crop yield variation in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
+
+```{r, eval=TRUE, warning=TRUE, error=TRUE, cache=TRUE}
+lox <- c("Northern", "Central", "Black Belt", "Southern")
+array_levs <- c("Single Axis Rotation", "Fixed Open Rack")
+combinations <- expand.grid(
+  sprop = c(0, 0.25, 0.5, 0.75, 1), # Solar proportion
+  price = c(17, 20, 23), # Tomato price
+  elcprc = c(0.03, 0.04, 0.05) #Electricity price
+)
+
+# Iterate over the combinations and create the plots
+for (combo in seq_len(nrow(combinations))) {
+  filtered_data <- tav_profit %>%
+    filter(
+      sprop == combinations$sprop[combo],
+      price == combinations$price[combo],
+      elcprc == combinations$elcprc[combo]
+    )
+  
+  tav_yv_plot <- ggplot(data = filtered_data,
+                        mapping = aes(x = al_regs,
+                                      y = tav_profit,
+                                      color = factor(yldvar),
+                                      group = factor(yldvar))) +
+    geom_line() +
+    geom_point() +
+    facet_grid(height ~ array) +
+    guides(color = guide_legend(ncol = 1, 
+                                reverse = TRUE)) +
+    scale_x_discrete(limits = lox,
+                     labels = c("North", "Center", "B Belt", "South")) +
+    guides(color = guide_legend(ncol = 2, 
+                                reverse = TRUE))
+  
+  # Add horizontal line at y = 0 if y has both positive and negative values
+  if (min(filtered_data$tav_profit) < 0
+      & max(filtered_data$tav_profit) > 0) {
+    tav_yv_plot <- tav_yv_plot + 
+      geom_hline(yintercept = 0,
+                 size = 1,
+                 linetype = "dotted", 
+                 color = "black")
+  }
+  
+  print(combinations[combo,])
+  print(tav_yv_plot)
+  ggsave(file = paste0("Plots/tav_yv_", combo, ".png"))
+  }
 ```
 
 ## Strawberry AV
@@ -432,7 +547,7 @@ rm(result_matrix)
 ```{r}
 write.csv(as.data.frame(sbav_chtbl),
           row.names = TRUE,
-          col.names = TRUE,
+          #col.names = TRUE,
           file = "sbav_chtbl.csv")
 dim(sbav_chtbl)
 names(sbav_chtbl)
@@ -455,12 +570,106 @@ names(sbav_chtbl)
 names(sbav_profit)
 ```
 
-### Plotting Strawberry Profit
+### Plotting Strawberry Profit by Solar Proportion
 
--   Result suppressed.
+You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, echo=FALSE, results='hide', warning=FALSE, error=TRUE}
+```{r, echo=TRUE, warning=TRUE, error=TRUE, eval=TRUE}
+lox <- c("Northern", "Central", "Black Belt", "Southern")
+array_levs = c("Single Axis Rotation", "Fixed Open Rack")
+combinations <- expand.grid(
+  yldvar = c(0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield proportion
+  price = c(3, 6, 9), # Strawbeery price
+  elcprc = c(0.03, 0.04, 0.05) #Electricity price
+)
 
+# Iterate over the combinations and create the plots
+for (combo in seq_len(nrow(combinations))) {
+  filtered_data <- sbav_profit %>%
+    filter(
+      yldvar == combinations$yldvar[combo],
+      price == combinations$price[combo],
+      elcprc == combinations$elcprc[combo]
+    )
+  
+  sbav_sp_plot <- ggplot(data = filtered_data,
+                        mapping = aes(x = al_regs,
+                                      y = sbav_profit,
+                                      color = factor(sprop),
+                                      group = factor(sprop))) +
+    geom_line() +
+    geom_point() +
+    facet_grid(height ~ array) +
+    guides(color = guide_legend(ncol = 1, reverse = TRUE)) +
+    scale_x_discrete(limits = lox,
+                     labels = c("North", "Center", "B Belt", "South")) +
+    guides(color = guide_legend(ncol = 2, reverse = TRUE))
+  
+    # Add horizontal line at y = 0 if y has both positive and negative values
+  if (min(filtered_data$sbav_profit) < 0
+      & max(filtered_data$sbav_profit) > 0) {
+    sbav_sp_plot <- sbav_sp_plot + 
+      geom_hline(yintercept = 0,
+                 size = 1,
+                 linetype = "dotted", 
+                 color = "black")
+  }
+  
+  print(combinations[combo,])
+  print(sbav_sp_plot)
+  ggsave(file = paste0("Plots/sbav_sp_", combo, ".png"))
+}
+```
+
+### Plotting Strawberry Profit by Yield Variation
+
+You can see plot breakdown based on solar proportion, crop price, and electricity price. You can see variation for all crop yield variation in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
+
+```{r, eval=TRUE, echo=TRUE, warning=TRUE, error=TRUE}
+lox <- c("Northern", "Central", "Black Belt", "Southern")
+array_levs = c("Single Axis Rotation", "Fixed Open Rack")
+combinations <- expand.grid(
+  sprop = c(0, 0.25, 0.5, 0.75, 1), # Solar proportion
+  price = c(3, 6, 9), # Strawberry price
+  elcprc = c(0.03, 0.04, 0.05) #Electricity price
+)
+
+# Iterate over the combinations and create the plots
+for (combo in seq_len(nrow(combinations))) {
+  filtered_data <- sbav_profit %>%
+    filter(
+      sprop == combinations$sprop[combo],
+      price == combinations$price[combo],
+      elcprc == combinations$elcprc[combo]
+    )
+  
+  sbav_yv_plot <- ggplot(data = filtered_data,
+                        mapping = aes(x = al_regs,
+                                      y = sbav_profit,
+                                      color = factor(yldvar),
+                                      group = factor(yldvar))) +
+    geom_line() +
+    geom_point() +
+    facet_grid(height ~ array) +
+    guides(color = guide_legend(ncol = 1, reverse = TRUE)) +
+    scale_x_discrete(limits = lox,
+                     labels = c("North", "Center", "B Belt", "South")) +
+    guides(color = guide_legend(ncol = 2, reverse = TRUE))
+  
+    # Add horizontal line at y = 0 if y has both positive and negative values
+  if (min(filtered_data$sbav_profit) < 0
+      & max(filtered_data$sbav_profit) > 0) {
+    sbav_yv_plot <- sbav_yv_plot + 
+      geom_hline(yintercept = 0,
+                 size = 1,
+                 linetype = "dotted", 
+                 color = "black")
+  }
+  
+  print(combinations[combo,])
+  print(sbav_yv_plot)
+  ggsave(file = paste0("Plots/sbav_yv_", combo, ".png"))
+}
 ```
 
 ## Squash AV
@@ -572,10 +781,106 @@ dim(sqav_chtbl)
 names(sqav_profit)
 ```
 
-### Plotting Squash Profit
+### Plotting Squash Profit by Solar Proportion
 
--   Result suppressed.
+You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, echo=FALSE, results='hide', warning=FALSE, error=TRUE}
+```{r, echo=TRUE, results='show', warning=FALSE, error=TRUE, eval=TRUE}
+lox <- c("Northern", "Central", "Black Belt", "Southern")
+array_levs = c("Single Axis Rotation", "Fixed Open Rack")
+combinations <- expand.grid(
+  yldvar = c(0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield proportion
+  price = c(11, 14, 17), # Tomato price
+  elcprc = c(0.03, 0.04, 0.05) #Electricity price
+)
 
+# Iterate over the combinations and create the plots
+for (combo in seq_len(nrow(combinations))) {
+  filtered_data <- sqav_profit %>%
+    filter(
+      yldvar == combinations$yldvar[combo],
+      price == combinations$price[combo],
+      elcprc == combinations$elcprc[combo]
+    )
+  
+  sqav_sp_plot <- ggplot(data = filtered_data,
+                        mapping = aes(x = al_regs,
+                                      y = sqav_profit,
+                                      color = factor(sprop),
+                                      group = factor(sprop))) +
+    geom_line() +
+    geom_point() +
+    facet_grid(height ~ array) +
+    guides(color = guide_legend(ncol = 1, reverse = TRUE)) +
+    scale_x_discrete(limits = lox,
+                     labels = c("North", "Center", "B Belt", "South")) +
+    guides(color = guide_legend(ncol = 2, reverse = TRUE))
+  
+      # Add horizontal line at y = 0 if y has both positive and negative values
+  if (min(filtered_data$sqav_profit) < 0
+      & max(filtered_data$sqav_profit) > 0) {
+    sqav_sp_plot <- sqav_sp_plot + 
+      geom_hline(yintercept = 0,
+                 size = 1,
+                 linetype = "dotted", 
+                 color = "black")
+  }
+  
+  print(combinations[combo,])
+  print(sqav_sp_plot)
+  ggsave(file = paste0("Plots/sqav_sp_", combo, ".png"))
+}
+```
+
+### Plotting Squash Profit by Yield Variation
+
+You can see plot breakdown based on solar proportion, crop price, and electricity price. You can see variation for all crop yield variation in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
+
+```{r, echo=TRUE, results='show', warning=FALSE, error=TRUE, eval=TRUE}
+lox <- c("Northern", "Central", "Black Belt", "Southern")
+array_levs = c("Single Axis Rotation", "Fixed Open Rack")
+combinations <- expand.grid(
+  sprop = c(0, 0.25, 0.5, 0.75, 1), # Solar proportion
+  price = c(11, 14, 17), # Tomato price
+  elcprc = c(0.03, 0.04, 0.05) #Electricity price
+)
+
+# Iterate over the combinations and create the plots
+for (combo in seq_len(nrow(combinations))) {
+  filtered_data <- sqav_profit %>%
+    filter(
+      sprop == combinations$sprop[combo],
+      price == combinations$price[combo],
+      elcprc == combinations$elcprc[combo]
+    )
+  
+  sqav_yv_plot <- ggplot(data = filtered_data,
+                        mapping = aes(x = al_regs,
+                                      y = sqav_profit,
+                                      color = factor(yldvar),
+                                      group = factor(yldvar))) +
+    geom_line() +
+    geom_point() +
+    facet_grid(height ~ array) +
+    guides(color = guide_legend(ncol = 1, 
+                                reverse = TRUE)) +
+    scale_x_discrete(limits = lox,
+                     labels = c("North", "Center", "B Belt", "South")) +
+    guides(color = guide_legend(ncol = 2, 
+                                reverse = TRUE))
+  
+      # Add horizontal line at y = 0 if y has both positive and negative values
+  if (min(filtered_data$sqav_profit) < 0
+      & max(filtered_data$sqav_profit) > 0) {
+    sqav_yv_plot <- sqav_yv_plot + 
+      geom_hline(yintercept = 0,
+                 size = 1,
+                 linetype = "dotted", 
+                 color = "black")
+  }
+  
+  print(combinations[combo,])
+  print(sqav_yv_plot)
+  ggsave(file = paste0("Plots/sqav_yv_", combo, ".png"))
+}
 ```
