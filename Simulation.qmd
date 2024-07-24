@@ -440,7 +440,7 @@ ggplot(data = energy_output,
 # Convert to data frames if they are not already
 matrix1 <- energy_output  %>%
   group_by(sprop, al_regs, array, dc_kw, panels) %>%
-  #filter(datalot == 2) %>%
+  filter(datalot == 2) %>%
   # Compute mean of datalot 1 and datalot 2:
   summarise(
     energy = mean(energy),
@@ -903,7 +903,7 @@ Total profit from solar and crops for all combinations of AVs simulated.
 -   Joint profit from tomato (tomato_long) and solar energy production (solar_profit) from 1 acre of land.
 -   The last variable (tav_profit) is the final profit from tomato agrivoltaic system which is the result of our interest.
 
-```{r, echo=TRUE, results='show', cache=TRUE, error=TRUE, warning=TRUE}
+```{r, echo=TRUE, results='show', cache=FALSE, error=TRUE, warning=TRUE}
 # Generate all combinations of row indices from both matrices
 index_combinations <- expand.grid(1:nrow(solar_profit),
                                   1:nrow(tomato_long))
@@ -958,7 +958,7 @@ write_feather(tav_profit,
 -   Joint profit from strawberry (stberry_long) and solar energy production (solar_profit) from 1 acre of land.
 -   The last variable (sbav_profit) is the final profit from strawberry agrivoltaic system which is the result of our interest.
 
-```{r, echo=TRUE, results='show', cache=TRUE, error=TRUE, warning=TRUE}
+```{r, echo=TRUE, results='show', cache=FALSE, error=TRUE, warning=TRUE}
 # Generate all combinations of row indices from both matrices
 index_combinations <- expand.grid(1:nrow(solar_profit),
                                   1:nrow(stberry_long))
@@ -1013,7 +1013,7 @@ write_feather(sbav_profit,
 -   Joint profit from squash (squash_long) and solar energy production (solar_profit) from 1 acre of land.
 -   The last variable (sqav_profit) is the final profit from squash agrivoltaic system which is the result of our interest.
 
-```{r, echo=TRUE, results='show', cache=TRUE, error=TRUE, warning=TRUE}
+```{r, echo=TRUE, results='show', cache=FALSE, error=TRUE, warning=TRUE}
 # Generate all combinations of row indices from both matrices
 index_combinations <- expand.grid(1:nrow(solar_profit),
                                   1:nrow(squash_long))

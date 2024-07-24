@@ -47,7 +47,7 @@ ifelse(Sys.info()[6] == "bmishra",
 
 ## Load libraries
 
-```{r}
+```{r, error=TRUE, warning=FALSE, echo=TRUE, eval=TRUE}
 library(tidyverse, warn.conflicts = FALSE, quietly = TRUE)
 library(psych, warn.conflicts = FALSE, quietly = TRUE)
 library(likert,  warn.conflicts = FALSE, quietly = TRUE) # Likert Items
@@ -62,10 +62,13 @@ library(arrow, warn.conflicts = FALSE, quietly = TRUE) # Feather
 library(plot3D, warn.conflicts = FALSE, quietly = TRUE)
 library(plotly, warn.conflicts = FALSE, quietly = TRUE) # 3D plotting
 library(lattice, warn.conflicts = FALSE, quietly = TRUE)
+library(purrr, warn.conflicts = FALSE, quietly = TRUE)
+library(pheatmap, warn.conflicts = FALSE, quietly = TRUE)
+library(grid, warn.conflicts = FALSE, quietly = TRUE)
 ```
 
-```{r}
-#pacman::p_loaded()
+```{r, echo=TRUE}
+pacman::p_loaded()
 ```
 
 ## Theme for plots
@@ -142,6 +145,8 @@ Parameters defining agrivoltaic systems:
 
 -   sprop = proportion of solar in agrivoltaic system (0 to 1 in 0.5 increment.) Length = 21.
 
+-   panels = number of solar panels. Length = 16. Some sprop have same number of panels.
+
 -   al_regs = four regions of Alabama. Northern, Central, Black Belt, Southern. Length = 4.
 
 -   array = Solar array; Sun tracking (Tracking) and non-tracking (Fixed). Length = 2.
@@ -157,8 +162,6 @@ Parameters defining agrivoltaic systems:
 Calculated results using above parameters:
 
 -   dc_kw = DC system size (kW) See [PVWatts® Calculator](https://pvwatts.nrel.gov/pvwatts.php).
-
--   panels = number of solar panels.
 
 -   energy = total energy generated from solar system. See: [PVWatts® Calculator](https://pvwatts.nrel.gov/pvwatts.php).
 
@@ -191,6 +194,42 @@ tav_profit <- as.data.frame(read_feather(file = "tav_profit.feather"))
 dim(tav_profit)
 ```
 
+## Calculate tavp_wocp
+
+-   Profit at 100% crop at their respective price is subtracted from tav_profit.
+
+-   tavp_wocp = tav_profit - profit from 100% crop at their respective prices. This variable gives an idea where av profit stands in relation to crop profit. It helps to identify relative profitability of agrivoltaic system compared to crop only.
+
+    ```{r}
+    # Calculate the profit:
+    # Step 1: Filter the dataframe to get the unique profit values for each price when yldvar is 1
+    unique_profits <- unique(tav_profit[tav_profit$yldvar == 1, 
+                                        c("price", "profit")])
+
+    # Step 2: Create a lookup table for unique profits by price
+    profit_lookup <- setNames(unique_profits$profit, 
+                              unique_profits$price)
+
+    # Step 3: Create the new variable tavp_wocp by subtracting the unique profit from tav_profit
+    tav_profit$tavp_wocp <- mapply(function(tav_profit, price) {
+      profit_to_subtract <- ifelse(price %in% 
+                                     names(profit_lookup), 
+                                   profit_lookup[as.character(price)], 0)
+      return(tav_profit - profit_to_subtract)
+    }, tav_profit$tav_profit, tav_profit$price)
+
+    # Print the dataframe to check the result
+    tav_profit %>%
+    filter(
+      sprop == unique(sprop[1]),
+      al_regs == unique(al_regs[1]),
+      array == unique(array[1]),
+      elcprc == unique(elcprc[1]),
+      height == unique(height[1]),
+      price == unique(price[1])
+      )
+    ```
+
 ## Strawberry AV
 
 See tomato for variable descriptions.
@@ -204,29 +243,110 @@ sbav_profit <- as.data.frame(read_feather(file = "sbav_profit.feather"))
 dim(sbav_profit)
 ```
 
+## Calculate sbvp_wocp
+
+-   Profit at 100% crop at their respective price is subtracted from sbav_profit.
+
+-   sbavp_wocp = sbav_profit - profit from 100% crop at their respective prices. This variable gives an idea where av profit stands in relation to crop profit. It helps to identify relative profitability of agrivoltaic system compared to crop only.
+
+    ```{r}
+    # Calculate the profit:
+    # Step 1: Filter the dataframe to get the unique profit values for each price when yldvar is 1
+    unique_profits <- unique(sbav_profit[sbav_profit$yldvar == 1, 
+                                        c("price", "profit")])
+
+    # Step 2: Create a lookup table for unique profits by price
+    profit_lookup <- setNames(unique_profits$profit, 
+                              unique_profits$price)
+
+    # Step 3: Create the new variable sbavp_wocp by subtracting the unique profit from sqav_profit
+    sbav_profit$sbavp_wocp <- mapply(function(sbav_profit, price) {
+      profit_to_subtract <- ifelse(price %in% 
+                                     names(profit_lookup), 
+                                   profit_lookup[as.character(price)], 0)
+      return(sbav_profit - profit_to_subtract)
+    }, sbav_profit$sbav_profit, sbav_profit$price)
+
+    # Print the dataframe to check the result
+    sbav_profit %>%
+    filter(
+      sprop == unique(sprop[1]),
+      al_regs == unique(al_regs[1]),
+      array == unique(array[1]),
+      elcprc == unique(elcprc[1]),
+      height == unique(height[1]),
+      price == unique(price[1])
+      )
+    ```
+
 ## Squash AV
 
-See tomato for variable descriptions.
+-   See tomato for variable descriptions.
 
-sqav_profit = total profit from solar and squash.
+-   sqav_profit = total profit from solar and squash.
 
 ```{r}
 sqav_profit <- as.data.frame(read_feather(file = "sqav_profit.feather"))
-#str(sqav_profit)
 #head(sqav_profit); tail(sqav_profit)
 dim(sqav_profit)
 ```
 
-# Tabulating and Plotting Results
+## Calculate sqvp_wocp
 
-## Tomato AV
+-   Profit at 100% crop at their respective price is subtracted from sqav_profit.
+
+-   sqavp_wocp = sbav_profit - profit from 100% crop at their respective prices. This variable gives an idea where av profit stands in relation to crop profit. It helps to identify relative profitability of agrivoltaic system compared to crop only.
+
+    ```{r}
+    # Calculate the profit:
+    # Step 1: Filter the dataframe to get the unique profit values for each price when yldvar is 1
+    unique_profits <- unique(sqav_profit[sqav_profit$yldvar == 1, 
+                                        c("price", "profit")])
+
+    # Step 2: Create a lookup table for unique profits by price
+    profit_lookup <- setNames(unique_profits$profit, 
+                              unique_profits$price)
+
+    # Step 3: Create the new variable sqavp_wocp by subtracting the unique profit from sqav_profit
+    sqav_profit$sqavp_wocp <- mapply(function(sqav_profit, price) {
+      profit_to_subtract <- ifelse(price %in% 
+                                     names(profit_lookup), 
+                                   profit_lookup[as.character(price)], 0)
+      return(sqav_profit - profit_to_subtract)
+    }, sqav_profit$sqav_profit, sqav_profit$price)
+
+    # Print the dataframe to check the result
+    sqav_profit %>%
+    filter(
+      sprop == unique(sprop[1]),
+      al_regs == unique(al_regs[1]),
+      array == unique(array[1]),
+      elcprc == unique(elcprc[1]),
+      height == unique(height[1]),
+      price == unique(price[1])
+      )
+    ```
+
+# Tomato AV Results
+
+## tav_profit Crosstab
+
+-   Row naming: Electricity Price_Crop Price_Solar Proportion_Alabama Regions.
+
+-   Column naming: Solar Proportion_Array Types_Solar Panel Height.
+
+-   Solar Proportion can be converted to total number of panels.
+
+-   Only selected values from each variables are extracted for tabulation purpose.
+
+-   Values displayed in the table are profit from Tomato AV system.
 
 ```{r}
 # Define the values for each variable
 sprop <- c(0, 0.25, 0.50, 0.75, 1.00) # Land Proportion
 array <- c("Fixed", "Tracking") # Solar Array
 height <- c(4.6, 6.4, 8.2) # Panel height
-yldvar <- c(0.10, 0.30, 0.50, 0.70, 1.00, 1.20, 1.50, 1.80, 2.00) # Crop Yield Variation
+yldvar <- c(0.10, 0.30, 0.50, 0.70, 1.00, 1.20, 1.50, 1.80, 2.00) # Yield Variation
 al_regs <- c("Northern", "Central", "Black Belt", "Southern") # Regions of AL
 price <- c(17, 20, 23) # Crop Price
 elcprc <- c(0.02, 0.03, 0.04) # Electricity Price
@@ -245,14 +365,14 @@ if (length(missing_columns) > 0) {
 
 # Generate column names using reversed order of expand.grid
 col_names <- apply(expand.grid(height, array, sprop), 1,
-                   function(x) paste0(x[3], "%_", x[2], "_", x[1]))
+                   function(x) paste0(x[3], x[2], x[1]))
 
 # Generate row names using reversed order of expand.grid
 row_names <- apply(expand.grid(elcprc, 
                                price,
                                yldvar, 
                                al_regs), 1, 
-                   function(x) paste0(x, collapse = "_"))
+                   function(x) paste0(x, collapse = ""))
 
 # Create an empty matrix to store the results
 result_matrix <- matrix(NA, nrow = length(row_names), 
@@ -280,13 +400,14 @@ merged_data <- merge(param_combinations,
 # reversed column and row names
 merged_data$col_name <- apply(
   merged_data[, c("sprop", "array", "height")], 1,
-  function(x) paste0(x[1], "%_", x[2], "_", x[3]))
+  function(x) paste0(x[1], x[2], x[3]))
 
 merged_data$row_name <- apply(
   merged_data[, c("al_regs", "yldvar", "price", "elcprc")], 1,
-  function(x) paste0(x[4], "_",
-                     x[3], "_",
-                     x[2], "_", x[1]))
+  function(x) paste0(x[4],
+                     x[3],
+                     x[2],
+                     x[1]))
 
 # Fill the matrix with tav_profit values
 for (i in seq_len(nrow(result_matrix))) {
@@ -300,70 +421,196 @@ for (i in seq_len(nrow(result_matrix))) {
                           row_data$tav_profit, 2)
   }
 }
-tav_chtbl <- as.data.frame(result_matrix) #Table in Excel.
+ct_tav_pft <- as.data.frame(result_matrix) # Table in Excel.
 rm(result_matrix)
 ```
 
 ```{r}
-write.csv(as.data.frame(tav_chtbl),
+write.csv(as.data.frame(ct_tav_pft),
           row.names = TRUE,
-          #col.names = TRUE,
-          file = "tav_chtbl.csv")
-dim(tav_chtbl)
+          file = "ct_tav_profit.csv")
+dim(ct_tav_pft)
 ```
 
--   Row naming: Electricity Price_Crop Price_Solar Proportion_Alabama Regions
+## tav_profit Heatmap
 
--   Column naming: Solar Proportion_Array Types_Solar Panel Height.
-
--   Solar Proportion can be converted to total number of panels.
-
--   Only selected values from each variables are extracted for tabulation purpose.
-
--   Values displayed in the table are profit from Tomato AV system.
+-   Heatmap of 324\*30 dimension matrix
+-   Tomato profit.
 
 ```{r}
-# Display the result matrix
-#head(tav_chtbl)
-#tail(tav_chtbl)
-names(tav_profit)
+colorcount = length(unique(as.vector(as.matrix(ct_tav_pft[-1]))))
+colorcount
+heatmap_plot <- pheatmap(t(ct_tav_pft),
+                         #clustering_distance_rows = "correlation",
+                         clustering_distance_rows = "euclidean",
+                         clustering_distance_cols = "euclidean",
+                         clustering_method = "complete",
+                         color = colorRampPalette(c("red", 
+                                                    "yellow", 
+                                                    "green"))(colorcount),
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+                         cluster_rows = FALSE,
+                         cluster_cols = FALSE,
+                         show_rownames = TRUE,
+                         show_colnames = FALSE,
+                         display_numbers = FALSE,
+                         number_format = "%.2f",
+                         cellheight =15,
+                         cellwidth = 3)
 ```
 
-### Plotting Tomato Profits by Solar Proportions
+```{r, eval=TRUE, echo=TRUE}
+ggsave(heatmap_plot,
+       height = 8,
+       width = 16,
+       units = "in",
+       file = paste0("Plots/gp_tav_pft", ".png"))
+rm(colorcount)
+rm(heatmap_plot)
+```
+
+## tavp_wocp Crosstab
+
+-   Heatmap of 324\*30 dimension matrix.
+
+-   See tav_profit for variable naming convention.
+
+    ```{r}
+    # Define the values for each variable
+    sprop <- c(0, 0.25, 0.50, 0.75, 1.00) # Land Proportion
+    array <- c("Fixed", "Tracking") # Solar Array
+    height <- c(4.6, 6.4, 8.2) # Panel height
+    yldvar <- c(0.10, 0.30, 0.50, 0.70, 1.00, 1.20, 1.50, 1.80, 2.00) # Crop Yield Variation
+    al_regs <- c("Northern", "Central", "Black Belt", "Southern") # Regions of AL
+    price <- c(17, 20, 23) # Crop Price
+    elcprc <- c(0.02, 0.03, 0.04) # Electricity Price
+
+    # Define the required columns
+    required_columns <- c("sprop", "array", "height", 
+                          "al_regs", "yldvar", "price", "elcprc")
+
+    # Check if the columns exist in tav_profit
+    missing_columns <- setdiff(required_columns, 
+                               names(tav_profit))
+    if (length(missing_columns) > 0) {
+      stop("Missing columns in tavp_wocp: ",
+           paste(missing_columns, collapse = ", "))
+    }
+
+    # Generate column names using reversed order of expand.grid
+    col_names <- apply(expand.grid(height, array, sprop), 1,
+                       function(x) paste0(x[3], x[2], x[1]))
+
+    # Generate row names using reversed order of expand.grid
+    row_names <- apply(expand.grid(elcprc, 
+                                   price,
+                                   yldvar, 
+                                   al_regs), 1, 
+                       function(x) paste0(x, collapse = ""))
+
+    # Create an empty matrix to store the results
+    result_matrix <- matrix(NA, nrow = length(row_names), 
+                            ncol = length(col_names))
+    colnames(result_matrix) <- col_names
+    rownames(result_matrix) <- row_names
+
+    # Create a data frame with 
+    # all combinations of parameters in reversed order
+    param_combinations <- expand.grid(elcprc = elcprc, 
+                                      price = price, 
+                                      yldvar = yldvar, 
+                                      al_regs = al_regs,
+                                      height = height, 
+                                      array = array, 
+                                      sprop = sprop)
+
+    # Merge with tav_profit to get tav_profit values for each combination
+    merged_data <- merge(param_combinations, 
+                         tav_profit, 
+                         by = required_columns,
+                         all.x = TRUE)
+
+    # Reshape merged_data to fill result_matrix with 
+    # reversed column and row names
+    merged_data$col_name <- apply(
+      merged_data[, c("sprop", "array", "height")], 1,
+      function(x) paste0(x[1], x[2], x[3]))
+
+    merged_data$row_name <- apply(
+      merged_data[, c("al_regs", "yldvar", "price", "elcprc")], 1,
+      function(x) paste0(x[4],
+                         x[3],
+                         x[2],
+                         x[1]))
+
+    # Fill the matrix with tav_profit values
+    for (i in seq_len(nrow(result_matrix))) {
+      row_condition <- rownames(result_matrix)[i]
+      row_data <- merged_data[
+        merged_data$row_name == row_condition, ]
+      if (nrow(row_data) > 0) {
+        result_matrix[i, 
+                      match(row_data$col_name, 
+                            colnames(result_matrix))] <- round(
+                              row_data$tavp_wocp, 2)
+      }
+    }
+    ct_tavp_wocp <- as.data.frame(result_matrix) # Table in Excel.
+    rm(result_matrix)
+    ```
+
+```{r}
+dim(ct_tavp_wocp)
+write.csv(as.data.frame(ct_tavp_wocp),
+          row.names = TRUE,
+          file = "ct_tavp_wocp.csv")
+```
+
+## tavp_wocp Heatmap
+
+-   Heatmap of 324\*30 dimension matrix.
+
+```{r}
+colorcount = length(unique(as.vector(as.matrix(ct_tavp_wocp[-1]))))
+colorcount
+heatmap_plot <- pheatmap(t(ct_tavp_wocp),
+                         #clustering_distance_rows = "correlation",
+                         clustering_distance_rows = "euclidean",
+                         clustering_distance_cols = "euclidean",
+                         clustering_method = "complete",
+                         color = colorRampPalette(c("red", 
+                                                    "yellow", 
+                                                    "green"))(colorcount),
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+                         cluster_rows = FALSE,
+                         cluster_cols = FALSE,
+                         show_rownames = TRUE,
+                         show_colnames = FALSE,
+                         display_numbers = FALSE,
+                         number_format = "%.2f",
+                         cellheight = 15,
+                         cellwidth = 3)
+```
+
+```{r, eval=TRUE, echo=TRUE}
+ggsave(heatmap_plot,
+       height = 8,
+       width = 16,
+       units = "in",
+       file = paste0("Plots/gp_tavp_wocp", ".png"))
+rm(heatmap_plot)
+rm(colorcount)
+```
+
+## Plotting Tomato Profits by Panels
 
 You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, echo = FALSE, eval=FALSE, results = 'hide', warning=TRUE, error=TRUE, cache=TRUE}
-# Inefficient code, supressed.
-lox <- c("Northern", "Central", "Black Belt", "Southern")
-array_levs <- c("Single Axis Rotation", "Fixed Open Rack")
-for (i in unique(tav_profit$yield)) {
-  for (j in unique(tav_profit$price)) {
-    for (k in unique(tav_profit$elcprc)) {
-      tav_plot = tav_profit %>% 
-        filter(yield == i, price == j, elcprc == k)
-      tomato_plot <-ggplot(data = tav_plot,
-       mapping = aes(x = sprop,
-                     y = tav_profit,
-                     color = factor(al_regs),
-                     group = factor(al_regs))) +
-  geom_line() +
-  geom_point() +
-  facet_grid(array~height) +
-  guides(color = guide_legend(ncol = 1,
-                              reverse = TRUE))
-print(tomato_plot)
-#ggsave(file = "tomato_plot.png")
-    }
-  }
-}
-```
-
 ```{r, eval=TRUE, warning=TRUE, error=TRUE, cache=TRUE}
-lox <- c("Northern", "Central", "Black Belt", "Southern")
-array_levs <- c("Single Axis Rotation", "Fixed Open Rack")
 combinations <- expand.grid(
-  yldvar = c(0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield proportion
+  yldvar = c(0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield variation
   price = c(17, 20, 23), # Tomato price
   elcprc = c(0.03, 0.04, 0.05) #Electricity price
 )
@@ -376,45 +623,61 @@ for (combo in seq_len(nrow(combinations))) {
       price == combinations$price[combo],
       elcprc == combinations$elcprc[combo]
     )
-  
+  # If by panel, put panels below in color and group.
   tav_sp_plot <- ggplot(data = filtered_data,
                         mapping = aes(x = al_regs,
                                       y = tav_profit,
-                                      color = factor(sprop),
-                                      group = factor(sprop))) +
+                                      color = factor(panels),
+                                      group = factor(panels))) +
     geom_line() +
     geom_point() +
-    facet_grid(height ~ array) +
-    guides(color = guide_legend(ncol = 1, reverse = TRUE)) +
-    scale_x_discrete(limits = lox,
-                     labels = c("North", "Center", "B Belt", "South")) +
-    guides(color = guide_legend(ncol = 2, reverse = TRUE))
+    facet_grid(height ~ array,
+               labeller = as_labeller(
+                 c(
+                   "4.6" = "4.6 ft. Height",
+                   "6.4" = "6.4 ft. Height",
+                   "8.2" = "8.2 ft. Height",
+                   Tracking = "Single Axis Rotation", 
+                   Fixed = "Fixed Open Rack"
+                   ))) +
+    guides(color = guide_legend(ncol = 1, 
+                                reverse = TRUE)) +
+    scale_x_discrete(limits = c("Northern", "Central",
+                                "Black Belt", "Southern"), 
+                     labels = c("North", "Center", 
+                                "B Belt", "South")) +
+    guides(color = guide_legend(ncol = 2, 
+                                reverse = TRUE)) +
+    labs(x = "Regions of Alabama",
+         y = "Profit ($) from Tomato Agrivoltaic System",
+         color = "Number of Solar \n Panels per Acre",
+         title = (list(combinations[combo,]))
+         ) +
+    theme(strip.background = element_blank())
   
   # Add horizontal line at y = 0 if y has both positive and negative values
-  if (min(filtered_data$tav_profit) < 0
-      & max(filtered_data$tav_profit) > 0) {
+  if (min(filtered_data$tav_profit) < 0 &
+      max(filtered_data$tav_profit) > 0) {
     tav_sp_plot <- tav_sp_plot + 
-      geom_hline(yintercept = 0,
-                 size = 1,
-                 linetype = "dotted", 
+      geom_hline(yintercept = 0, 
+                 linewidth = 0.30, 
+                 linetype = "dashed", 
                  color = "black")
-    }
-    
+  }
   print(combinations[combo,])
   print(tav_sp_plot)
   ggsave(file = paste0("Plots/tav_sp_", combo, ".png"))
+  #break
 }
 ```
 
-### Plotting Tomato Profits by Yield Variation
+## Plotting Tomato Profits by Yields
 
 You can see plot breakdown based on solar proportion, crop price, and electricity price. You can see variation for all crop yield variation in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
 ```{r, eval=TRUE, warning=TRUE, error=TRUE, cache=TRUE}
-lox <- c("Northern", "Central", "Black Belt", "Southern")
-array_levs <- c("Single Axis Rotation", "Fixed Open Rack")
 combinations <- expand.grid(
-  sprop = c(0, 0.25, 0.5, 0.75, 1), # Solar proportion
+  sprop = c(0, 0.25, 0.50, 0.75, 1.00), # Solar proportion
   price = c(17, 20, 23), # Tomato price
   elcprc = c(0.03, 0.04, 0.05) #Electricity price
 )
@@ -427,41 +690,68 @@ for (combo in seq_len(nrow(combinations))) {
       price == combinations$price[combo],
       elcprc == combinations$elcprc[combo]
     )
-  
+  # If by yield, put yield below in color and group.
   tav_yv_plot <- ggplot(data = filtered_data,
                         mapping = aes(x = al_regs,
                                       y = tav_profit,
-                                      color = factor(yldvar),
-                                      group = factor(yldvar))) +
+                                      color = factor(yield),
+                                      group = factor(yield))) +
     geom_line() +
     geom_point() +
-    facet_grid(height ~ array) +
+    facet_grid(height ~ array,
+               labeller = as_labeller(
+                 c(
+                   "4.6" = "4.6 ft. Height",
+                   "6.4" = "6.4 ft. Height",
+                   "8.2" = "8.2 ft. Height",
+                   Tracking = "Single Axis Rotation", 
+                   Fixed = "Fixed Open Rack"
+                   ))) +
     guides(color = guide_legend(ncol = 1, 
                                 reverse = TRUE)) +
-    scale_x_discrete(limits = lox,
-                     labels = c("North", "Center", "B Belt", "South")) +
+    scale_x_discrete(limits = c("Northern", "Central",
+                                "Black Belt", "Southern"), 
+                     labels = c("North", "Center", 
+                                "B Belt", "South")) +
     guides(color = guide_legend(ncol = 2, 
-                                reverse = TRUE))
-  
+                                reverse = TRUE)) +
+    labs(x = "Regions of Alabama",
+         y = "Profit ($) from Tomato Agrivoltaic System",
+         color = "Tomato Yield \n (25 Lb Buckets)",
+         title = (list(combinations[combo,]))
+         ) +
+    theme(strip.background = element_blank())
   # Add horizontal line at y = 0 if y has both positive and negative values
-  if (min(filtered_data$tav_profit) < 0
-      & max(filtered_data$tav_profit) > 0) {
+  if (min(filtered_data$tav_profit) < 0 &
+      max(filtered_data$tav_profit) > 0) {
     tav_yv_plot <- tav_yv_plot + 
-      geom_hline(yintercept = 0,
-                 size = 1,
-                 linetype = "dotted", 
+      geom_hline(yintercept = 0, 
+                 linewidth = 0.30, 
+                 linetype = "dashed", 
                  color = "black")
   }
-  
   print(combinations[combo,])
   print(tav_yv_plot)
   ggsave(file = paste0("Plots/tav_yv_", combo, ".png"))
-  }
+  #break
+}
 ```
 
-## Strawberry AV
+# Strawberry AV Results
 
-```{r}
+## sbav_profit Crosstab
+
+-   Row naming: Electricity Price_Crop Price_Solar Proportion_Alabama Regions
+
+-   Column naming: Solar Proportion_Array Types_Solar Panel Height.
+
+-   Solar Proportion can be converted to total number of panels.
+
+-   Only selected values from each variables are extracted for tabulation purpose.
+
+-   Values displayed in the table are profit from Strawberry AV system.
+
+```{r, warning=TRUE, error=TRUE}
 # Define the values for each variable
 sprop <- c(0, 0.25, 0.50, 0.75, 1.00)
 array <- c("Fixed", "Tracking")
@@ -485,14 +775,14 @@ if (length(missing_columns) > 0) {
 
 # Generate column names using reversed order of expand.grid
 col_names <- apply(expand.grid(height, array, sprop), 1,
-                   function(x) paste0(x[3], "%_", x[2], "_", x[1]))
+                   function(x) paste0(x[3], x[2], x[1]))
 
 # Generate row names using reversed order of expand.grid
 row_names <- apply(expand.grid(elcprc, 
                                price,
                                yldvar, 
                                al_regs), 1, 
-                   function(x) paste0(x, collapse = "_"))
+                   function(x) paste0(x, collapse = ""))
 
 # Create an empty matrix to store the results
 result_matrix <- matrix(NA, nrow = length(row_names), 
@@ -520,13 +810,16 @@ merged_data <- merge(param_combinations,
 # reversed column and row names
 merged_data$col_name <- apply(
   merged_data[, c("sprop", "array", "height")], 1,
-  function(x) paste0(x[1], "%_", x[2], "_", x[3]))
+  function(x) paste0(x[1],
+                     x[2], 
+                     x[3]))
 
 merged_data$row_name <- apply(
   merged_data[, c("al_regs", "yldvar", "price", "elcprc")], 1,
-  function(x) paste0(x[4], "_",
-                     x[3], "_",
-                     x[2], "_", x[1]))
+  function(x) paste0(x[4],
+                     x[3],
+                     x[2],
+                     x[1]))
 
 # Fill the matrix with sbav_profit values
 for (i in seq_len(nrow(result_matrix))) {
@@ -540,18 +833,56 @@ for (i in seq_len(nrow(result_matrix))) {
                           row_data$sbav_profit, 2)
   }
 }
-sbav_chtbl <- as.data.frame(result_matrix) #Table in Excel.
+ct_sbav_pft <- as.data.frame(result_matrix) #Table in Excel.
 rm(result_matrix)
 ```
 
 ```{r}
-write.csv(as.data.frame(sbav_chtbl),
+write.csv(as.data.frame(ct_sbav_pft),
           row.names = TRUE,
           #col.names = TRUE,
-          file = "sbav_chtbl.csv")
-dim(sbav_chtbl)
-names(sbav_chtbl)
+          file = "ct_sbav_pft.csv")
+dim(ct_sbav_pft)
 ```
+
+## sbav_profit Heatmap
+
+-   Heatmap of 324\*30 dimension matrix.
+
+```{r}
+colorcount = length(unique(as.vector(as.matrix(ct_sbav_pft[-1]))))
+colorcount
+heatmap_plot <- pheatmap(t(ct_sbav_pft),
+                         #clustering_distance_rows = "correlation",
+                         clustering_distance_rows = "euclidean",
+                         clustering_distance_cols = "euclidean",
+                         clustering_method = "complete",
+                         color = colorRampPalette(c("red", 
+                                                    "yellow", 
+                                                    "green"))(colorcount),
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+                         cluster_rows = FALSE,
+                         cluster_cols = FALSE,
+                         show_rownames = TRUE,
+                         show_colnames = FALSE,
+                         display_numbers = FALSE,
+                         number_format = "%.2f",
+                         cellheight = 15,
+                         cellwidth = 3)
+```
+
+```{r, eval=TRUE, echo=TRUE}
+ggsave(heatmap_plot,
+       height = 8,
+       width = 16,
+       units = "in",
+       file = paste0("Plots/gp_sbav_pft", ".png"))
+rm(heatmap_plot)
+rm(colorcount)
+```
+
+## sbavp_wocp Crosstab
 
 -   Row naming: Electricity Price_Crop Price_Solar Proportion_Alabama Regions
 
@@ -563,24 +894,146 @@ names(sbav_chtbl)
 
 -   Values displayed in the table are profit from Strawberry AV system.
 
-```{r}
-# Display the result matrix
-#head(sbav_chtbl)
-#tail(sbav_chtbl)
-names(sbav_profit)
+```{r, warning=TRUE, error=TRUE}
+# Define the values for each variable
+sprop <- c(0, 0.25, 0.50, 0.75, 1.00)
+array <- c("Fixed", "Tracking")
+height <- c(4.6, 6.4, 8.2)
+yldvar <- c(0.10, 0.30, 0.50, 0.70, 1.00, 1.20, 1.50, 1.80, 2.00)
+al_regs <- c("Northern", "Central", "Black Belt", "Southern")
+price <- c(3, 6, 9)
+elcprc <- c(0.02, 0.03, 0.04)
+
+# Define the required columns
+required_columns <- c("sprop", "array", "height", 
+                      "al_regs", "yldvar", "price", "elcprc")
+
+# Check if the columns exist in sbav_profit
+missing_columns <- setdiff(required_columns, 
+                           names(sbav_profit))
+if (length(missing_columns) > 0) {
+  stop("Missing columns in sbav_profit: ",
+       paste(missing_columns, collapse = ", "))
+}
+
+# Generate column names using reversed order of expand.grid
+col_names <- apply(expand.grid(height, array, sprop), 1,
+                   function(x) paste0(x[3], x[2], x[1]))
+
+# Generate row names using reversed order of expand.grid
+row_names <- apply(expand.grid(elcprc, 
+                               price,
+                               yldvar, 
+                               al_regs), 1, 
+                   function(x) paste0(x, collapse = ""))
+
+# Create an empty matrix to store the results
+result_matrix <- matrix(NA, nrow = length(row_names), 
+                        ncol = length(col_names))
+colnames(result_matrix) <- col_names
+rownames(result_matrix) <- row_names
+
+# Create a data frame with
+# all combinations of parameters in reversed order
+param_combinations <- expand.grid(elcprc = elcprc, 
+                                  price = price, 
+                                  yldvar = yldvar, 
+                                  al_regs = al_regs,
+                                  height = height, 
+                                  array = array, 
+                                  sprop = sprop)
+
+# Merge with tav_profit to get sbav_profit values for each combination
+merged_data <- merge(param_combinations, 
+                     sbav_profit, 
+                     by = required_columns,
+                     all.x = TRUE)
+
+# Reshape merged_data to fill result_matrix with 
+# reversed column and row names
+merged_data$col_name <- apply(
+  merged_data[, c("sprop", "array", "height")], 1,
+  function(x) paste0(x[1],
+                     x[2], 
+                     x[3]))
+
+merged_data$row_name <- apply(
+  merged_data[, c("al_regs", "yldvar", "price", "elcprc")], 1,
+  function(x) paste0(x[4],
+                     x[3],
+                     x[2],
+                     x[1]))
+
+# Fill the matrix with sbav_profit values
+for (i in seq_len(nrow(result_matrix))) {
+  row_condition <- rownames(result_matrix)[i]
+  row_data <- merged_data[
+    merged_data$row_name == row_condition, ]
+  if (nrow(row_data) > 0) {
+    result_matrix[i, 
+                  match(row_data$col_name, 
+                        colnames(result_matrix))] <- round(
+                          row_data$sbavp_wocp, 2)
+  }
+}
+ct_sbavp_wocp <- as.data.frame(result_matrix) #Table in Excel.
+rm(result_matrix)
 ```
 
-### Plotting Strawberry Profit by Solar Proportion
+```{r}
+write.csv(as.data.frame(ct_sbavp_wocp),
+          row.names = TRUE,
+          #col.names = TRUE,
+          file = "ct_sbavp_wocp.csv")
+dim(ct_sbavp_wocp)
+```
+
+## sbavp_wocp Heatmap
+
+-   Heatmap of 324\*30 dimension matrix.
+
+```{r}
+colorcount = length(unique(as.vector(as.matrix(ct_sbavp_wocp[-1]))))
+colorcount
+heatmap_plot <- pheatmap(t(ct_sbavp_wocp),
+                         #clustering_distance_rows = "correlation",
+                         clustering_distance_rows = "euclidean",
+                         clustering_distance_cols = "euclidean",
+                         clustering_method = "complete",
+                         color = colorRampPalette(c("red", 
+                                                    "yellow", 
+                                                    "green"))(colorcount),
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+                         cluster_rows = FALSE,
+                         cluster_cols = FALSE,
+                         show_rownames = TRUE,
+                         show_colnames = FALSE,
+                         display_numbers = FALSE,
+                         number_format = "%.2f",
+                         cellheight = 15,
+                         cellwidth = 3)
+```
+
+```{r, eval=TRUE, echo=TRUE}
+ggsave(heatmap_plot,
+       height = 8,
+       width = 16,
+       units = "in",
+       file = paste0("Plots/gp_sbavp_wocp", ".png"))
+rm(heatmap_plot)
+rm(colorcount)
+```
+
+## Plotting Strawberry Profit by Panels
 
 You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, echo=TRUE, warning=TRUE, error=TRUE, eval=TRUE}
-lox <- c("Northern", "Central", "Black Belt", "Southern")
-array_levs = c("Single Axis Rotation", "Fixed Open Rack")
+```{r, echo=TRUE, warning=TRUE, error=TRUE, eval=TRUE, cache=TRUE}
 combinations <- expand.grid(
-  yldvar = c(0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield proportion
-  price = c(3, 6, 9), # Strawbeery price
-  elcprc = c(0.03, 0.04, 0.05) #Electricity price
+  yldvar = c(0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield variation
+  price = c(3, 6, 9), # Strawberry price
+  elcprc = c(0.03, 0.04, 0.05) # Electricity price
 )
 
 # Iterate over the combinations and create the plots
@@ -591,45 +1044,60 @@ for (combo in seq_len(nrow(combinations))) {
       price == combinations$price[combo],
       elcprc == combinations$elcprc[combo]
     )
-  
+  # If by panel, put panels below in color and group.
   sbav_sp_plot <- ggplot(data = filtered_data,
                         mapping = aes(x = al_regs,
                                       y = sbav_profit,
-                                      color = factor(sprop),
-                                      group = factor(sprop))) +
+                                      color = factor(panels),
+                                      group = factor(panels))) +
     geom_line() +
     geom_point() +
-    facet_grid(height ~ array) +
-    guides(color = guide_legend(ncol = 1, reverse = TRUE)) +
-    scale_x_discrete(limits = lox,
-                     labels = c("North", "Center", "B Belt", "South")) +
-    guides(color = guide_legend(ncol = 2, reverse = TRUE))
-  
-    # Add horizontal line at y = 0 if y has both positive and negative values
-  if (min(filtered_data$sbav_profit) < 0
-      & max(filtered_data$sbav_profit) > 0) {
+    facet_grid(height ~ array,
+               labeller = as_labeller(
+                 c(
+                   "4.6" = "4.6 ft. Height",
+                   "6.4" = "6.4 ft. Height",
+                   "8.2" = "8.2 ft. Height",
+                   Tracking = "Single Axis Rotation", 
+                   Fixed = "Fixed Open Rack"
+                   ))) +
+    guides(color = guide_legend(ncol = 1, 
+                                reverse = TRUE)) +
+    scale_x_discrete(limits = c("Northern", "Central",
+                                "Black Belt", "Southern"), 
+                     labels = c("North", "Center", 
+                                "B Belt", "South")) +
+    guides(color = guide_legend(ncol = 2, 
+                                reverse = TRUE)) +
+    labs(x = "Regions of Alabama",
+         y = "Profit ($) from Strawberry Agrivoltaic System",
+         color = "Number of Solar \n Panels per Acre",
+         title = (list(combinations[combo,]))
+         ) +
+    theme(strip.background = element_blank())
+  # Add horizontal line at y = 0 if y has both positive and negative values
+  if (min(filtered_data$sbav_profit) < 0 &
+      max(filtered_data$sbav_profit) > 0) {
     sbav_sp_plot <- sbav_sp_plot + 
-      geom_hline(yintercept = 0,
-                 size = 1,
-                 linetype = "dotted", 
+      geom_hline(yintercept = 0, 
+                 linewidth = 0.30, 
+                 linetype = "dashed", 
                  color = "black")
   }
-  
   print(combinations[combo,])
   print(sbav_sp_plot)
   ggsave(file = paste0("Plots/sbav_sp_", combo, ".png"))
+  #break
 }
 ```
 
-### Plotting Strawberry Profit by Yield Variation
+## Plotting Strawberry Profit by Yields
 
 You can see plot breakdown based on solar proportion, crop price, and electricity price. You can see variation for all crop yield variation in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, eval=TRUE, echo=TRUE, warning=TRUE, error=TRUE}
-lox <- c("Northern", "Central", "Black Belt", "Southern")
-array_levs = c("Single Axis Rotation", "Fixed Open Rack")
+```{r, eval=TRUE, echo=TRUE, warning=TRUE, error=TRUE, cache=TRUE}
 combinations <- expand.grid(
-  sprop = c(0, 0.25, 0.5, 0.75, 1), # Solar proportion
+  sprop = c(0, 0.25, 0.50, 0.75, 1.00), # Solar proportion
   price = c(3, 6, 9), # Strawberry price
   elcprc = c(0.03, 0.04, 0.05) #Electricity price
 )
@@ -642,37 +1110,66 @@ for (combo in seq_len(nrow(combinations))) {
       price == combinations$price[combo],
       elcprc == combinations$elcprc[combo]
     )
-  
+  # If by yield, put yield below in color and group.
   sbav_yv_plot <- ggplot(data = filtered_data,
                         mapping = aes(x = al_regs,
                                       y = sbav_profit,
-                                      color = factor(yldvar),
-                                      group = factor(yldvar))) +
+                                      color = factor(yield),
+                                      group = factor(yield))) +
     geom_line() +
     geom_point() +
-    facet_grid(height ~ array) +
-    guides(color = guide_legend(ncol = 1, reverse = TRUE)) +
-    scale_x_discrete(limits = lox,
-                     labels = c("North", "Center", "B Belt", "South")) +
-    guides(color = guide_legend(ncol = 2, reverse = TRUE))
-  
-    # Add horizontal line at y = 0 if y has both positive and negative values
-  if (min(filtered_data$sbav_profit) < 0
-      & max(filtered_data$sbav_profit) > 0) {
+    facet_grid(height ~ array,
+               labeller = as_labeller(
+                 c(
+                   "4.6" = "4.6 ft. Height",
+                   "6.4" = "6.4 ft. Height",
+                   "8.2" = "8.2 ft. Height",
+                   Tracking = "Single Axis Rotation", 
+                   Fixed = "Fixed Open Rack"
+                   ))) +
+    guides(color = guide_legend(ncol = 1, 
+                                reverse = TRUE)) +
+    scale_x_discrete(limits = c("Northern", "Central",
+                                "Black Belt", "Southern"), 
+                     labels = c("North", "Center", 
+                                "B Belt", "South")) +
+    guides(color = guide_legend(ncol = 2, 
+                                reverse = TRUE)) +
+    labs(x = "Regions of Alabama",
+         y = "Profit ($) from Strawberry Agrivoltaic System",
+         color = "Strawberry Yield \n (25 Lb Buckets)",
+         title = (list(combinations[combo,]))
+         ) +
+    theme(strip.background = element_blank())
+  # Add horizontal line at y = 0 if y has both positive and negative values
+  if (min(filtered_data$sbav_profit) < 0 &
+      max(filtered_data$sbav_profit) > 0) {
     sbav_yv_plot <- sbav_yv_plot + 
-      geom_hline(yintercept = 0,
-                 size = 1,
-                 linetype = "dotted", 
+      geom_hline(yintercept = 0, 
+                 linewidth = 0.30, 
+                 linetype = "dashed", 
                  color = "black")
   }
-  
   print(combinations[combo,])
   print(sbav_yv_plot)
   ggsave(file = paste0("Plots/sbav_yv_", combo, ".png"))
+  #break
 }
 ```
 
-## Squash AV
+# Squash AV Results
+
+## sqav_profit Crosstab
+
+-   Row naming: Electricity Price_Crop Price_Solar Proportion_Alabama Regions
+
+-   Column naming: Solar Proportion_Array Types_Solar Panel Height.
+
+-   Solar Proportion can be converted to total number of panels.
+
+-   Only selected values from each variables are extracted for tabulation purpose.
+
+-   Values displayed in the table are profit from Squash AV system.
 
 ```{r}
 # Define the values for each variable
@@ -698,14 +1195,16 @@ if (length(missing_columns) > 0) {
 
 # Generate column names using reversed order of expand.grid
 col_names <- apply(expand.grid(height, array, sprop), 1,
-                   function(x) paste0(x[3], "%_", x[2], "_", x[1]))
+                   function(x) paste0(x[3],
+                                      x[2],
+                                      x[1]))
 
 # Generate row names using reversed order of expand.grid
 row_names <- apply(expand.grid(elcprc, 
                                price,
                                yldvar, 
                                al_regs), 1, 
-                   function(x) paste0(x, collapse = "_"))
+                   function(x) paste0(x, collapse = ""))
 
 # Create an empty matrix to store the results
 result_matrix <- matrix(NA, nrow = length(row_names), 
@@ -733,13 +1232,16 @@ merged_data <- merge(param_combinations,
 # reversed column and row names
 merged_data$col_name <- apply(
   merged_data[, c("sprop", "array", "height")], 1,
-  function(x) paste0(x[1], "%_", x[2], "_", x[3]))
+  function(x) paste0(x[1],
+                     x[2],
+                     x[3]))
 
 merged_data$row_name <- apply(
   merged_data[, c("al_regs", "yldvar", "price", "elcprc")], 1,
-  function(x) paste0(x[4], "_",
-                     x[3], "_",
-                     x[2], "_", x[1]))
+  function(x) paste0(x[4],
+                     x[3],
+                     x[2],
+                     x[1]))
 
 # Fill the matrix with sqav_profit values
 for (i in seq_len(nrow(result_matrix))) {
@@ -753,44 +1255,200 @@ for (i in seq_len(nrow(result_matrix))) {
                           row_data$sqav_profit, 2)
   }
 }
-sqav_chtbl <- as.data.frame(result_matrix) #Table in Excel.
+ct_sqav_pft <- as.data.frame(result_matrix)
 rm(result_matrix)
 ```
 
 ```{r}
-write.csv(as.data.frame(sqav_chtbl),
+write.csv(as.data.frame(ct_sqav_pft),
           row.names = TRUE,
-          file = "sqav_chtbl.csv")
-dim(sqav_chtbl)
+          file = "ct_sqav_pft.csv")
+dim(ct_sqav_pft)
 ```
 
--   Row naming: Electricity Price_Crop Price_Solar Proportion_Alabama Regions
+## sqav_profit Heatmap
 
--   Column naming: Solar Proportion_Array Types_Solar Panel Height.
-
--   Solar Proportion can be converted to total number of panels.
-
--   Only selected values from each variables are extracted for tabulation purpose.
-
--   Values displayed in the table are profit from Squash AV system.
+-   Heatmap of 324\*30 dimension matrix.
 
 ```{r}
-# Display the result matrix
-#head(sqav_chtbl)
-#tail(sqav_chtbl)
-names(sqav_profit)
+colorcount = length(unique(as.vector(as.matrix(ct_sqav_pft[-1]))))
+colorcount
+heatmap_plot <- pheatmap(t(ct_sqav_pft),
+                         #clustering_distance_rows = "correlation",
+                         clustering_distance_rows = "euclidean",
+                         clustering_distance_cols = "euclidean",
+                         clustering_method = "complete",
+                         color = colorRampPalette(c("red", 
+                                                    "yellow", 
+                                                    "green"))(colorcount),
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+                         cluster_rows = FALSE,
+                         cluster_cols = FALSE,
+                         show_rownames = TRUE,
+                         show_colnames = FALSE,
+                         display_numbers = FALSE,
+                         number_format = "%.2f",
+                         cellheight = 15,
+                         cellwidth = 3)
 ```
 
-### Plotting Squash Profit by Solar Proportion
+```{r, eval=TRUE, echo=TRUE}
+ggsave(heatmap_plot,
+       height = 8,
+       width = 16,
+       units = "in",
+       file = paste0("Plots/gp_sqav_pft", ".png"))
+rm(heatmap_plot)
+rm(colorcount)
+```
+
+## sqavp_wocp Crosstab
+
+-   Profit at 100% crop at their respective price is subtracted from tav_profit.
+
+-   tavp_wocp = tav_profit - profit from 100% crop at their respective prices. This variable gives an idea where av profit stands in relation to crop profit. It helps to identify relative profitability of agrivoltaic system compared to crop only.
+
+```{r}
+# Define the values for each variable
+sprop <- c(0, 0.25, 0.50, 0.75, 1.00)
+array <- c("Fixed", "Tracking")
+height <- c(4.6, 6.4, 8.2)
+yldvar <- c(0.10, 0.30, 0.50, 0.70, 1.00, 1.20, 1.50, 1.80, 2.00)
+al_regs <- c("Northern", "Central", "Black Belt", "Southern")
+price <- c(11, 14, 17)
+elcprc <- c(0.02, 0.03, 0.04)
+
+# Define the required columns
+required_columns <- c("sprop", "array", "height", 
+                      "al_regs", "yldvar", "price", "elcprc")
+
+# Check if the columns exist in sqav_profit
+missing_columns <- setdiff(required_columns, 
+                           names(sqav_profit))
+if (length(missing_columns) > 0) {
+  stop("Missing columns in sqav_profit: ",
+       paste(missing_columns, collapse = ", "))
+}
+
+# Generate column names using reversed order of expand.grid
+col_names <- apply(expand.grid(height, array, sprop), 1,
+                   function(x) paste0(x[3],
+                                      x[2],
+                                      x[1]))
+
+# Generate row names using reversed order of expand.grid
+row_names <- apply(expand.grid(elcprc, 
+                               price,
+                               yldvar, 
+                               al_regs), 1, 
+                   function(x) paste0(x, collapse = ""))
+
+# Create an empty matrix to store the results
+result_matrix <- matrix(NA, nrow = length(row_names), 
+                        ncol = length(col_names))
+colnames(result_matrix) <- col_names
+rownames(result_matrix) <- row_names
+
+# Create a data frame with 
+# all combinations of parameters in reversed order
+param_combinations <- expand.grid(elcprc = elcprc, 
+                                  price = price, 
+                                  yldvar = yldvar, 
+                                  al_regs = al_regs,
+                                  height = height, 
+                                  array = array, 
+                                  sprop = sprop)
+
+# Merge with tav_profit to get sqav_profit values for each combination
+merged_data <- merge(param_combinations, 
+                     sqav_profit, 
+                     by = required_columns,
+                     all.x = TRUE)
+
+# Reshape merged_data to fill result_matrix with 
+# reversed column and row names
+merged_data$col_name <- apply(
+  merged_data[, c("sprop", "array", "height")], 1,
+  function(x) paste0(x[1],
+                     x[2],
+                     x[3]))
+
+merged_data$row_name <- apply(
+  merged_data[, c("al_regs", "yldvar", "price", "elcprc")], 1,
+  function(x) paste0(x[4],
+                     x[3],
+                     x[2],
+                     x[1]))
+
+# Fill the matrix with sqav_profit values
+for (i in seq_len(nrow(result_matrix))) {
+  row_condition <- rownames(result_matrix)[i]
+  row_data <- merged_data[
+    merged_data$row_name == row_condition, ]
+  if (nrow(row_data) > 0) {
+    result_matrix[i, 
+                  match(row_data$col_name, 
+                        colnames(result_matrix))] <- round(
+                          row_data$sqavp_wocp, 2)
+  }
+}
+ct_sqavp_wocp <- as.data.frame(result_matrix) #Table in Excel.
+rm(result_matrix)
+```
+
+```{r}
+write.csv(as.data.frame(ct_sqavp_wocp),
+          row.names = TRUE,
+          file = "ct_sqavp_wocp.csv")
+dim(ct_sqavp_wocp)
+```
+
+## sqavp_wocp Heatmap
+
+-   Heatmap of 324\*30 dimension matrix.
+
+```{r}
+colorcount = length(unique(as.vector(as.matrix(ct_sqavp_wocp[-1]))))
+colorcount
+heatmap_plot <- pheatmap(t(ct_sqavp_wocp),
+                         #clustering_distance_rows = "correlation",
+                         clustering_distance_rows = "euclidean",
+                         clustering_distance_cols = "euclidean",
+                         clustering_method = "complete",
+                         color = colorRampPalette(c("red", 
+                                                    "yellow", 
+                                                    "green"))(colorcount),
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+                         cluster_rows = FALSE,
+                         cluster_cols = FALSE,
+                         show_rownames = TRUE,
+                         show_colnames = FALSE,
+                         display_numbers = FALSE,
+                         number_format = "%.2f",
+                         cellheight = 15,
+                         cellwidth = 3)
+```
+
+```{r, eval=TRUE, echo=TRUE}
+ggsave(heatmap_plot,
+       height = 8,
+       width = 16,
+       units = "in",
+       file = paste0("Plots/gp_sqavp_wocp", ".png"))
+rm(heatmap_plot)
+rm(colorcount)
+```
+
+## Plotting Squash Profit by Panels
 
 You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, echo=TRUE, results='show', warning=FALSE, error=TRUE, eval=TRUE}
-lox <- c("Northern", "Central", "Black Belt", "Southern")
-array_levs = c("Single Axis Rotation", "Fixed Open Rack")
+```{r, cache=TRUE, warning=FALSE, error=TRUE, eval=TRUE}
 combinations <- expand.grid(
-  yldvar = c(0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield proportion
-  price = c(11, 14, 17), # Tomato price
+  yldvar = c(0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield variation
+  price = c(11, 14, 17), # Squash price
   elcprc = c(0.03, 0.04, 0.05) #Electricity price
 )
 
@@ -802,46 +1460,61 @@ for (combo in seq_len(nrow(combinations))) {
       price == combinations$price[combo],
       elcprc == combinations$elcprc[combo]
     )
-  
+  # If by panel, put panels below in color and group.
   sqav_sp_plot <- ggplot(data = filtered_data,
                         mapping = aes(x = al_regs,
                                       y = sqav_profit,
-                                      color = factor(sprop),
-                                      group = factor(sprop))) +
+                                      color = factor(panels),
+                                      group = factor(panels))) +
     geom_line() +
     geom_point() +
-    facet_grid(height ~ array) +
-    guides(color = guide_legend(ncol = 1, reverse = TRUE)) +
-    scale_x_discrete(limits = lox,
-                     labels = c("North", "Center", "B Belt", "South")) +
-    guides(color = guide_legend(ncol = 2, reverse = TRUE))
-  
-      # Add horizontal line at y = 0 if y has both positive and negative values
-  if (min(filtered_data$sqav_profit) < 0
-      & max(filtered_data$sqav_profit) > 0) {
+    facet_grid(height ~ array,
+               labeller = as_labeller(
+                 c(
+                   "4.6" = "4.6 ft. Height",
+                   "6.4" = "6.4 ft. Height",
+                   "8.2" = "8.2 ft. Height",
+                   Tracking = "Single Axis Rotation", 
+                   Fixed = "Fixed Open Rack"
+                   ))) +
+    guides(color = guide_legend(ncol = 1, 
+                                reverse = TRUE)) +
+    scale_x_discrete(limits = c("Northern", "Central",
+                                "Black Belt", "Southern"), 
+                     labels = c("North", "Center", 
+                                "B Belt", "South")) +
+    guides(color = guide_legend(ncol = 2, 
+                                reverse = TRUE)) +
+    labs(x = "Regions of Alabama",
+         y = "Profit ($) from Squash Agrivoltaic System",
+         color = "Number of Solar \n Panels per Acre",
+         title = (list(combinations[combo,]))
+         ) +
+    theme(strip.background = element_blank())
+  # Add horizontal line at y = 0 if y has both positive and negative values
+  if (min(filtered_data$sqav_profit) < 0 &
+      max(filtered_data$sqav_profit) > 0) {
     sqav_sp_plot <- sqav_sp_plot + 
-      geom_hline(yintercept = 0,
-                 size = 1,
-                 linetype = "dotted", 
+      geom_hline(yintercept = 0, 
+                 linewidth = 0.30, 
+                 linetype = "dashed", 
                  color = "black")
   }
-  
   print(combinations[combo,])
   print(sqav_sp_plot)
   ggsave(file = paste0("Plots/sqav_sp_", combo, ".png"))
+  #break
 }
 ```
 
-### Plotting Squash Profit by Yield Variation
+## Plotting Squash Profit by Yields
 
 You can see plot breakdown based on solar proportion, crop price, and electricity price. You can see variation for all crop yield variation in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, echo=TRUE, results='show', warning=FALSE, error=TRUE, eval=TRUE}
-lox <- c("Northern", "Central", "Black Belt", "Southern")
-array_levs = c("Single Axis Rotation", "Fixed Open Rack")
+```{r, cache=TRUE, results='show', warning=FALSE, error=TRUE, eval=TRUE}
 combinations <- expand.grid(
-  sprop = c(0, 0.25, 0.5, 0.75, 1), # Solar proportion
-  price = c(11, 14, 17), # Tomato price
+  sprop = c(0, 0.25, 0.50, 0.75, 1.00), # Solar proportion
+  price = c(11, 14, 17), # Squash price
   elcprc = c(0.03, 0.04, 0.05) #Electricity price
 )
 
@@ -853,34 +1526,49 @@ for (combo in seq_len(nrow(combinations))) {
       price == combinations$price[combo],
       elcprc == combinations$elcprc[combo]
     )
-  
+  # If by yield, put yield below in color and group.
   sqav_yv_plot <- ggplot(data = filtered_data,
                         mapping = aes(x = al_regs,
                                       y = sqav_profit,
-                                      color = factor(yldvar),
-                                      group = factor(yldvar))) +
+                                      color = factor(yield),
+                                      group = factor(yield))) +
     geom_line() +
     geom_point() +
-    facet_grid(height ~ array) +
+    facet_grid(height ~ array,
+               labeller = as_labeller(
+                 c(
+                   "4.6" = "4.6 ft. Height",
+                   "6.4" = "6.4 ft. Height",
+                   "8.2" = "8.2 ft. Height",
+                   Tracking = "Single Axis Rotation", 
+                   Fixed = "Fixed Open Rack"
+                   ))) +
     guides(color = guide_legend(ncol = 1, 
                                 reverse = TRUE)) +
-    scale_x_discrete(limits = lox,
-                     labels = c("North", "Center", "B Belt", "South")) +
+    scale_x_discrete(limits = c("Northern", "Central",
+                                "Black Belt", "Southern"), 
+                     labels = c("North", "Center", 
+                                "B Belt", "South")) +
     guides(color = guide_legend(ncol = 2, 
-                                reverse = TRUE))
-  
-      # Add horizontal line at y = 0 if y has both positive and negative values
-  if (min(filtered_data$sqav_profit) < 0
-      & max(filtered_data$sqav_profit) > 0) {
+                                reverse = TRUE)) +
+    labs(x = "Regions of Alabama",
+         y = "Profit ($) from Squash Agrivoltaic System",
+         color = "Squash Yield \n (25 Lb Buckets)",
+         title = (list(combinations[combo,]))
+         ) +
+    theme(strip.background = element_blank())
+  # Add horizontal line at y = 0 if y has both positive and negative values
+  if (min(filtered_data$sqav_profit) < 0 &
+      max(filtered_data$sqav_profit) > 0) {
     sqav_yv_plot <- sqav_yv_plot + 
-      geom_hline(yintercept = 0,
-                 size = 1,
-                 linetype = "dotted", 
+      geom_hline(yintercept = 0, 
+                 linewidth = 0.30, 
+                 linetype = "dashed", 
                  color = "black")
   }
-  
   print(combinations[combo,])
   print(sqav_yv_plot)
   ggsave(file = paste0("Plots/sqav_yv_", combo, ".png"))
+  #break
 }
 ```
