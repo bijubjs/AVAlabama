@@ -22,4 +22,7 @@ arrow
 plot3D
 plotly
 lattice
+future
+furrr
 pheatmap
+data.table

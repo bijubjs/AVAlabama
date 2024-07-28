@@ -170,7 +170,7 @@ Import necessary data.
 -   rlc17 to 23 = Return to land and capital after subtracting operator cost from total revenue.
 
 ```{r}
-tomato <- read_xlsx("Parameters.xlsx",
+tomato <- read_xlsx("Data/Parameters.xlsx",
                     sheet = "Tomato",
                     start_row = 2,
                     start_col = 9,
@@ -191,7 +191,7 @@ tail(tomato)
 -   Numbers 3 to 9 in names are price ranges for strawberry.
 
 ```{r}
-strawberry <- read_xlsx("Parameters.xlsx",
+strawberry <- read_xlsx("Data/Parameters.xlsx",
                         sheet = "Strawberry",
                         start_row = 2,
                         start_col = 7,
@@ -212,7 +212,7 @@ tail(strawberry)
 -   Numbers 11 to 17 in names are price ranges for squash.
 
 ```{r}
-squash <- read_xlsx("Parameters.xlsx",
+squash <- read_xlsx("Data/Parameters.xlsx",
                     sheet = "Squash",
                     start_row = 2,
                     start_col = 8,
@@ -233,7 +233,7 @@ Electricity price ranges from 1 cents to 6 cents in 0.5 cent increment. Previous
 Electricity price (\$/kWh) was retail electricity price range for Alabama based on retail electricity price in April 2023 and April 2024 taken from [DOE Database](https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_6_a). Retail electricity price range in Alabama was from 6.44 to 15.85 cents/kWh in April 2023 and April 2024 which represents industry, commercial, and residential prices.
 
 ```{r}
-elec_price <- read_xlsx("Parameters.xlsx",
+elec_price <- read_xlsx("Data/Parameters.xlsx",
                               sheet = "Electricity Price") %>%
   rename(epr_kwh = `Electricity Price ($/kWh)`)
 dim(elec_price)
@@ -251,7 +251,7 @@ elec_price
 -   tcost = Total cost is the sum of all itemized cost for AV system. See figure 3 and table 1 in above document for more detail.
 
 ```{r}
-pvsc <- wb_read(file = "Parameters.xlsx",
+pvsc <- wb_read(file = "Data/Parameters.xlsx",
                 sheet = "PV system Cost (NREL)",
                 rows = c(1:109),
                 cols = c(1:5),
@@ -279,7 +279,7 @@ Variable Descriptions:
 -   array: Solar array. Tracker = Single axis sun tracking panels; Fixed = Non-tracking panels.
 
 ```{r}
-capex <- read.table(file = "CAPEX.txt",
+capex <- read.table(file = "Data/CAPEX.txt",
                     header = TRUE,
                   sep = "\t") %>% 
   rename(capex = cost,
@@ -320,7 +320,7 @@ plottheme %>% ggplot(data = capex,
 -   Panel configuration and DV system output (W).
 
 ```{r, results='markup'}
-panconf <- wb_read(file = "Parameters.xlsx",
+panconf <- wb_read(file = "Data/Parameters.xlsx",
                 sheet = "Panel Spacing",
                 start_row = 2,
                 start_col = 1,
@@ -358,7 +358,7 @@ Energy output was simulated using NREL [PV Watts Calculator](https://pvwatts.nre
 -   energy = total energy output ( kWh/Year) considering system parameters. Total hours considered by the model is 8,760 (See [PV Watts Calculator](https://pvwatts.nrel.gov/pvwatts.php){.uri} Results \> help (below the result) \> results \> download monthly or hourly results).
 
 ```{r, echo=TRUE, results='show', warning=TRUE, error=TRUE}
-energy_output <- read_xlsx("Parameters.xlsx", 
+energy_output <- read_xlsx("Data/Parameters.xlsx", 
                            sheet = "Energy Output",
                            start_row = 1,
                            start_col = 1,
@@ -944,7 +944,7 @@ tail(tav_profit)
 ```{r}
 #write_csv(tav_profit, "tav_profit.csv")
 write_feather(tav_profit,
-  sink = "tav_profit.feather",
+  sink = "Data/tav_profit.feather",
   version = 2,
   chunk_size = 65536L,
   compression = c("default"),
@@ -999,7 +999,7 @@ tail(sbav_profit)
 ```{r}
 #write_csv(sbav_profit, "tav_profit.csv")
 write_feather(sbav_profit,
-  sink = "sbav_profit.feather",
+  sink = "Data/sbav_profit.feather",
   version = 2,
   chunk_size = 65536L,
   compression = c("default"),
@@ -1054,7 +1054,7 @@ tail(sqav_profit)
 ```{r}
 #write_csv(sqav_profit, "tav_profit.csv")
 write_feather(sqav_profit,
-  sink = "sqav_profit.feather",
+  sink = "Data/sqav_profit.feather",
   version = 2,
   chunk_size = 65536L,
   compression = c("default"),
