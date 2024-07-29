@@ -1008,7 +1008,7 @@ You can install a fully-featured version by running:
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to data frames if they are not already</span></span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>matrix1 <span class="ot">&lt;-</span> energy_output  <span class="sc">%&gt;%</span></span>
 <span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sprop, al_regs, array, dc_kw, panels) <span class="sc">%&gt;%</span></span>
-<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#filter(datalot == 2) %&gt;%</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(datalot <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute mean of datalot 1 and datalot 2:</span></span>
 <span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
 <span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">energy =</span> <span class="fu">mean</span>(energy),</span>
@@ -1058,13 +1058,13 @@ You can install a fully-featured version by running:
 6     0   Northern Tracking     0      0      0   0.01      0</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     sprop  al_regs    array  dc_kw panels   energy elcprc   elcrev
-1843     1  Central    Fixed 423.74    885 587291.0   0.06 35237.46
-1844     1  Central Tracking 423.74    885 678466.0   0.06 40707.96
-1845     1 Northern    Fixed 423.74    885 579622.5   0.06 34777.35
-1846     1 Northern Tracking 423.74    885 664888.0   0.06 39893.28
-1847     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23
-1848     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90</code></pre>
+<pre><code>     sprop  al_regs    array  dc_kw panels energy elcprc   elcrev
+1843     1  Central    Fixed 423.74    885 594824   0.06 35689.44
+1844     1  Central Tracking 423.74    885 688037   0.06 41282.22
+1845     1 Northern    Fixed 423.74    885 574020   0.06 34441.20
+1846     1 Northern Tracking 423.74    885 656889   0.06 39413.34
+1847     1 Southern    Fixed 423.74    885 613342   0.06 36800.52
+1848     1 Southern Tracking 423.74    885 712873   0.06 42772.38</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for any NAs in the result</span></span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">any</span>(<span class="fu">is.na</span>(energy_revenue))) {</span>
@@ -1436,13 +1436,13 @@ You can install a fully-featured version by running:
 </div>
 <div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(energy_cost)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     sprop  al_regs    array  dc_kw panels   energy elcprc   elcrev height
-5539     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    4.6
-5540     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    6.4
-5541     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    8.2
-5542     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    4.6
-5543     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    6.4
-5544     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    8.2
+<pre><code>     sprop  al_regs    array  dc_kw panels energy elcprc   elcrev height
+5539     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    4.6
+5540     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    6.4
+5541     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    8.2
+5542     1 Southern Tracking 423.74    885 712873   0.06 42772.38    4.6
+5543     1 Southern Tracking 423.74    885 712873   0.06 42772.38    6.4
+5544     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
         capex  ttlcost  anncost  moncost
 5539 1.593333 675.1591 47.90419 3.946913
 5540 1.850000 783.9190 55.62098 4.582712
@@ -1489,20 +1489,20 @@ You can install a fully-featured version by running:
 </div>
 <div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(solar_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     sprop  al_regs    array  dc_kw panels   energy elcprc   elcrev height
-5539     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    4.6
-5540     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    6.4
-5541     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    8.2
-5542     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    4.6
-5543     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    6.4
-5544     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    8.2
+<pre><code>     sprop  al_regs    array  dc_kw panels energy elcprc   elcrev height
+5539     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    4.6
+5540     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    6.4
+5541     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    8.2
+5542     1 Southern Tracking 423.74    885 712873   0.06 42772.38    4.6
+5543     1 Southern Tracking 423.74    885 712873   0.06 42772.38    6.4
+5544     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
         capex  ttlcost  anncost  moncost  eprofit eannprof emonprof
-5539 1.593333 675.1591 47.90419 3.946913 35248.07 35875.33 2989.656
-5540 1.850000 783.9190 55.62098 4.582712 35139.31 35867.61 2989.020
-5541 2.330000 987.3142 70.05237 5.771740 34935.92 35853.18 2987.831
-5542 1.733333 734.4827 52.11335 4.293713 40990.42 41672.79 3472.781
-5543 1.921667 814.2870 57.77567 4.760241 40910.61 41667.12 3472.315
-5544 2.110000 894.0914 63.43798 5.226769 40830.81 41661.46 3471.848</code></pre>
+5539 1.593333 675.1591 47.90419 3.946913 36125.36 36752.62 3062.763
+5540 1.850000 783.9190 55.62098 4.582712 36016.60 36744.90 3062.127
+5541 2.330000 987.3142 70.05237 5.771740 35813.21 36730.47 3060.938
+5542 1.733333 734.4827 52.11335 4.293713 42037.90 42720.27 3560.071
+5543 1.921667 814.2870 57.77567 4.760241 41958.09 42714.60 3559.605
+5544 2.110000 894.0914 63.43798 5.226769 41878.29 42708.94 3559.138</code></pre>
 </div>
 </div>
 <section id="plot-profit-from-solar" class="level3" data-number="3.5.1">
@@ -2197,27 +2197,27 @@ You can install a fully-featured version by running:
 </div>
 <div class="sourceCode cell-code" id="cb151"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       sprop  al_regs    array  dc_kw panels   energy elcprc   elcrev height
-776155     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    4.6
-776156     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    6.4
-776157     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    8.2
-776158     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    4.6
-776159     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    6.4
-776160     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    8.2
+<pre><code>       sprop  al_regs    array  dc_kw panels energy elcprc   elcrev height
+776155     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    4.6
+776156     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    6.4
+776157     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    8.2
+776158     1 Southern Tracking 423.74    885 712873   0.06 42772.38    4.6
+776159     1 Southern Tracking 423.74    885 712873   0.06 42772.38    6.4
+776160     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
           capex  ttlcost  anncost  moncost  eprofit eannprof emonprof yldvar
-776155 1.593333 675.1591 47.90419 3.946913 35248.07 35875.33 2989.656    0.1
-776156 1.850000 783.9190 55.62098 4.582712 35139.31 35867.61 2989.020    0.1
-776157 2.330000 987.3142 70.05237 5.771740 34935.92 35853.18 2987.831    0.1
-776158 1.733333 734.4827 52.11335 4.293713 40990.42 41672.79 3472.781    0.1
-776159 1.921667 814.2870 57.77567 4.760241 40910.61 41667.12 3472.315    0.1
-776160 2.110000 894.0914 63.43798 5.226769 40830.81 41661.46 3471.848    0.1
+776155 1.593333 675.1591 47.90419 3.946913 36125.36 36752.62 3062.763    0.1
+776156 1.850000 783.9190 55.62098 4.582712 36016.60 36744.90 3062.127    0.1
+776157 2.330000 987.3142 70.05237 5.771740 35813.21 36730.47 3060.938    0.1
+776158 1.733333 734.4827 52.11335 4.293713 42037.90 42720.27 3560.071    0.1
+776159 1.921667 814.2870 57.77567 4.760241 41958.09 42714.60 3559.605    0.1
+776160 2.110000 894.0914 63.43798 5.226769 41878.29 42708.94 3559.138    0.1
        yield price    profit tav_profit
-776155   136    23 -8170.617   27704.71
-776156   136    23 -8170.617   27696.99
-776157   136    23 -8170.617   27682.56
-776158   136    23 -8170.617   33502.17
-776159   136    23 -8170.617   33496.51
-776160   136    23 -8170.617   33490.84</code></pre>
+776155   136    23 -8170.617   28582.00
+776156   136    23 -8170.617   28574.28
+776157   136    23 -8170.617   28559.85
+776158   136    23 -8170.617   34549.65
+776159   136    23 -8170.617   34543.99
+776160   136    23 -8170.617   34538.32</code></pre>
 </div>
 </div>
 <section id="saving-results-locally" class="level3" data-number="5.1.1">
@@ -2323,27 +2323,27 @@ You can install a fully-featured version by running:
 </div>
 <div class="sourceCode cell-code" id="cb158"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       sprop  al_regs    array  dc_kw panels   energy elcprc   elcrev height
-776155     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    4.6
-776156     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    6.4
-776157     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    8.2
-776158     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    4.6
-776159     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    6.4
-776160     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    8.2
+<pre><code>       sprop  al_regs    array  dc_kw panels energy elcprc   elcrev height
+776155     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    4.6
+776156     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    6.4
+776157     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    8.2
+776158     1 Southern Tracking 423.74    885 712873   0.06 42772.38    4.6
+776159     1 Southern Tracking 423.74    885 712873   0.06 42772.38    6.4
+776160     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
           capex  ttlcost  anncost  moncost  eprofit eannprof emonprof yldvar
-776155 1.593333 675.1591 47.90419 3.946913 35248.07 35875.33 2989.656    0.1
-776156 1.850000 783.9190 55.62098 4.582712 35139.31 35867.61 2989.020    0.1
-776157 2.330000 987.3142 70.05237 5.771740 34935.92 35853.18 2987.831    0.1
-776158 1.733333 734.4827 52.11335 4.293713 40990.42 41672.79 3472.781    0.1
-776159 1.921667 814.2870 57.77567 4.760241 40910.61 41667.12 3472.315    0.1
-776160 2.110000 894.0914 63.43798 5.226769 40830.81 41661.46 3471.848    0.1
+776155 1.593333 675.1591 47.90419 3.946913 36125.36 36752.62 3062.763    0.1
+776156 1.850000 783.9190 55.62098 4.582712 36016.60 36744.90 3062.127    0.1
+776157 2.330000 987.3142 70.05237 5.771740 35813.21 36730.47 3060.938    0.1
+776158 1.733333 734.4827 52.11335 4.293713 42037.90 42720.27 3560.071    0.1
+776159 1.921667 814.2870 57.77567 4.760241 41958.09 42714.60 3559.605    0.1
+776160 2.110000 894.0914 63.43798 5.226769 41878.29 42708.94 3559.138    0.1
        yield price    profit sbav_profit
-776155 307.5     9 -10855.74    25019.59
-776156 307.5     9 -10855.74    25011.87
-776157 307.5     9 -10855.74    24997.44
-776158 307.5     9 -10855.74    30817.05
-776159 307.5     9 -10855.74    30811.38
-776160 307.5     9 -10855.74    30805.72</code></pre>
+776155 307.5     9 -10855.74    25896.88
+776156 307.5     9 -10855.74    25889.16
+776157 307.5     9 -10855.74    25874.73
+776158 307.5     9 -10855.74    31864.53
+776159 307.5     9 -10855.74    31858.86
+776160 307.5     9 -10855.74    31853.20</code></pre>
 </div>
 </div>
 <section id="saving-results-locally-1" class="level3" data-number="5.2.1">
@@ -2449,27 +2449,27 @@ You can install a fully-featured version by running:
 </div>
 <div class="sourceCode cell-code" id="cb165"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb165-1"><a href="#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       sprop  al_regs    array  dc_kw panels   energy elcprc   elcrev height
-776155     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    4.6
-776156     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    6.4
-776157     1 Southern    Fixed 423.74    885 598720.5   0.06 35923.23    8.2
-776158     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    4.6
-776159     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    6.4
-776160     1 Southern Tracking 423.74    885 695415.0   0.06 41724.90    8.2
+<pre><code>       sprop  al_regs    array  dc_kw panels energy elcprc   elcrev height
+776155     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    4.6
+776156     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    6.4
+776157     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    8.2
+776158     1 Southern Tracking 423.74    885 712873   0.06 42772.38    4.6
+776159     1 Southern Tracking 423.74    885 712873   0.06 42772.38    6.4
+776160     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
           capex  ttlcost  anncost  moncost  eprofit eannprof emonprof yldvar
-776155 1.593333 675.1591 47.90419 3.946913 35248.07 35875.33 2989.656    0.1
-776156 1.850000 783.9190 55.62098 4.582712 35139.31 35867.61 2989.020    0.1
-776157 2.330000 987.3142 70.05237 5.771740 34935.92 35853.18 2987.831    0.1
-776158 1.733333 734.4827 52.11335 4.293713 40990.42 41672.79 3472.781    0.1
-776159 1.921667 814.2870 57.77567 4.760241 40910.61 41667.12 3472.315    0.1
-776160 2.110000 894.0914 63.43798 5.226769 40830.81 41661.46 3471.848    0.1
+776155 1.593333 675.1591 47.90419 3.946913 36125.36 36752.62 3062.763    0.1
+776156 1.850000 783.9190 55.62098 4.582712 36016.60 36744.90 3062.127    0.1
+776157 2.330000 987.3142 70.05237 5.771740 35813.21 36730.47 3060.938    0.1
+776158 1.733333 734.4827 52.11335 4.293713 42037.90 42720.27 3560.071    0.1
+776159 1.921667 814.2870 57.77567 4.760241 41958.09 42714.60 3559.605    0.1
+776160 2.110000 894.0914 63.43798 5.226769 41878.29 42708.94 3559.138    0.1
        yield price    profit sqav_profit
-776155   109    17 -2370.133    33505.19
-776156   109    17 -2370.133    33497.48
-776157   109    17 -2370.133    33483.04
-776158   109    17 -2370.133    39302.65
-776159   109    17 -2370.133    39296.99
-776160   109    17 -2370.133    39291.33</code></pre>
+776155   109    17 -2370.133    34382.48
+776156   109    17 -2370.133    34374.77
+776157   109    17 -2370.133    34360.33
+776158   109    17 -2370.133    40350.13
+776159   109    17 -2370.133    40344.47
+776160   109    17 -2370.133    40338.81</code></pre>
 </div>
 </div>
 <section id="saving-results-locally-2" class="level3" data-number="5.3.1">
