@@ -1,0 +1,116 @@
+Source: The cost of PV + Crops (reinforced regular mount) holds panels at 8.2 ft above the ground while maintaining structural integrity under wind and snow loads.
+Inter-row spacing is 44 degrees except for vertical mount (90-degree). Panel height taken from Table 1, Page 7, https://www.nrel.gov/docs/fy21osti/77811.pdf
+Site preparation cost is included under install labor and equipment and contribute to difference in cost across the scenario.
+
+Suggested Citation
+Horowitz, Kelsey, Vignesh Ramasamy, Jordan Macknick and Robert Margolis. 2020. Capital Costs for Dual-Use Photovoltaic Installations: 2020 Benchmark for Ground Mounted PV Systems with Pollinator-Friendly Vegetation, Grazing, and Crops. Golden, CO: National Renewable Energy Laboratory. NREL/TP-6A20-77811. https://www.nrel.gov/docs/fy21osti/77811.pdf.
+
+AV Types	Item	Cost ($)	Panel Height (ft.)	Total Cost ($)
+Typical Fixed PV	EPC/Developer Net Profit	0.11	4.6	1.53
+Typical Fixed PV	Developer Overhead	0.15	4.6	1.53
+Typical Fixed PV	Contingency(3%)	0.05	4.6	1.53
+Typical Fixed PV	Interconnection Fee	0.03	4.6	1.53
+Typical Fixed PV	Permitting Fee (if any)	0.02	4.6	1.53
+Typical Fixed PV	Sale Tax (if any)	0.05	4.6	1.53
+Typical Fixed PV	EPC Overhead	0.12	4.6	1.53
+Typical Fixed PV	Installation and Labor Cost	0.18	4.6	1.53
+Typical Fixed PV	Electrical BOS	0.24	4.6	1.53
+Typical Fixed PV	Structural BOS	0.11	4.6	1.53
+Typical Fixed PV	Inverter Only	0.08	4.6	1.53
+Typical Fixed PV	Module	0.40	4.6	1.53
+Typical 1-AT PV	EPC/Developer Net Profit	0.12	4.6	1.66
+Typical 1-AT PV	Developer Overhead	0.16	4.6	1.66
+Typical 1-AT PV	Contingency(3%)	0.05	4.6	1.66
+Typical 1-AT PV	Interconnection Fee	0.03	4.6	1.66
+Typical 1-AT PV	Permitting Fee (if any)	0.02	4.6	1.66
+Typical 1-AT PV	Sale Tax (if any)	0.05	4.6	1.66
+Typical 1-AT PV	EPC Overhead	0.14	4.6	1.66
+Typical 1-AT PV	Installation and Labor Cost	0.21	4.6	1.66
+Typical 1-AT PV	Electrical BOS	0.24	4.6	1.66
+Typical 1-AT PV	Structural BOS	0.16	4.6	1.66
+Typical 1-AT PV	Inverter Only	0.08	4.6	1.66
+Typical 1-AT PV	Module	0.40	4.6	1.66
+Fixed PV + Grazing	EPC/Developer Net Profit	0.12	4.6	1.60
+Fixed PV + Grazing	Developer Overhead	0.15	4.6	1.60
+Fixed PV + Grazing	Contingency(3%)	0.05	4.6	1.60
+Fixed PV + Grazing	Interconnection Fee	0.03	4.6	1.60
+Fixed PV + Grazing	Permitting Fee (if any)	0.02	4.6	1.60
+Fixed PV + Grazing	Sale Tax (if any)	0.05	4.6	1.60
+Fixed PV + Grazing	EPC Overhead	0.13	4.6	1.60
+Fixed PV + Grazing	Installation and Labor Cost	0.19	4.6	1.60
+Fixed PV + Grazing	Electrical BOS	0.26	4.6	1.60
+Fixed PV + Grazing	Structural BOS	0.12	4.6	1.60
+Fixed PV + Grazing	Inverter Only	0.08	4.6	1.60
+Fixed PV + Grazing	Module	0.40	4.6	1.60
+Tracker PV + Grazing	EPC/Developer Net Profit	0.13	4.6	1.73
+Tracker PV + Grazing	Developer Overhead	0.17	4.6	1.73
+Tracker PV + Grazing	Contingency(3%)	0.06	4.6	1.73
+Tracker PV + Grazing	Interconnection Fee	0.03	4.6	1.73
+Tracker PV + Grazing	Permitting Fee (if any)	0.02	4.6	1.73
+Tracker PV + Grazing	Sale Tax (if any)	0.06	4.6	1.73
+Tracker PV + Grazing	EPC Overhead	0.15	4.6	1.73
+Tracker PV + Grazing	Installation and Labor Cost	0.22	4.6	1.73
+Tracker PV + Grazing	Electrical BOS	0.26	4.6	1.73
+Tracker PV + Grazing	Structural BOS	0.17	4.6	1.73
+Tracker PV + Grazing	Inverter Only	0.08	4.6	1.73
+Tracker PV + Grazing	Module	0.40	4.6	1.73
+Fixed PV + Pollinator	EPC/Developer Net Profit	0.12	4.6	1.63
+Fixed PV + Pollinator	Developer Overhead	0.16	4.6	1.63
+Fixed PV + Pollinator	Contingency(3%)	0.05	4.6	1.63
+Fixed PV + Pollinator	Interconnection Fee	0.03	4.6	1.63
+Fixed PV + Pollinator	Permitting Fee (if any)	0.02	4.6	1.63
+Fixed PV + Pollinator	Sale Tax (if any)	0.05	4.6	1.63
+Fixed PV + Pollinator	EPC Overhead	0.14	4.6	1.63
+Fixed PV + Pollinator	Installation and Labor Cost	0.23	4.6	1.63
+Fixed PV + Pollinator	Electrical BOS	0.24	4.6	1.63
+Fixed PV + Pollinator	Structural BOS	0.12	4.6	1.63
+Fixed PV + Pollinator	Inverter Only	0.08	4.6	1.63
+Fixed PV + Pollinator	Module	0.40	4.6	1.63
+Tracker PV + Pollinator	EPC/Developer Net Profit	0.13	4.6	1.78
+Tracker PV + Pollinator	Developer Overhead	0.17	4.6	1.78
+Tracker PV + Pollinator	Contingency(3%)	0.06	4.6	1.78
+Tracker PV + Pollinator	Interconnection Fee	0.03	4.6	1.78
+Tracker PV + Pollinator	Permitting Fee (if any)	0.02	4.6	1.78
+Tracker PV + Pollinator	Sale Tax (if any)	0.06	4.6	1.78
+Tracker PV + Pollinator	EPC Overhead	0.16	4.6	1.78
+Tracker PV + Pollinator	Installation and Labor Cost	0.27	4.6	1.78
+Tracker PV + Pollinator	Electrical BOS	0.24	4.6	1.78
+Tracker PV + Pollinator	Structural BOS	0.17	4.6	1.78
+Tracker PV + Pollinator	Inverter Only	0.08	4.6	1.78
+Tracker PV + Pollinator	Module	0.40	4.6	1.78
+PV + Crops (Vertical Mount)	EPC/Developer Net Profit	0.14	6.4	1.83
+PV + Crops (Vertical Mount)	Developer Overhead	0.18	6.4	1.83
+PV + Crops (Vertical Mount)	Contingency(3%)	0.06	6.4	1.83
+PV + Crops (Vertical Mount)	Interconnection Fee	0.03	6.4	1.83
+PV + Crops (Vertical Mount)	Permitting Fee (if any)	0.02	6.4	1.83
+PV + Crops (Vertical Mount)	Sale Tax (if any)	0.06	6.4	1.83
+PV + Crops (Vertical Mount)	EPC Overhead	0.17	6.4	1.83
+PV + Crops (Vertical Mount)	Installation and Labor Cost	0.25	6.4	1.83
+PV + Crops (Vertical Mount)	Electrical BOS	0.25	6.4	1.83
+PV + Crops (Vertical Mount)	Structural BOS	0.21	6.4	1.83
+PV + Crops (Vertical Mount)	Inverter Only	0.08	6.4	1.83
+PV + Crops (Vertical Mount)	Module	0.40	6.4	1.83
+PV + Crops (Tracker Stilt Mount)	EPC/Developer Net Profit	0.16	8.2	2.09
+PV + Crops (Tracker Stilt Mount)	Developer Overhead	0.20	8.2	2.09
+PV + Crops (Tracker Stilt Mount)	Contingency(3%)	0.07	8.2	2.09
+PV + Crops (Tracker Stilt Mount)     	Interconnection Fee	0.03	8.2	2.09
+PV + Crops (Tracker Stilt Mount)     	Permitting Fee (if any)	0.02	8.2	2.09
+PV + Crops (Tracker Stilt Mount)     	Sale Tax (if any)	0.07	8.2	2.09
+PV + Crops (Tracker Stilt Mount)     	EPC Overhead	0.19	8.2	2.09
+PV + Crops (Tracker Stilt Mount)     	Installation and Labor Cost	0.22	8.2	2.09
+PV + Crops (Tracker Stilt Mount)     	Electrical BOS	0.27	8.2	2.09
+PV + Crops (Tracker Stilt Mount)     	Structural BOS	0.40	8.2	2.09
+PV + Crops (Tracker Stilt Mount)     	Inverter Only	0.08	8.2	2.09
+PV + Crops (Tracker Stilt Mount)     	Module	0.40	8.2	2.09
+PV + Crops (Reinforced Regular Mount)	EPC/Developer Net Profit	0.17	8.2	2.33
+PV + Crops (Reinforced Regular Mount)	Developer Overhead	0.22	8.2	2.33
+PV + Crops (Reinforced Regular Mount)	Contingency(3%)	0.07	8.2	2.33
+PV + Crops (Reinforced Regular Mount)	Interconnection Fee	0.03	8.2	2.33
+PV + Crops (Reinforced Regular Mount)	Permitting Fee (if any)	0.02	8.2	2.33
+PV + Crops (Reinforced Regular Mount)	Sale Tax (if any)	0.07	8.2	2.33
+PV + Crops (Reinforced Regular Mount)	EPC Overhead	0.25	8.2	2.33
+PV + Crops (Reinforced Regular Mount)	Installation and Labor Cost	0.32	8.2	2.33
+PV + Crops (Reinforced Regular Mount)	Electrical BOS	0.38	8.2	2.33
+PV + Crops (Reinforced Regular Mount)	Structural BOS	0.32	8.2	2.33
+PV + Crops (Reinforced Regular Mount)	Inverter Only	0.08	8.2	2.33
+PV + Crops (Reinforced Regular Mount)	Module	0.40	8.2	2.33
