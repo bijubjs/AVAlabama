@@ -697,9 +697,15 @@ heatmap_plot <- pheatmap(t(ct_tav_pft),
 
 ```{r, eval=TRUE, echo=TRUE}
 ggsave(heatmap_plot,
+<<<<<<< HEAD
        height = 8,
        width = 12,
        units = "in",
+=======
+       #height = 40,
+       #width = 80,
+       #units = "in",
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
        limitsize = FALSE,
        file = paste0("Plots/gp_tav_pft", ".png"))
 #rm(colorcount); rm(heatmap_plot)
@@ -714,7 +720,11 @@ ggsave(heatmap_plot,
     ```{r}
     # Define the values for each variable
     sprop <- c(0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50,
+<<<<<<< HEAD
                0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00)
+=======
+               0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00) # Land Proportion
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
     array <- c("Fixed", "Tracking") # Solar Array
     height <- c(4.6, 6.4, 8.2) # Panel height
     yldvar <- c(0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 
@@ -819,23 +829,38 @@ heatmap_plot <- pheatmap(t(ct_tavp_wocp),
                          color = colorRampPalette(c("red", 
                                                     "yellow", 
                                                     "green"))(colorcount),
+<<<<<<< HEAD
                          #cutree_rows = 5,
                          #cutree_cols = 4,
+=======
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
                          cluster_rows = FALSE,
                          cluster_cols = FALSE,
                          show_rownames = FALSE,
                          show_colnames = FALSE,
                          display_numbers = FALSE,
                          number_format = "%.2f",
+<<<<<<< HEAD
                          #cellheight = 3,
                          #cellwidth = 3
                          )
+=======
+                         cellheight = 3,
+                         cellwidth = 3)
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
 ```
 
 ```{r, eval=TRUE, echo=TRUE}
 ggsave(heatmap_plot,
+<<<<<<< HEAD
        height = 8,
        width = 12,
+=======
+       height = 16,
+       width = 32,
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
        units = "in",
        file = paste0("Plots/gp_tavp_wocp", ".png"))
 rm(heatmap_plot); rm(colorcount)
@@ -845,10 +870,19 @@ rm(heatmap_plot); rm(colorcount)
 
 ```{r}
 # Define the values for each variable
+<<<<<<< HEAD
 sprop <- c(0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00)
 array <- c("Fixed", "Tracking") # Solar Array
 height <- c(4.6, 6.4, 8.2) # Panel height
 yldvar <- c(0.10, 0.30, 0.50, 0.70, 1.00, 1.20, 1.50, 1.80, 2.00)
+=======
+sprop <- c(0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50,
+           0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00) # Land Proportion
+array <- c("Fixed", "Tracking") # Solar Array
+height <- c(4.6, 6.4, 8.2) # Panel height
+yldvar <- c(0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 
+            1.10, 1.20, 1.30, 1.40, 1.50, 1.60, 1.70, 1.80, 1.90, 2.00)
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
 al_regs <- c("Northern", "Central", "Black Belt", "Southern") # Regions of AL
 price <- c(17, 18, 19, 20, 21, 22, 23) # Crop Price
 elcprc <- c(0.02, 0.03, 0.04) # Electricity Price
@@ -944,6 +978,7 @@ heatmap_plot <- pheatmap(t(ct_tavp_be_yld),
                          color = colorRampPalette(c("red", 
                                                     "yellow", 
                                                     "green"))(colorcount),
+<<<<<<< HEAD
                          #cutree_rows = 5,
                          #cutree_cols = 4,
                          cluster_rows = FALSE,
@@ -957,12 +992,29 @@ heatmap_plot <- pheatmap(t(ct_tavp_be_yld),
                          fontsize = 40,
                          fontsize_row = 30
                          )
+=======
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+                         cluster_rows = FALSE,
+                         cluster_cols = FALSE,
+                         show_rownames = FALSE,
+                         show_colnames = FALSE,
+                         display_numbers = FALSE,
+                         number_format = "%.2f",
+                         cellheight = 3,
+                         cellwidth = 3)
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
 ```
 
 ```{r}
 ggsave(heatmap_plot,
+<<<<<<< HEAD
        height = 32,
        width = 38,
+=======
+       height = 16,
+       width = 32,
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
        units = "in",
        file = paste0("Plots/gp_tavp_be_yld", ".png"))
 rm(heatmap_plot); rm(colorcount)
@@ -1323,23 +1375,38 @@ heatmap_plot <- pheatmap(t(ct_sbav_pft),
                          color = colorRampPalette(c("red", 
                                                     "yellow", 
                                                     "green"))(colorcount),
+<<<<<<< HEAD
                          #cutree_rows = 5,
                          #cutree_cols = 4,
+=======
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
                          cluster_rows = FALSE,
                          cluster_cols = FALSE,
                          show_rownames = FALSE,
                          show_colnames = FALSE,
                          display_numbers = FALSE,
                          number_format = "%.2f",
+<<<<<<< HEAD
                          #cellheight = 3,
                          #cellwidth = 3
                          )
+=======
+                         cellheight = 3,
+                         cellwidth = 3)
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
 ```
 
 ```{r, eval=TRUE, echo=TRUE}
 ggsave(heatmap_plot,
+<<<<<<< HEAD
        height = 8,
        width = 12,
+=======
+       height = 16,
+       width = 32,
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
        units = "in",
        file = paste0("Plots/gp_sbav_pft", ".png"))
 rm(heatmap_plot)
@@ -1469,23 +1536,38 @@ heatmap_plot <- pheatmap(t(ct_sbavp_wocp),
                          color = colorRampPalette(c("red", 
                                                     "yellow", 
                                                     "green"))(colorcount),
+<<<<<<< HEAD
                          #cutree_rows = 5,
                          #cutree_cols = 4,
+=======
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
                          cluster_rows = FALSE,
                          cluster_cols = FALSE,
                          show_rownames = FALSE,
                          show_colnames = FALSE,
                          display_numbers = FALSE,
                          number_format = "%.2f",
+<<<<<<< HEAD
                          #cellheight = 3,
                          #cellwidth = 3
                          )
+=======
+                         cellheight = 3,
+                         cellwidth = 3)
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
 ```
 
 ```{r, eval=TRUE, echo=TRUE}
 ggsave(heatmap_plot,
+<<<<<<< HEAD
        height = 8,
        width = 12,
+=======
+       height = 16,
+       width = 32,
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
        units = "in",
        file = paste0("Plots/gp_sbavp_wocp", ".png"))
 rm(heatmap_plot)
@@ -1496,10 +1578,19 @@ rm(colorcount)
 
 ```{r}
 # Define the values for each variable
+<<<<<<< HEAD
 sprop <- c(0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00)
 array <- c("Fixed", "Tracking") # Solar Array
 height <- c(4.6, 6.4, 8.2) # Panel height
 yldvar <- c(0.10, 0.30, 0.50, 0.70, 1.00, 1.20, 1.50, 1.80, 2.00)
+=======
+sprop <- c(0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50,
+           0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00) # Land Proportion
+array <- c("Fixed", "Tracking") # Solar Array
+height <- c(4.6, 6.4, 8.2) # Panel height
+yldvar <- c(0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 
+            1.10, 1.20, 1.30, 1.40, 1.50, 1.60, 1.70, 1.80, 1.90, 2.00)
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
 al_regs <- c("Northern", "Central", "Black Belt", "Southern") # Regions of AL
 price <- c(3, 4, 5, 6, 7, 8, 9)
 elcprc <- c(0.02, 0.03, 0.04) # Electricity Price
@@ -1581,6 +1672,7 @@ write.csv(as.data.frame(ct_sbav_be_yld),
 dim(ct_sbav_be_yld)
 ```
 
+<<<<<<< HEAD
 ```{r, echo=FALSE, eval=FALSE}
 # Load necessary libraries
 library(dplyr)
@@ -1663,6 +1755,8 @@ dim(ct_sbav_be_yld1)
 View(ct_sbav_be_yld1)
 ```
 
+=======
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
 ## sbav_be_yld Heatmap
 
 ```{r}
@@ -1676,6 +1770,7 @@ heatmap_plot <- pheatmap(t(ct_sbav_be_yld),
                          color = colorRampPalette(c("red", 
                                                     "yellow", 
                                                     "green"))(colorcount),
+<<<<<<< HEAD
                          #cutree_rows = 5,
                          #cutree_cols = 4,
                          cluster_rows = FALSE,
@@ -1689,12 +1784,29 @@ heatmap_plot <- pheatmap(t(ct_sbav_be_yld),
                          fontsize = 40,
                          fontsize_row = 30
                          )
+=======
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+                         cluster_rows = FALSE,
+                         cluster_cols = FALSE,
+                         show_rownames = FALSE,
+                         show_colnames = FALSE,
+                         display_numbers = FALSE,
+                         number_format = "%.2f",
+                         cellheight = 3,
+                         cellwidth = 3)
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
 ```
 
 ```{r}
 ggsave(heatmap_plot,
+<<<<<<< HEAD
        height = 32,
        width = 38,
+=======
+       height = 16,
+       width = 32,
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
        units = "in",
        file = paste0("Plots/gp_sbav_be_yld", ".png"))
 rm(heatmap_plot); rm(colorcount)
@@ -2053,23 +2165,38 @@ heatmap_plot <- pheatmap(t(ct_sqav_pft),
                          color = colorRampPalette(c("red", 
                                                     "yellow", 
                                                     "green"))(colorcount),
+<<<<<<< HEAD
                          #cutree_rows = 5,
                          #cutree_cols = 4,
+=======
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
                          cluster_rows = FALSE,
                          cluster_cols = FALSE,
                          show_rownames = FALSE,
                          show_colnames = FALSE,
                          display_numbers = FALSE,
                          number_format = "%.2f",
+<<<<<<< HEAD
                          #cellheight = 3,
                          #cellwidth = 3
                          )
+=======
+                         cellheight = 3,
+                         cellwidth = 3)
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
 ```
 
 ```{r, eval=TRUE, echo=TRUE, eval=TRUE}
 ggsave(heatmap_plot,
+<<<<<<< HEAD
        height = 8,
        width = 12,
+=======
+       height = 16,
+       width = 32,
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
        units = "in",
        file = paste0("Plots/gp_sqav_pft", ".png"))
 rm(heatmap_plot)
@@ -2194,23 +2321,38 @@ heatmap_plot <- pheatmap(t(ct_sqavp_wocp),
                          color = colorRampPalette(c("red", 
                                                     "yellow", 
                                                     "green"))(colorcount),
+<<<<<<< HEAD
                          #cutree_rows = 5,
                          #cutree_cols = 4,
+=======
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
                          cluster_rows = FALSE,
                          cluster_cols = FALSE,
                          show_rownames = FALSE,
                          show_colnames = FALSE,
                          display_numbers = FALSE,
                          number_format = "%.2f",
+<<<<<<< HEAD
                          #cellheight = 3,
                          #cellwidth = 3
                          )
+=======
+                         cellheight = 3,
+                         cellwidth = 3)
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
 ```
 
 ```{r, eval=TRUE, echo=TRUE}
 ggsave(heatmap_plot,
+<<<<<<< HEAD
        height = 8,
        width = 12,
+=======
+       height = 16,
+       width = 32,
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
        units = "in",
        file = paste0("Plots/gp_sqavp_wocp", ".png"))
 rm(heatmap_plot)
@@ -2221,10 +2363,19 @@ rm(colorcount)
 
 ```{r}
 # Define the values for each variable
+<<<<<<< HEAD
 sprop <- c(0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00)
 array <- c("Fixed", "Tracking") # Solar Array
 height <- c(4.6, 6.4, 8.2) # Panel height
 yldvar <- c(0.10, 0.30, 0.50, 0.70, 1.00, 1.20, 1.50, 1.80, 2.00)
+=======
+sprop <- c(0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50,
+           0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00) # Land Proportion
+array <- c("Fixed", "Tracking") # Solar Array
+height <- c(4.6, 6.4, 8.2) # Panel height
+yldvar <- c(0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 
+            1.10, 1.20, 1.30, 1.40, 1.50, 1.60, 1.70, 1.80, 1.90, 2.00) # Crop Yield Variation
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
 al_regs <- c("Northern", "Central", "Black Belt", "Southern") # Regions of AL
 price <- c(11, 12, 13, 14, 15, 16, 17)
 elcprc <- c(0.02, 0.03, 0.04) # Electricity Price
@@ -2320,6 +2471,7 @@ heatmap_plot <- pheatmap(t(ct_sqav_be_yld),
                          color = colorRampPalette(c("red", 
                                                     "yellow", 
                                                     "green"))(colorcount),
+<<<<<<< HEAD
                          #cutree_rows = 5,
                          #cutree_cols = 4,
                          cluster_rows = FALSE,
@@ -2333,15 +2485,36 @@ heatmap_plot <- pheatmap(t(ct_sqav_be_yld),
                          fontsize = 30,
                          fontsize_row = 30
                          )
+=======
+                         cutree_rows = 5,
+                         cutree_cols = 4,
+                         cluster_rows = FALSE,
+                         cluster_cols = FALSE,
+                         show_rownames = FALSE,
+                         show_colnames = FALSE,
+                         display_numbers = FALSE,
+                         number_format = "%.2f",
+                         cellheight = 3,
+                         cellwidth = 3)
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
 ```
 
 ```{r}
 ggsave(heatmap_plot,
+<<<<<<< HEAD
        height = 32,
        width = 38,
        units = "in",
        file = paste0("Plots/gp_sqav_be_yld", ".png"))
 rm(heatmap_plot); rm(colorcount)
+=======
+       height = 16,
+       width = 32,
+       units = "in",
+       file = paste0("Plots/gp_sqav_be_yld", ".png"))
+rm(heatmap_plot)
+rm(colorcount)
+>>>>>>> 4fb1d2f5116ddb5b0c5733cd1f41967386431d66
 ```
 
 ## Plotting Squash Profit by Panels
