@@ -848,7 +848,7 @@ ggsave(heatmap_plot,
 rm(heatmap_plot); rm(colorcount)
 ```
 
-## tavp_be_yld Crosstab
+## tav_be_yld Crosstab
 
 ```{r}
 # Define the values for each variable
@@ -939,9 +939,11 @@ dim(ct_tavp_be_yld)
 rm(result_matrix)
 ```
 
-## tavp_be_yld Heatmap
+## tav_be_yld Heatmap
 
 ```{r}
+uniquevalue = unique(as.vector(as.matrix(ct_tavp_be_yld[-1])))
+uniquevalue
 colorcount = length(unique(as.vector(as.matrix(ct_tavp_be_yld[-1]))))
 colorcount
 heatmap_plot <- pheatmap((ct_tavp_be_yld),
@@ -949,9 +951,11 @@ heatmap_plot <- pheatmap((ct_tavp_be_yld),
                          clustering_distance_rows = "euclidean",
                          clustering_distance_cols = "euclidean",
                          clustering_method = "complete",
-                         color = colorRampPalette(c("red", 
+                         angle_col = 90,
+                         na_col = "white",
+                         color = colorRampPalette(c("green", 
                                                     "yellow", 
-                                                    "green"))(colorcount),
+                                                    "red"))(colorcount),
                          cellheight = 5,
                          cellwidth = 5,
                          fontsize = 12,
@@ -962,7 +966,8 @@ heatmap_plot <- pheatmap((ct_tavp_be_yld),
                          show_rownames = TRUE,
                          show_colnames = TRUE,
                          display_numbers = FALSE,
-                         number_format = "%.2f"
+                         number_format = "%.2f",
+                         legend_breaks = uniquevalue
                          )
 ```
 
@@ -972,7 +977,7 @@ ggsave(heatmap_plot,
        width = 12,
        units = "in",
        file = paste0("Plots/gp_tav_be_yld", ".png"))
-rm(heatmap_plot); rm(colorcount)
+rm(heatmap_plot); rm(colorcount); rm(uniquevalue)
 ```
 
 ## Plotting Tomato Profits by Panels
@@ -1497,7 +1502,7 @@ rm(heatmap_plot)
 rm(colorcount)
 ```
 
-## sbavp_be_yld Crosstab
+## sbav_be_yld Crosstab
 
 ```{r}
 sprop <- c(0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50,
@@ -1584,19 +1589,23 @@ write.csv(as.data.frame(ct_sbav_be_yld),
 dim(ct_sbav_be_yld)
 ```
 
-## sbavp_be_yld Heatmap
+## sbav_be_yld Heatmap
 
 ```{r}
-colorcount = length(unique(as.vector(as.matrix(ct_sbav_be_yld[-1]))))
+uniquevalue <- unique(as.vector(as.matrix(ct_sbav_be_yld[-1])))
+uniquevalue
+colorcount <- length(unique(as.vector(as.matrix(ct_sbav_be_yld[-1]))))
 colorcount
 heatmap_plot <- pheatmap((ct_sbav_be_yld),
                          #clustering_distance_rows = "correlation",
                          clustering_distance_rows = "euclidean",
                          clustering_distance_cols = "euclidean",
                          clustering_method = "complete",
-                         color = colorRampPalette(c("red", 
+                         angle_col = 90,
+                         na_col = "white",
+                         color = colorRampPalette(c("green", 
                                                     "yellow", 
-                                                    "green"))(colorcount),
+                                                    "red"))(colorcount),
                          cellheight = 5,
                          cellwidth = 5,
                          fontsize = 12,
@@ -1607,7 +1616,9 @@ heatmap_plot <- pheatmap((ct_sbav_be_yld),
                          show_rownames = TRUE,
                          show_colnames = TRUE,
                          display_numbers = FALSE,
-                         number_format = "%.2f"
+                         number_format = "%.2f",
+                         legend_breaks = uniquevalue,
+                         legend_labels = c(uniquevalue)
                          )
 ```
 
@@ -1617,14 +1628,14 @@ ggsave(heatmap_plot,
        width = 12,
        units = "in",
        file = paste0("Plots/gp_sbav_be_yld", ".png"))
-rm(heatmap_plot); rm(colorcount)
+rm(heatmap_plot); rm(colorcount); rm(uniquevalue)
 ```
 
 ## Plotting Strawberry Profit by Panels
 
 You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, echo=TRUE, warning=TRUE, error=TRUE, eval=FALSE, cache=TRUE}
+```{r, echo=TRUE, warning=TRUE, error=TRUE, eval=TRUE, cache=TRUE}
 combinations <- expand.grid(
   yldvar = c(0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield variation
   price = c(3, 6, 9), # Strawberry price
@@ -2098,7 +2109,7 @@ write.csv(as.data.frame(ct_sqavp_wocp),
 dim(ct_sqavp_wocp)
 ```
 
-## sqavp_wocp Heatmap
+## sqav_wocp Heatmap
 
 -   Heatmap of 324\*30 dimension matrix.
 
@@ -2136,7 +2147,7 @@ rm(heatmap_plot)
 rm(colorcount)
 ```
 
-## sqavp_be_yld Crosstab
+## sqav_be_yld Crosstab
 
 ```{r}
 # Define the values for each variable
@@ -2225,9 +2236,11 @@ dim(ct_sqav_be_yld)
 rm(result_matrix)
 ```
 
-## sqavp_be_yld Heatmap
+## sqav_be_yld Heatmap
 
 ```{r}
+uniquevalue = unique(as.vector(as.matrix(ct_sqav_be_yld[-1])))
+uniquevalue
 colorcount = length(unique(as.vector(as.matrix(ct_sqav_be_yld[-1]))))
 colorcount
 heatmap_plot <- pheatmap((ct_sqav_be_yld),
@@ -2235,9 +2248,11 @@ heatmap_plot <- pheatmap((ct_sqav_be_yld),
                          clustering_distance_rows = "euclidean",
                          clustering_distance_cols = "euclidean",
                          clustering_method = "complete",
-                         color = colorRampPalette(c("red", 
+                         angle_col = 90,
+                         na_col = "white",
+                         color = colorRampPalette(c("green", 
                                                     "yellow", 
-                                                    "green"))(colorcount),
+                                                    "red"))(colorcount),
                          cellheight = 5,
                          cellwidth = 5,
                          fontsize = 12,
@@ -2248,7 +2263,10 @@ heatmap_plot <- pheatmap((ct_sqav_be_yld),
                          show_rownames = TRUE,
                          show_colnames = TRUE,
                          display_numbers = FALSE,
-                         number_format = "%.2f"
+                         number_format = "%.2f",
+                         annotation_colors = c(uniquevalue),
+                         legend_breaks = uniquevalue,
+                         legend_labels = c(uniquevalue)
                          )
 ```
 
@@ -2258,15 +2276,14 @@ ggsave(heatmap_plot,
        width = 12,
        units = "in",
        file = paste0("Plots/gp_sqav_be_yld", ".png"))
-rm(heatmap_plot)
-rm(colorcount)
+rm(heatmap_plot); rm(colorcount); rm(uniquevalue)
 ```
 
 ## Plotting Squash Profit by Panels
 
 You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, cache=TRUE, warning=FALSE, error=TRUE, eval=FALSE}
+```{r, cache=TRUE, warning=FALSE, error=TRUE, eval=TRUE}
 combinations <- expand.grid(
   yldvar = c(0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield variation
   price = c(11, 14, 17), # Squash price
@@ -2332,7 +2349,7 @@ for (combo in seq_len(nrow(combinations))) {
 
 You can see plot breakdown based on solar proportion, crop price, and electricity price. You can see variation for all crop yield variation in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, cache=TRUE, results='show', warning=FALSE, error=TRUE, eval=FALSE}
+```{r, cache=TRUE, results='show', warning=FALSE, error=TRUE, eval=TRUE}
 combinations <- expand.grid(
   sprop = c(0, 0.25, 0.50, 0.75, 1.00), # Solar proportion
   price = c(11, 14, 17), # Squash price
