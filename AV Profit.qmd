@@ -931,22 +931,22 @@ for (i in seq_len(nrow(result_matrix))) {
                           row_data$yield, 2)
   }
 }
-ct_tavp_be_yld <- as.data.frame(result_matrix) # Table in Excel.
-write.csv(as.data.frame(ct_tavp_be_yld),
+ct_tav_be_yld <- as.data.frame(result_matrix) # Table in Excel.
+write.csv(as.data.frame(ct_tav_be_yld),
           row.names = TRUE,
-          file = "Results/ct_tavp_be_yld.csv")
-dim(ct_tavp_be_yld)
+          file = "Results/ct_tav_be_yld.csv")
+dim(ct_tav_be_yld)
 rm(result_matrix)
 ```
 
 ## tav_be_yld Heatmap
 
 ```{r}
-uniquevalue = unique(as.vector(as.matrix(ct_tavp_be_yld[-1])))
+uniquevalue = unique(as.vector(as.matrix(ct_tav_be_yld[-1])))
 uniquevalue
-colorcount = length(unique(as.vector(as.matrix(ct_tavp_be_yld[-1]))))
+colorcount = length(unique(as.vector(as.matrix(ct_tav_be_yld[-1]))))
 colorcount
-heatmap_plot <- pheatmap((ct_tavp_be_yld),
+heatmap_plot <- pheatmap((ct_tav_be_yld),
                          #clustering_distance_rows = "correlation",
                          clustering_distance_rows = "euclidean",
                          clustering_distance_cols = "euclidean",
