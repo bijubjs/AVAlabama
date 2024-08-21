@@ -47,7 +47,7 @@ ifelse(Sys.info()[6] == "bmishra",
 
 ## Load libraries
 
-```{r, error=TRUE, warning=FALSE, echo=TRUE, eval=TRUE}
+```{r, error=TRUE, warning=TRUE, echo=TRUE, eval=TRUE}
 library(tidyverse, warn.conflicts = FALSE, quietly = TRUE)
 library(psych, warn.conflicts = FALSE, quietly = TRUE)
 library(likert,  warn.conflicts = FALSE, quietly = TRUE) # Likert Items
@@ -72,70 +72,6 @@ library(parallel, warn.conflicts = FALSE, quietly = TRUE)
 
 ```{r, echo=TRUE}
 pacman::p_loaded()
-```
-
-## Theme for plots
-
-Setting theme for plots:
-
-```{r, error=TRUE, warning=FALSE, echo=TRUE, eval=TRUE}
-####### Plotting Data: #####
-# Map Theme:
-plottheme <- ggplot() +
-  theme_void() +
-  # Mapping theme:
-  theme(axis.title = element_blank(),
-        axis.ticks = element_blank(),
-        axis.text = element_blank(),
-        panel.border = element_blank(),
-        plot.margin = margin(t = 0, 
-                             r = 0, 
-                             b = 0, 
-                             l = 0, 
-                             unit = "cm"),
-        plot.title = element_text(hjust = 0.5),
-        plot.background = element_rect(fill = "white", 
-                                       color = "black",
-                                       linewidth = 0),
-        panel.background = element_rect(fill = "white", 
-                                        color = "black",
-                                        linewidth = 0),
-        panel.grid.major.x = element_line(color = "lightgrey",
-                                          linetype = 2,
-                                          linewidth = 0),
-        panel.grid.minor.x = element_line(color = "lightgrey",
-                                          linetype = 2,
-                                          linewidth = 0),
-        panel.grid.major.y = element_line(color = "grey",
-                                          linetype = 2,
-                                          linewidth = 0),
-        panel.grid.minor.y = element_line(color = "grey",
-                                          linetype = 2,
-                                          linewidth = 0),
-        axis.line.x.top = element_line(color = "white",
-                                       linetype = 2,
-                                       linewidth = 0),
-        axis.line.y.right = element_line(color = "white",
-                                         linetype = 2,
-                                         linewidth = 0),
-        axis.line.x.bottom = element_line(color = "black",
-                                          linetype = 1,
-                                          linewidth = 0),
-        axis.line.y.left = element_line(color = "black",
-                                        linetype = 1,
-                                        linewidth = 0),
-        # Text formatting:
-        text = element_text(family = "serif", # font
-                            size = 12, # font size
-                            colour = "black"# font color
-        ),
-        legend.position = c(0.95, -0.05),
-        legend.key = element_rect(color = "black", 
-                                  fill = NA, 
-                                  linewidth = 0.05, 
-                                  linetype = 1),
-        legend.justification = "right",
-        legend.direction = "horizontal")
 ```
 
 # Import data
@@ -222,8 +158,8 @@ dim(tav_profit)
                                    profit_lookup[as.character(price)], 0)
       return(tav_profit - profit_to_subtract)
     }, tav_profit$tav_profit, tav_profit$price)
-    unique_profits
-    tav_profit[1:21,]
+    unique_profits # 7 Prices give 7 Profits at 100% Yield.
+    tav_profit[1:21,] # Sample data.
     rm(unique_profits); rm(profit_lookup)
     ```
 
@@ -276,7 +212,7 @@ tav_be_yld <- rbindlist(results,
                         use.names = TRUE,
                         fill = TRUE) %>% 
   select(al_regs, array, sprop,panels, elcprc, price,
-         height, profit, yldvar, yield, tav_profit, tavp_wocp)
+         height, profit, yldvar, yield, tav_profit, tavp_wocp, tavp_wosp)
 rm(results); rm(split_data); rm(process_subset)
 ```
 
@@ -329,7 +265,7 @@ tav_be_pden <- rbindlist(results,
 rm(results); rm(split_data); rm(process_subset)
 ```
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 write.csv(as.data.frame(tav_be_pden),
           row.names = TRUE,
           #col.names = TRUE,
@@ -480,7 +416,7 @@ sbav_be_pden <- rbindlist(results,
 rm(results); rm(split_data); rm(process_subset)
 ```
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 write.csv(as.data.frame(sbav_be_pden),
           row.names = TRUE,
           #col.names = TRUE,
@@ -494,7 +430,7 @@ dim(sbav_be_pden)
 
 -   sqav_profit = total profit from solar and squash.
 
-```{r, echo=TRUE, eval=TRUE,results='hide', warning=FALSE, error=FALSE}
+```{r, echo=TRUE, eval=TRUE, warning=TRUE, error=TRUE}
 sqav_profit <- as.data.frame(
   read_feather(file = "Data/sqav_profit.feather")
   )
@@ -508,7 +444,7 @@ dim(sqav_profit)
 
 -   sqavp_wocp = sbav_profit - profit from 100% crop at their respective prices. This variable gives an idea where av profit stands in relation to crop profit. It helps to identify relative profitability of agrivoltaic system compared to crop only.
 
-    ```{r, echo=TRUE, eval=TRUE,results='hide', warning=FALSE, error=FALSE}
+    ```{r, echo=TRUE, eval=TRUE, warning=TRUE, error=TRUE}
     # Calculate the profit:
     # Step 1: Filter the dataframe to get the unique profit values for each price when yldvar is 1
     unique_profits <- unique(sqav_profit[sqav_profit$yldvar == 1, 
@@ -535,7 +471,7 @@ dim(sqav_profit)
 
 -   sqavp_wosp = sqav_profit - profit from solar at their respective prices. This variable gives an idea where av profit stands in relation to solar alone profit. It helps to identify relative profitability of agrivoltaic system compared to solar only.
 
-```{r, echo=TRUE, eval=TRUE,results='hide', warning=FALSE, error=FALSE}
+```{r, echo=TRUE, eval=TRUE,results='hide', warning=TRUE, error=TRUE}
 sqav_profit$sqavp_wosp <- sqav_profit$sqav_profit - sqav_profit$eannprof
 ```
 
@@ -543,7 +479,7 @@ sqav_profit$sqavp_wosp <- sqav_profit$sqav_profit - sqav_profit$eannprof
 
 Summer squash yield where squash AV profit start becoming more profitable than squash alone.
 
-```{r, echo=TRUE, eval=TRUE,results='hide', warning=FALSE, error=FALSE}
+```{r, echo=TRUE, eval=TRUE,results='hide', warning=TRUE, error=TRUE}
 # Convert the data frame to a data.table for faster operations
 setDT(sqav_profit)
 
@@ -582,7 +518,7 @@ sqav_be_yld <- rbindlist(results,
 rm(results); rm(split_data); rm(process_subset)
 ```
 
-```{r, echo=TRUE, eval=TRUE,results='hide', warning=FALSE, error=FALSE}
+```{r, echo=TRUE, eval=TRUE,results='hide', warning=TRUE, error=TRUE}
 write.csv(as.data.frame(sqav_be_yld),
           row.names = TRUE,
           #col.names = TRUE,
@@ -592,7 +528,7 @@ dim(sqav_be_yld)
 
 ## SQAV Profit \> Solar Alone
 
-```{r, echo=TRUE, eval=TRUE,results='hide', warning=FALSE, error=FALSE}
+```{r, echo=TRUE, eval=TRUE,results='hide', warning=TRUE, error=TRUE}
 # Convert the data frame to a data.table for faster operations
 setDT(sqav_profit)
 
@@ -631,7 +567,7 @@ sqav_be_pden <- rbindlist(results,
 rm(results); rm(split_data); rm(process_subset)
 ```
 
-```{r, echo=TRUE, eval=TRUE,results='hide', warning=FALSE, error=FALSE}
+```{r, echo=TRUE, eval=TRUE,results='hide', warning=TRUE, error=TRUE}
 write.csv(as.data.frame(sqav_be_pden),
           row.names = TRUE,
           #col.names = TRUE,
@@ -749,7 +685,8 @@ rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
 
 ```{r}
 # Define the values for each variable
-sprop <- sprop <- c(0.05, 0.10, 0.30, 0.50, 0.60, 0.70, 0.80, 0.85)
+sprop <- c(0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50,
+           0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00)
 array <- c("Fixed", "Tracking") # Solar Array
 height <- c(4.6, 6.4, 8.2) # Panel height
 yldvar <- c(0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 
@@ -864,19 +801,19 @@ heatmap_plot <- pheatmap(t(ct_tav_pft),
                          color = colorRampPalette(c("green", 
                                                     "yellow", 
                                                     "red"))(colorcount),
-                         cellheight = 13,
-                         cellwidth = 14,
-                         fontsize = 12,
-                         fontsize_row = 12,
-                         fontsize_col = 12,
-                         number_color = "white",
-                         fontsize_number = 5,
+                         #cellheight = 13,
+                         #cellwidth = 14,
+                         #fontsize = 12,
+                         #fontsize_row = 12,
+                         #fontsize_col = 12,
+                         #number_color = "white",
+                         #fontsize_number = 5,
                          cluster_rows = FALSE,
                          cluster_cols = FALSE,
-                         show_rownames = TRUE,
-                         show_colnames = TRUE,
-                         display_numbers = TRUE,
-                         number_format = "%.0f"
+                         #show_rownames = TRUE,
+                         #show_colnames = TRUE,
+                         #display_numbers = TRUE,
+                         #number_format = "%.0f"
                          #legend_breaks = uniquevalue
                          )
 ```
@@ -1154,8 +1091,8 @@ heatmap_plot <- pheatmap((ct_tav_be_yld),
                          show_rownames = TRUE,
                          show_colnames = TRUE,
                          display_numbers = TRUE,
-                         number_format = "%.0f",
-                         legend_breaks = uniquevalue
+                         number_format = "%.0f"
+                         #legend_breaks = uniquevalue
                          )
 ```
 
@@ -1652,23 +1589,22 @@ heatmap_plot <- pheatmap(t(ct_sbav_pft),
                          clustering_method = "complete",
                          angle_col = 90,
                          na_col = "white",
-                         color = colorRampPalette(c("green", 
-                                                    "yellow", 
-                                                    "red"))(colorcount),
-                         cellheight = 13,
-                         cellwidth = 14,
-                         fontsize = 12,
-                         fontsize_row = 12,
-                         fontsize_col = 12,
-                         number_color = "white",
-                         fontsize_number = 5,
                          cluster_rows = FALSE,
                          cluster_cols = FALSE,
-                         show_rownames = TRUE,
-                         show_colnames = TRUE,
-                         display_numbers = TRUE,
-                         number_format = "%.0f",
-                         legend_breaks = uniquevalue
+                         show_rownames = FALSE,
+                         show_colnames = FALSE,
+                         #cellheight = 13,
+                         #cellwidth = 14,
+                         #fontsize = 12,
+                         #fontsize_row = 12,
+                         #fontsize_col = 12,
+                         number_color = "white",
+                         fontsize_number = 5,
+                         display_numbers = FALSE,
+                         #number_format = "%.0f",
+                         color = colorRampPalette(c("green", 
+                                                    "yellow", 
+                                                    "red"))(colorcount)
                          )
 ```
 

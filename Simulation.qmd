@@ -23,8 +23,7 @@ Techno-economic analysis of agrivoltaic systems in Alabama. A paper for [Choice 
 
 ## Housekeeping
 
-```{r, warning=FALSE, error=TRUE}
-# #| echo: TRUE
+```{r HK,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 rm(list = ls()) # Clean the environment.
 options(
   warn=0, # Warnings. options(warn=-1) / options(warn=0)
@@ -36,7 +35,7 @@ options(
 
 Codes and output are suppressed. Errors and warnings are visible. No warning and no error means code is working as it should.
 
-```{r, echo=FALSE, include = FALSE, eval=FALSE, error=TRUE, warning=TRUE}
+```{r WD,echo=FALSE,eval=TRUE,results='hide',error=TRUE,warning=TRUE}
 path_mac = "/Users/bmishra/Library/CloudStorage/OneDrive-AuburnUniversity/Collaboration/Ngbede M/Choice-paper"
 path_office = "C:\\Users\\bzm0094\\OneDrive - Auburn University\\Collaboration\\Ngbede M\\Choice-paper"
 ifelse(Sys.info()[6] == "bmishra",
@@ -46,7 +45,7 @@ ifelse(Sys.info()[6] == "bmishra",
 
 ## Load libraries
 
-```{r, results='hide', error=TRUE, warning=FALSE}
+```{r Libs,,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 library(tidyverse, warn.conflicts = FALSE, quietly = TRUE)
 library(psych, warn.conflicts = FALSE, quietly = TRUE)
 library(likert,  warn.conflicts = FALSE, quietly = TRUE) # Likert Items
@@ -60,7 +59,7 @@ library(progress, warn.conflicts = FALSE, quietly = TRUE) #progress bar
 library(arrow, warn.conflicts = FALSE, quietly = TRUE) #progress bar
 ```
 
-```{r}
+```{r PacMan,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 pacman::p_loaded()
 ```
 
@@ -68,7 +67,7 @@ pacman::p_loaded()
 
 Tracking data processing progress. Code and results supressed.
 
-```{r, echo=FALSE, eval=FALSE}
+```{r PB,echo=FALSE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 ####### Progress Bar #####
 pb = progress_bar$new(
   format = "Processing data at :rate. Processed :bytes in :elapsed.",
@@ -89,7 +88,7 @@ f = function() {
 
 Setting theme for plots:
 
-```{r, warning=FALSE, error=TRUE, collapse=TRUE}
+```{r Theme,echo=FALSE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 ####### Plotting Data: #####
 # Map Theme:
 plottheme <- ggplot() +
@@ -169,7 +168,7 @@ Import necessary data.
 
 -   rlc17 to 23 = Return to land and capital after subtracting operator cost from total revenue.
 
-```{r}
+```{r ImportTomato,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 tomato <- read_xlsx("Data/Parameters.xlsx",
                     sheet = "Tomato",
                     start_row = 2,
@@ -180,6 +179,7 @@ tomato <- read_xlsx("Data/Parameters.xlsx",
   rename(yield = Yield,
          yldvar = `Yield Variation (%)`)
 dim(tomato)
+str(tomato)
 head(tomato)
 tail(tomato)
 ```
@@ -190,7 +190,7 @@ tail(tomato)
 
 -   Numbers 3 to 9 in names are price ranges for strawberry.
 
-```{r}
+```{r ImportSB,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 strawberry <- read_xlsx("Data/Parameters.xlsx",
                         sheet = "Strawberry",
                         start_row = 2,
@@ -201,6 +201,7 @@ strawberry <- read_xlsx("Data/Parameters.xlsx",
   rename(yield = Yield,
          yldvar = `Yield Variation (%)`)
 dim(strawberry)
+str(strawberry)
 head(strawberry)
 tail(strawberry)
 ```
@@ -211,7 +212,7 @@ tail(strawberry)
 
 -   Numbers 11 to 17 in names are price ranges for squash.
 
-```{r}
+```{r ImportSQ,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 squash <- read_xlsx("Data/Parameters.xlsx",
                     sheet = "Squash",
                     start_row = 2,
@@ -232,11 +233,12 @@ Electricity price ranges from 1 cents to 6 cents in 0.5 cent increment. Previous
 
 Electricity price (\$/kWh) was retail electricity price range for Alabama based on retail electricity price in April 2023 and April 2024 taken from [DOE Database](https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_6_a). Retail electricity price range in Alabama was from 6.44 to 15.85 cents/kWh in April 2023 and April 2024 which represents industry, commercial, and residential prices.
 
-```{r}
+```{r ImpElcPrc,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 elec_price <- read_xlsx("Data/Parameters.xlsx",
                               sheet = "Electricity Price") %>%
   rename(epr_kwh = `Electricity Price ($/kWh)`)
 dim(elec_price)
+str(elec_price)
 elec_price
 ```
 
@@ -250,7 +252,7 @@ elec_price
 -   height = ground to panel clearance height (ft.)
 -   tcost = Total cost is the sum of all itemized cost for AV system. See figure 3 and table 1 in above document for more detail.
 
-```{r}
+```{r PVSC,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 pvsc <- wb_read(file = "Data/Parameters.xlsx",
                 sheet = "PV system Cost (NREL)",
                 rows = c(1:109),
@@ -260,8 +262,10 @@ pvsc <- wb_read(file = "Data/Parameters.xlsx",
          item = Item,
          cost = `Cost ($/W)`,
          height = `Panel Height (ft.)`,
-         tcost = `Total Cost ($/W)`)
+         tcost = `Total Cost ($/W)`
+         )
 dim(pvsc)
+str(pvsc)
 head(pvsc)
 tail(pvsc)
 ```
@@ -278,7 +282,9 @@ Variable Descriptions:
 
 -   array: Solar array. Tracker = Single axis sun tracking panels; Fixed = Non-tracking panels.
 
-```{r}
+-   Source: [Horowitz, 2020. CAPEX AV.](https://www.nrel.gov/docs/fy21osti/77811.pdf)
+
+```{r CAPEXNREL,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 capex <- read.table(file = "Data/CAPEX.txt",
                     header = TRUE,
                   sep = "\t") %>% 
@@ -286,40 +292,72 @@ capex <- read.table(file = "Data/CAPEX.txt",
          height = pheight,
          array = tracker)
 dim(capex)
+str(capex)
 capex
 ```
 
 ### Plotting capex
 
-```{r}
-plottheme %>% ggplot(data = capex,
-                     mapping = (aes(
-                       x = height,
-                       y = capex,
-                       color = array,
-                       group = array))) +
+```{r CpxPlt,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
+capex %>%
+  ggplot(aes(
+    x = height,
+    y = capex,
+    color = array,
+    group = array
+  )) +
   geom_point() +
   geom_line() +
-  # geom_text(aes(label = "Tracker"),
-  #           nudge_x = 0.05,
-  #           nudge_y = 0.05,
-  #           size = 6) +
+  # Display the rounded capex values
+  geom_text(aes(label = sprintf("%.2f", capex)),
+            vjust = -0.8,
+            hjust = 0.8,
+            size = 2,
+            check_overlap = TRUE,
+            show.legend = FALSE
+            ) +
   labs(
-    title = "CAPEX Cost by Solar Panel Height",
-    x = "Panel Height (ft.)",
+    #title = "CAPEX Cost by Solar Panel Height",
+    x = "Solar Panel Clearance Height (ft.)",
     y = "CAPEX Cost ($/W)",
-    color = "Array"
+    color = "Array Types:"
     ) +
   scale_x_continuous(limits = c(4.5, 8.5)) +
   scale_y_continuous(limits = c(1.5, 2.5)) +
-  guides(color = guide_legend(reverse = TRUE))
+  guides(color = guide_legend(reverse = TRUE)) +
+  theme(
+    plot.background = element_rect(
+      fill = "grey",
+      color = "black"
+      ),
+    legend.position = c(0.2, 0.8),
+    legend.background = element_rect(
+      fill = "white", 
+      color = "black"
+      ),
+    plot.margin = margin(10, 10, 10, 10)
+  ) +
+  scale_color_manual(
+    values = c("Fixed" = "blue",
+               "Tracking" = "red"),
+    labels = c("Fixed Open Rack",
+               "Single Axis Rotation")
+  )
+
+# Save the plot
+ggsave(
+  filename = "Plots/CAPEX Solar Panels.png",
+  width = 8,
+  height = 6,
+  units = "in"
+  )
 ```
 
 ## Panel Configuration
 
 -   Panel configuration and DV system output (W).
 
-```{r, results='markup'}
+```{r PConf,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 panconf <- wb_read(file = "Data/Parameters.xlsx",
                 sheet = "Panel Spacing",
                 start_row = 2,
@@ -333,6 +371,7 @@ panconf <- wb_read(file = "Data/Parameters.xlsx",
   #        height = `Panel Height (ft.)`,
   #        tcost = `Total Cost ($/W)`)
 dim(panconf)
+str(panconf)
 head(panconf)
 tail(panconf)
 ```
@@ -357,7 +396,7 @@ Energy output was simulated using NREL [PV Watts Calculator](https://pvwatts.nre
 
 -   energy = total energy output ( kWh/Year) considering system parameters. Total hours considered by the model is 8,760 (See [PV Watts Calculator](https://pvwatts.nrel.gov/pvwatts.php){.uri} Results \> help (below the result) \> results \> download monthly or hourly results).
 
-```{r, echo=TRUE, warning=TRUE, error=TRUE}
+```{r EngOut, echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 energy_output <- read_xlsx("Data/Parameters.xlsx", 
                            sheet = "Energy Output",
                            start_row = 1,
@@ -373,13 +412,17 @@ energy_output <- read_xlsx("Data/Parameters.xlsx",
          array = `Array Type`,
          dc_kw = `DC System Size (kW)`,
          energy = `Energy (kWh/Year)`) %>%
-  mutate(dc_kw = round(dc_kw, 2),
-         array = case_when(
-           array == "1AxisRot" ~ "Tracking",
-           array == "FixedOpen" ~ "Fixed",
-           TRUE ~ array))
+  mutate(
+    dc_kw = round(dc_kw, 2),
+    #energy = energy*1000,  #kWh/Year converted to Wh/Year.
+    array = case_when(
+      array == "1AxisRot" ~ "Tracking",
+      array == "FixedOpen" ~ "Fixed",
+      TRUE ~ array)
+    )
 
 dim(energy_output)
+str(energy_output)
 head(energy_output)
 tail(energy_output)
 ```
@@ -388,7 +431,7 @@ tail(energy_output)
 
 Plotting Energy output by number of solar panels in one acres of AV system from fixed and single axis rotation system for two zipcodes (1, 2) within each of the four regions of AL.
 
-```{r, eval=FALSE,echo=FALSE,warning=TRUE,error=TRUE}
+```{r EOBSPC,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 lox <- c("Northern", "Central", "Black Belt", "Southern")
 array_levs = c("Single Axis Rotation", "Fixed Open Rack")
 datalot_levs = c("Location 1", "Location 2")
@@ -410,7 +453,7 @@ ggplot(data = energy_output,
 
 Plotting Energy output by DC System Size from fixed and single axis rotation system for two zipcodes (1, 2) within each of the four regions of AL.
 
-```{r,eval=FALSE,echo=FALSE,warning=TRUE,error=TRUE}
+```{r EOBDCSS,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 lox <- c("Northern", "Central", "Black Belt", "Southern")
 ggplot(data = energy_output,
          mapping = aes(x = al_regs,
@@ -434,9 +477,9 @@ ggplot(data = energy_output,
 
 -   elcrev = Revenue from electricity for given electricity prices. See "energy output" and "electricity price" dataset for more details.
 
--   I took average of "energy" from datalot 1 and datalot 2 to minimize computation time.
+-   I filtered datalot 2--I did not take average of "energy" from datalot 1 and datalot 2-- to minimize computation time.
 
-```{r, echo=TRUE, error=TRUE}
+```{r Sim1,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 # Convert to data frames if they are not already
 matrix1 <- energy_output  %>%
   group_by(sprop, al_regs, array, dc_kw, panels) %>%
@@ -485,13 +528,17 @@ if(any(is.na(energy_revenue))) {
 } else {
   print("No NAs found in the result data frame.")
 }
+dim(energy_revenue)
+str(energy_revenue)
+head(energy_revenue)
+tail(energy_revenue)
 ```
 
 ## Simulation 2 for energy revenue
 
 This simulation has same result as above (Cross checking above code and output). Results are suppressed but errors and warnings are not. No error and no warnings means code is working as it should.
 
-```{r, echo=TRUE, results='hide', include = TRUE, error=TRUE, warning=TRUE}
+```{r Sim2,echo=FALSE,eval=FALSE,results='hide',error=TRUE,warning=TRUE}
 ## | results='hide'
 # Sample data
 set.seed(123)
@@ -513,6 +560,7 @@ for (i in 1:nrow(matrix2)) {
 
 # Display the resulting matrix
 dim(result_matrix)
+str(result_matrix)
 head(result_matrix)
 tail(result_matrix)
 ```
@@ -523,7 +571,7 @@ tail(result_matrix)
 
 I am using data from simulation 1 for this visualization. This code plots one chart per electricity cost. There are 11 electricity cost resulting into 11 charts. Electricity revenue is average revenue of first and second lots of simulation.
 
-```{r,echo=FALSE,eval=FALSE,warning=TRUE,error=TRUE}
+```{r BDBNSPs,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 lox <- c("Northern", "Central", "Black Belt", "Southern")
 array_levs = c("Single Axis Rotation", "Fixed Open Rack")
 datalot_levs = c("Location 1", "Location 2")
@@ -550,7 +598,7 @@ for (i in unique(energy_revenue$elcprc)) {
 
 -   Two proportions may have same number of solar panels (Eg. 0.80 and 0.85, 0.20 and 0.25). So, total lines in the chart may not match with total number of legend levels. Some proportions are overlapping in the chart. See panel configuration for more detail.
 
-```{r, eval=FALSE, echo=FALSE, warning=TRUE, error=TRUE}
+```{r BDBPLUS, eval=FALSE, echo=TRUE, warning=TRUE, error=TRUE}
 lox <- c("Northern", "Central", "Black Belt", "Southern")
 array_levs = c("Single Axis Rotation", "Fixed Open Rack")
 datalot_levs = c("Location 1", "Location 2")
@@ -577,11 +625,13 @@ for (i in unique(energy_revenue$elcprc)) {
 
 -   Cost of solar energy system in agrivoltaic setting.
 
--   I used DC system size (dc_kw) and capex (\$/w) to get total cost for each height and panel tracking system.
+-   I used energy output per 7.75 ft.\*3.5 ft. panel (545 w), capex (\$/w), and total number of panels to get total cost for each height and panel tracking system.
 
 -   height = height of solar panels; see capex dataset for details.
 
 -   capex = capex from capex table; see capex dataset for details.
+
+-   opex = Operational cost (\$15/kW/Year); Source: [Ramasamy, 2022. PV Cost Benchmark](https://www.nrel.gov/docs/fy22osti/83586.pdf)
 
 -   ttlcost = Total cost for given DC system size.
 
@@ -589,33 +639,40 @@ for (i in unique(energy_revenue$elcprc)) {
 
 -   moncost = Monthly payment to repay loan ($P_{mon}$) = $\frac{P_o((i/12)(1 + (i/12))^{t*12})}{(1+(i/12))^{t*12} - 1)}$, where $P_o$ = CAPEX loan burrowed to repay in $t$ years; $t = 25$, and $i$ = annual interest rate at $5\%$.
 
-```{r, warning=FALSE, results='hide', error=FALSE, echo=FALSE}
+```{r SSC1,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 cat("energy_revenue dimension = ", dim(energy_revenue)) # 1936*9
 names(energy_revenue)
 cat("capex = ", dim(capex)) # 6*3
 names(capex)
 ```
 
-```{r, echo=TRUE, results='show', error=TRUE, warning=TRUE}
+```{r SSC2,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
+r = 0.04 # Discount/interest Rate
+n = 30 # Life Span of solar panels (Years)
 expanded_data <- energy_revenue %>%
   slice(rep(1:n(),
             each = 3))
 capex_height <- rep(unique(capex$height),
                     length.out = nrow(energy_revenue))
+
 energy_cost = cbind(expanded_data, capex_height) %>% 
   rename(height = capex_height)
 
 energy_cost <- left_join(energy_cost, 
                          capex, 
-                         by = c("array", "height")) %>% 
-  # For Height = 7.75 ft. and Width = 3.5 ft., energy Output = 545 W.
-  mutate(ttlcost = capex*545*panels,
-         anncost = ttlcost*(0.05*(1 + 0.05)^25)/
-           ((1 + 0.05)^25 - 1),
-         moncost = ttlcost*((0.05/12)*(1 + (0.05/12))^(25*12))/
-           ((1 + (0.05/12))^(25*12) - 1))
-
+                         by = c("array", "height")) %>%
+  mutate(
+    landlease = 1000, #$/Acre/Year
+    # 7.75*3.5 sq.ft. panel energy output = 545 W.
+    # Operational cost (OPEX) = $15/kW-yr; 1 kW = 1,000W.
+    opex = 545*15/1000*panels,
+    ttlcost = capex*545*panels,
+    recredit = 6.60/1000*energy, # Renewable energy credit 6.60 $/MWh
+    anncost = ttlcost*(r*(1+r)**n)/((1+r)**n-1)+opex,
+    moncost = ttlcost*((r/12)*(1+(r/n))^(n*12))/((1+(r/12))^(n*12)-1)+opex/12
+    )
 dim(energy_cost)
+str(energy_cost)
 head(energy_cost)
 tail(energy_cost)
 ```
@@ -628,19 +685,21 @@ Profit from solar energy system in agrivoltaic setting
 -   eannprof = annual profit from solar after subtracting annual loan repayment distributed over 25 years.
 -   emonprof = monthly profit from solar after subtracting monthly loan repayment distributed over 25 years.
 
-```{r}
+```{r PFS,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 solar_profit <- energy_cost %>%
-  mutate(eprofit = elcrev - ttlcost,
-         eannprof = elcrev - anncost,
-         emonprof = (elcrev/12) - moncost)
+  mutate(
+    eprofit = elcrev - ttlcost,
+    eannprof = elcrev - anncost + recredit,
+    emonprof = elcrev/12 - moncost + recredit/12)
 dim(solar_profit)
+str(solar_profit)
 head(solar_profit)
 tail(solar_profit)
 ```
 
-### Plot profit from solar
+### Plot Solar profit
 
-```{r,eval=FALSE,echo=FALSE,warning=TRUE,error=TRUE}
+```{r PlotAPFS,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 lox <- c("Northern", "Central", "Black Belt", "Southern")
 array_levs = c("Single Axis Rotation", "Fixed Open Rack")
 datalot_levs = c("Location 1", "Location 2")
@@ -650,7 +709,36 @@ datalot_levs = c("Location 1", "Location 2")
                 filter(elcprc == i)),
       mapping = aes(
         x = al_regs,
-        y = eprofit,
+        y = eannprof, #Annual Profit
+        #fill = energy,
+        color = factor(panels),
+        group = factor(panels)
+      )
+    ) +
+      geom_line() +
+      geom_point() +
+      facet_grid(height ~ array) +
+      scale_x_discrete(limits = lox,
+                       labels = c("North", "Center", 
+                                  "B Belt", "South")) +
+      guides(color = guide_legend(ncol = 2, 
+                                  reverse = TRUE))
+    cat("Electricity Price = ", i)
+    print(b)
+  }
+```
+
+```{r PlotMPFS,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
+lox <- c("Northern", "Central", "Black Belt", "Southern")
+array_levs = c("Single Axis Rotation", "Fixed Open Rack")
+datalot_levs = c("Location 1", "Location 2")
+  for (i in unique(solar_profit$elcprc)) {
+    b = ggplot(
+      data = (solar_profit %>%
+                filter(elcprc == i)),
+      mapping = aes(
+        x = al_regs,
+        y = emonprof, #Monthly Profit.
         #fill = energy,
         color = factor(panels),
         group = factor(panels)
@@ -675,7 +763,7 @@ datalot_levs = c("Location 1", "Location 2")
 
 Filter return to operator, land and capital profit from Tomato:
 
-```{r}
+```{r PFTFilter,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 tomato_profit = tomato %>% 
   select(yldvar, yield, 
          rolac17, rolac18, rolac19, rolac20, 
@@ -686,7 +774,7 @@ tomato_profit
 
 Convert data to long format:
 
-```{r}
+```{r LDFTom,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 # Assign column names for clarity
 colnames(tomato_profit) <- c("yldvar", "yield",
                   "rolac17", "rolac18", "rolac19",
@@ -707,13 +795,14 @@ tomato_long$price <- as.numeric(gsub("rolac", "", tomato_long$price))
 
 # View the resulting data frame
 dim(tomato_long)
+str(tomato_long)
 head(tomato_long)
 tail(tomato_long)
 ```
 
-### Profit from tomato
+### Plot Tomato Profit
 
-```{r}
+```{r PFT,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 ggplot(data = tomato_long,
        mapping = aes(x = price,
                      y = profit,
@@ -751,7 +840,7 @@ guides(color = guide_legend(reverse = TRUE))
 
 Filter return to operator, land and capital profit from strawberry
 
-```{r}
+```{r SBRet,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 strawberry_profit = strawberry %>% 
   select(yldvar, yield, 
          rolac3, rolac4, rolac5, rolac6, 
@@ -762,7 +851,7 @@ strawberry_profit
 
 Convert data to long format:
 
-```{r}
+```{r sblong,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 # Assign column names for clarity
 colnames(strawberry_profit) <- c("yldvar", "yield",
                   "rolac3", "rolac4", "rolac5",
@@ -782,13 +871,14 @@ stberry_long$price <- as.numeric(gsub("rolac", "", stberry_long$price))
 
 # View the resulting data frame
 dim(stberry_long)
+str(stberry_long)
 head(stberry_long)
 tail(stberry_long)
 ```
 
 ### Plot Strawberry Profit
 
-```{r}
+```{r PlotSBPBYv,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 ggplot(data = stberry_long,
        mapping = aes(x = price,
                      y = profit,
@@ -803,7 +893,7 @@ ggplot(data = stberry_long,
                               reverse = TRUE))
 ```
 
-```{r}
+```{r PlotSBPBP,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 ggplot(data = stberry_long,
        mapping = aes(x = yield,
                      y = profit,
@@ -825,7 +915,7 @@ ggplot(data = stberry_long,
 
 Filter return to operator, land and capital profit from squash
 
-```{r}
+```{r SQPrft,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 squash_profit = squash %>% 
   select(yldvar, yield, 
          rolac11, rolac12, rolac13, rolac14, 
@@ -835,7 +925,7 @@ squash_profit
 
 Convert data to long format:
 
-```{r}
+```{r SQLong,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 # Assign column names for clarity
 colnames(squash_profit) <- c("yldvar", "yield",
                   "rolac11", "rolac12", "rolac13",
@@ -856,13 +946,14 @@ squash_long$price <- as.numeric(gsub("rolac", "", squash_long$price))
 
 # View the resulting data frame
 dim(squash_long)
+str(squash_long)
 head(squash_long)
 tail(squash_long)
 ```
 
 ### Profit from squash:
 
-```{r}
+```{r PrftSQuash,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 ggplot(data = squash_long,
        mapping = aes(x = price,
                      y = profit,
@@ -877,7 +968,7 @@ ggplot(data = squash_long,
                               reverse = TRUE))
 ```
 
-```{r}
+```{r SPFFTBP,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 ggplot(data = squash_long,
        mapping = aes(x = yield,
                      y = profit,
@@ -904,44 +995,7 @@ Total profit from solar and crops for all combinations of AVs simulated.
 -   Joint profit from tomato (tomato_long) and solar energy production (solar_profit) from 1 acre of land.
 -   The last variable (tav_profit) is the final profit from tomato agrivoltaic system which is the result of our interest.
 
-```{r, echo=TRUE, eval=FALSE, cache=FALSE, error=TRUE, warning=TRUE}
-# Generate all combinations of row indices from both matrices
-index_combinations <- expand.grid(1:nrow(solar_profit),
-                                  1:nrow(tomato_long))
-
-# Define a function to process each combination of indices
-process_combination <- function(indices) {
-  i <- indices[1]
-  j <- indices[2]
-  new_row <- c(solar_profit[i, ],
-               tomato_long[j, ], 
-               #solar_profit[i, 14] = eannprof
-               solar_profit$eannprof[i] + tomato_long$profit[j]) 
-  return(new_row)
-}
-
-# Apply the function to each combination of indices
-# Combine the results into a matrix
-tav_profit <- do.call(rbind,
-                          lapply(
-                            seq_len(nrow(index_combinations)),
-                            function(k) {
-                              indices <- as.integer(
-                                index_combinations[k, ])
-                              process_combination(indices)
-                              }))
-
-# Optionally, you can convert the result back to a data frame if needed
-tav_profit <- as.data.frame(tav_profit) %>%
-    rename(tav_profit = V21)
-tav_profit <- data.frame(lapply(tav_profit, unlist))
-str(tav_profit)
-head(tav_profit)
-tail(tav_profit)
-```
-
-```{r, echo=TRUE, eval = TRUE, error=TRUE, warning=TRUE}
-# Same as above code but more efficient version. Checking the code.
+```{r TAV,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 # Calculate all combinations of rows from both matrices in a vectorized way
 solar_expanded <- solar_profit[rep(1:nrow(solar_profit), 
                                    each = nrow(tomato_long)), ]
@@ -961,6 +1015,7 @@ tav_profit <- as.data.frame(tav_profit)
 tav_profit <- data.frame(lapply(tav_profit, unlist))
 
 # Inspect the structure and data
+dim(tav_profit)
 str(tav_profit)
 head(tav_profit)
 tail(tav_profit)
@@ -968,7 +1023,7 @@ tail(tav_profit)
 
 ### Saving results locally
 
-```{r}
+```{r TAVSave,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 #write_csv(tav_profit, "tav_profit.csv")
 write_feather(tav_profit,
   sink = "Data/tav_profit.feather",
@@ -985,47 +1040,11 @@ write_feather(tav_profit,
 -   Joint profit from strawberry (stberry_long) and solar energy production (solar_profit) from 1 acre of land.
 -   The last variable (sbav_profit) is the final profit from strawberry agrivoltaic system which is the result of our interest.
 
-```{r, echo=TRUE, eval=FALSE, cache=FALSE, error=TRUE, warning=TRUE}
-# Generate all combinations of row indices from both matrices
-index_combinations <- expand.grid(1:nrow(solar_profit),
-                                  1:nrow(stberry_long))
-
-# Define a function to process each combination of indices
-process_combination <- function(indices) {
-  i <- indices[1]
-  j <- indices[2]
-  new_row <- c(solar_profit[i, ],
-               stberry_long[j, ], 
-               #solar_profit[i, 14] = eannprof
-               solar_profit$eannprof[i] + stberry_long$profit[j])
-  return(new_row)
-}
-
-# Apply the function to each combination of indices
-# Combine the results into a matrix
-sbav_profit <- do.call(rbind, 
-                          lapply(
-                            seq_len(nrow(index_combinations)),
-                            function(k) {
-                              indices <- as.integer(
-                                index_combinations[k, ])
-                              process_combination(indices)
-                              }))
-
-# Optionally, you can convert the result back to a data frame if needed
-sbav_profit <- as.data.frame(sbav_profit) %>%
-  rename(sbav_profit = V21)
-sbav_profit <- data.frame(lapply(sbav_profit, unlist))
-str(sbav_profit)
-head(sbav_profit)
-tail(sbav_profit)
-```
-
-```{r, echo=TRUE, eval=TRUE, error=TRUE, warning=TRUE}
-# Efficient calculation of all combinations of rows from both matrices
+```{r SBAV,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
+# Generate all combinations of rows from both matrices in a vectorized way
 solar_expanded <- solar_profit[rep(1:nrow(solar_profit), 
                                    each = nrow(stberry_long)), ]
-stberry_expanded <- stberry_long[rep(1:nrow(stberry_long), 
+stberry_expanded <- stberry_long[rep(1:nrow(stberry_long),
                                      times = nrow(solar_profit)), ]
 
 # Calculate the new column for sbav_profit directly
@@ -1041,6 +1060,7 @@ sbav_profit <- as.data.frame(sbav_profit)
 sbav_profit <- data.frame(lapply(sbav_profit, unlist))
 
 # Inspect the structure and data
+dim(sbav_profit)
 str(sbav_profit)
 head(sbav_profit)
 tail(sbav_profit)
@@ -1048,7 +1068,7 @@ tail(sbav_profit)
 
 ### Saving results locally
 
-```{r}
+```{r SBAVSave,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 #write_csv(sbav_profit, "tav_profit.csv")
 write_feather(sbav_profit,
   sink = "Data/sbav_profit.feather",
@@ -1065,43 +1085,7 @@ write_feather(sbav_profit,
 -   Joint profit from squash (squash_long) and solar energy production (solar_profit) from 1 acre of land.
 -   The last variable (sqav_profit) is the final profit from squash agrivoltaic system which is the result of our interest.
 
-```{r, echo=TRUE, eval=FALSE, cache=FALSE, error=TRUE, warning=TRUE}
-# Generate all combinations of row indices from both matrices
-index_combinations <- expand.grid(1:nrow(solar_profit),
-                                  1:nrow(squash_long))
-
-# Define a function to process each combination of indices
-process_combination <- function(indices) {
-  i <- indices[1]
-  j <- indices[2]
-  new_row <- c(solar_profit[i, ],
-               squash_long[j, ],
-               #solar_profit[i, 14] = eannprof
-               solar_profit$eannprof[i] + squash_long$profit[j])
-  return(new_row)
-}
-
-# Apply the function to each combination of indices
-# Combine the results into a matrix
-sqav_profit <- do.call(rbind, 
-                          lapply(
-                            seq_len(nrow(index_combinations)),
-                            function(k) {
-                              indices <- as.integer(
-                                index_combinations[k, ])
-                              process_combination(indices)
-                              }))
-
-# Optionally, you can convert the result back to a data frame if needed
-sqav_profit <- as.data.frame(sqav_profit) %>%
-  rename(sqav_profit = V21)
-sqav_profit <- data.frame(lapply(sqav_profit, unlist))
-str(sqav_profit)
-head(sqav_profit)
-tail(sqav_profit)
-```
-
-```{r, echo=TRUE, eval=TRUE, cache=FALSE, error=TRUE, warning=TRUE}
+```{r SQAV,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 # Efficient calculation of all combinations of rows from both matrices
 solar_expanded <- solar_profit[rep(1:nrow(solar_profit), 
                                    each = nrow(squash_long)), ]
@@ -1121,6 +1105,7 @@ sqav_profit <- as.data.frame(sqav_profit)
 sqav_profit <- data.frame(lapply(sqav_profit, unlist))
 
 # Inspect the structure and data
+dim(sqav_profit)
 str(sqav_profit)
 head(sqav_profit)
 tail(sqav_profit)
@@ -1128,7 +1113,7 @@ tail(sqav_profit)
 
 ### Saving results locally
 
-```{r}
+```{r SQAVSave,echo=TRUE,eval=TRUE,results='markup',error=TRUE,warning=TRUE}
 #write_csv(sqav_profit, "tav_profit.csv")
 write_feather(sqav_profit,
   sink = "Data/sqav_profit.feather",
