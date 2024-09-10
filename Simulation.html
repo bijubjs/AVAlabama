@@ -1399,7 +1399,7 @@ You can install a fully-featured version by running:
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="fl">0.04</span> <span class="co"># Discount/interest Rate</span></span>
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="fl">0.07</span> <span class="co"># Discount/interest Rate</span></span>
 <span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">30</span> <span class="co"># Life Span of solar panels (Years)</span></span>
 <span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a>expanded_data <span class="ot">&lt;-</span> energy_revenue <span class="sc">%&gt;%</span></span>
 <span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>(),</span>
@@ -1417,54 +1417,61 @@ You can install a fully-featured version by running:
 <span id="cb107-16"><a href="#cb107-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">landlease =</span> <span class="dv">1000</span>, <span class="co">#$/Acre/Year</span></span>
 <span id="cb107-17"><a href="#cb107-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 7.75*3.5 sq.ft. panel energy output = 545 W.</span></span>
 <span id="cb107-18"><a href="#cb107-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Operational cost (OPEX) = $15/kW-yr; 1 kW = 1,000W.</span></span>
-<span id="cb107-19"><a href="#cb107-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">opex =</span> <span class="dv">545</span><span class="sc">*</span><span class="dv">15</span><span class="sc">/</span><span class="dv">1000</span><span class="sc">*</span>panels,</span>
+<span id="cb107-19"><a href="#cb107-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Opex = 545*15/1000*panels,</span></span>
 <span id="cb107-20"><a href="#cb107-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">ttlcost =</span> capex<span class="sc">*</span><span class="dv">545</span><span class="sc">*</span>panels,</span>
-<span id="cb107-21"><a href="#cb107-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">recredit =</span> <span class="fl">6.60</span><span class="sc">/</span><span class="dv">1000</span><span class="sc">*</span>energy, <span class="co"># Renewable energy credit 6.60 $/MWh</span></span>
-<span id="cb107-22"><a href="#cb107-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">anncost =</span> ttlcost<span class="sc">*</span>(r<span class="sc">*</span>(<span class="dv">1</span><span class="sc">+</span>r)<span class="sc">**</span>n)<span class="sc">/</span>((<span class="dv">1</span><span class="sc">+</span>r)<span class="sc">**</span>n<span class="dv">-1</span>)<span class="sc">+</span>opex,</span>
-<span id="cb107-23"><a href="#cb107-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">moncost =</span> ttlcost<span class="sc">*</span>((r<span class="sc">/</span><span class="dv">12</span>)<span class="sc">*</span>(<span class="dv">1</span><span class="sc">+</span>(r<span class="sc">/</span>n))<span class="sc">^</span>(n<span class="sc">*</span><span class="dv">12</span>))<span class="sc">/</span>((<span class="dv">1</span><span class="sc">+</span>(r<span class="sc">/</span><span class="dv">12</span>))<span class="sc">^</span>(n<span class="sc">*</span><span class="dv">12</span>)<span class="sc">-</span><span class="dv">1</span>)<span class="sc">+</span>opex<span class="sc">/</span><span class="dv">12</span></span>
-<span id="cb107-24"><a href="#cb107-24" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb107-25"><a href="#cb107-25" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(energy_cost)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 5544   16</code></pre>
+<span id="cb107-21"><a href="#cb107-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Renewable energy credit 6.60 $/MWh</span></span>
+<span id="cb107-22"><a href="#cb107-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">recredit =</span> <span class="fl">6.60</span><span class="sc">/</span><span class="dv">1000</span><span class="sc">*</span>energy,</span>
+<span id="cb107-23"><a href="#cb107-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Annualized using annual discount rate:</span></span>
+<span id="cb107-24"><a href="#cb107-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">annualizedcost =</span> ttlcost<span class="sc">*</span>(r<span class="sc">*</span>(<span class="dv">1</span><span class="sc">+</span>r)<span class="sc">**</span>n)<span class="sc">/</span>((<span class="dv">1</span><span class="sc">+</span>r)<span class="sc">**</span>n<span class="dv">-1</span>),</span>
+<span id="cb107-25"><a href="#cb107-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">monthlycost =</span> ttlcost<span class="sc">*</span></span>
+<span id="cb107-26"><a href="#cb107-26" aria-hidden="true" tabindex="-1"></a>      ((r<span class="sc">/</span><span class="dv">12</span>)<span class="sc">*</span>(<span class="dv">1</span><span class="sc">+</span>(r<span class="sc">/</span>n))<span class="sc">^</span>(n<span class="sc">*</span><span class="dv">12</span>))<span class="sc">/</span>((<span class="dv">1</span><span class="sc">+</span>(r<span class="sc">/</span><span class="dv">12</span>))<span class="sc">^</span>(n<span class="sc">*</span><span class="dv">12</span>)<span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb107-27"><a href="#cb107-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Cost of Insurance = $5/$1000/Yr annualized capex</span></span>
+<span id="cb107-28"><a href="#cb107-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">inscst =</span> annualizedcost<span class="sc">*</span><span class="dv">5</span><span class="sc">/</span><span class="dv">1000</span>, <span class="co">#Cost </span></span>
+<span id="cb107-29"><a href="#cb107-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Operational cost = 3% of annualized capex</span></span>
+<span id="cb107-30"><a href="#cb107-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">opex =</span> <span class="dv">3</span><span class="sc">*</span>annualizedcost<span class="sc">/</span><span class="dv">100</span>, <span class="co"># Cost</span></span>
+<span id="cb107-31"><a href="#cb107-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># REAP Program = 50% of annualized capex</span></span>
+<span id="cb107-32"><a href="#cb107-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">reap =</span> <span class="dv">50</span><span class="sc">*</span>annualizedcost<span class="sc">/</span><span class="dv">100</span>, <span class="co"># Return</span></span>
+<span id="cb107-33"><a href="#cb107-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Tax credit = 30% of annualized capex</span></span>
+<span id="cb107-34"><a href="#cb107-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">taxcredit =</span> <span class="dv">30</span><span class="sc">*</span>annualizedcost<span class="sc">/</span><span class="dv">100</span>, <span class="co"># Return </span></span>
+<span id="cb107-35"><a href="#cb107-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Monthalized using monthly discount rate:</span></span>
+<span id="cb107-36"><a href="#cb107-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">anncost =</span> annualizedcost <span class="sc">+</span> inscst <span class="sc">+</span> opex <span class="sc">-</span> reap <span class="sc">-</span> recredit,</span>
+<span id="cb107-37"><a href="#cb107-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">moncost =</span> monthlycost <span class="sc">+</span> (inscst <span class="sc">+</span> opex <span class="sc">-</span> reap <span class="sc">-</span> reccredit)<span class="sc">/</span><span class="dv">12</span></span>
+<span id="cb107-38"><a href="#cb107-38" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in `mutate()`:
+ℹ In argument: `moncost = monthlycost + (inscst + opex - reap -
+  reccredit)/12`.
+Caused by error:
+! object 'reccredit' not found</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(energy_cost)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(energy_cost)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   5544 obs. of  16 variables:
- $ sprop    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ al_regs  : chr  "Black Belt" "Black Belt" "Black Belt" "Black Belt" ...
- $ array    : chr  "Fixed" "Fixed" "Fixed" "Tracking" ...
- $ dc_kw    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ panels   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ energy   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ elcprc   : num  0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 ...
- $ elcrev   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ height   : num  4.6 6.4 8.2 4.6 6.4 8.2 4.6 6.4 8.2 4.6 ...
- $ capex    : num  1.59 1.85 2.33 1.73 1.92 ...
- $ landlease: num  1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 ...
- $ opex     : num  0 0 0 0 0 0 0 0 0 0 ...
- $ ttlcost  : num  0 0 0 0 0 0 0 0 0 0 ...
- $ recredit : num  0 0 0 0 0 0 0 0 0 0 ...
- $ anncost  : num  0 0 0 0 0 0 0 0 0 0 ...
- $ moncost  : num  0 0 0 0 0 0 0 0 0 0 ...</code></pre>
+<pre><code>[1] 5544    9</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(energy_cost)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(energy_cost)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  sprop    al_regs    array dc_kw panels energy elcprc elcrev height    capex
-1     0 Black Belt    Fixed     0      0      0   0.01      0    4.6 1.593333
-2     0 Black Belt    Fixed     0      0      0   0.01      0    6.4 1.850000
-3     0 Black Belt    Fixed     0      0      0   0.01      0    8.2 2.330000
-4     0 Black Belt Tracking     0      0      0   0.01      0    4.6 1.733333
-5     0 Black Belt Tracking     0      0      0   0.01      0    6.4 1.921667
-6     0 Black Belt Tracking     0      0      0   0.01      0    8.2 2.110000
-  landlease opex ttlcost recredit anncost moncost
-1      1000    0       0        0       0       0
-2      1000    0       0        0       0       0
-3      1000    0       0        0       0       0
-4      1000    0       0        0       0       0
-5      1000    0       0        0       0       0
-6      1000    0       0        0       0       0</code></pre>
+<pre><code>'data.frame':   5544 obs. of  9 variables:
+ $ sprop  : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ al_regs: chr  "Black Belt" "Black Belt" "Black Belt" "Black Belt" ...
+ $ array  : chr  "Fixed" "Fixed" "Fixed" "Tracking" ...
+ $ dc_kw  : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ panels : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ energy : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ elcprc : num  0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 ...
+ $ elcrev : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ height : num  4.6 6.4 8.2 4.6 6.4 8.2 4.6 6.4 8.2 4.6 ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(energy_cost)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(energy_cost)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  sprop    al_regs    array dc_kw panels energy elcprc elcrev height
+1     0 Black Belt    Fixed     0      0      0   0.01      0    4.6
+2     0 Black Belt    Fixed     0      0      0   0.01      0    6.4
+3     0 Black Belt    Fixed     0      0      0   0.01      0    8.2
+4     0 Black Belt Tracking     0      0      0   0.01      0    4.6
+5     0 Black Belt Tracking     0      0      0   0.01      0    6.4
+6     0 Black Belt Tracking     0      0      0   0.01      0    8.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(energy_cost)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     sprop  al_regs    array  dc_kw panels energy elcprc   elcrev height
 5539     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    4.6
@@ -1472,14 +1479,7 @@ You can install a fully-featured version by running:
 5541     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    8.2
 5542     1 Southern Tracking 423.74    885 712873   0.06 42772.38    4.6
 5543     1 Southern Tracking 423.74    885 712873   0.06 42772.38    6.4
-5544     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-        capex landlease     opex   ttlcost recredit  anncost  moncost
-5539 1.593333      1000 7234.875  768504.5 4048.057 51677.57 2391.775
-5540 1.850000      1000 7234.875  892301.2 4048.057 58836.74 2679.940
-5541 2.330000      1000 7234.875 1123817.3 4048.057 72225.34 3218.846
-5542 1.733333      1000 7234.875  836030.0 4704.962 55582.57 2548.956
-5543 1.921667      1000 7234.875  926867.9 4704.962 60835.74 2760.402
-5544 2.110000      1000 7234.875 1017705.8 4704.962 66088.90 2971.848</code></pre>
+5544     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2</code></pre>
 </div>
 </div>
 </section>
@@ -1492,356 +1492,96 @@ You can install a fully-featured version by running:
 <li>emonprof = monthly profit from solar after subtracting monthly loan repayment distributed over 25 years.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>solar_profit <span class="ot">&lt;-</span> energy_cost <span class="sc">%&gt;%</span></span>
-<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">eprofit =</span> elcrev <span class="sc">-</span> ttlcost,</span>
-<span id="cb115-4"><a href="#cb115-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">eannprof =</span> elcrev <span class="sc">-</span> anncost <span class="sc">+</span> recredit,</span>
-<span id="cb115-5"><a href="#cb115-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">emonprof =</span> elcrev<span class="sc">/</span><span class="dv">12</span> <span class="sc">-</span> moncost <span class="sc">+</span> recredit<span class="sc">/</span><span class="dv">12</span>)</span>
-<span id="cb115-6"><a href="#cb115-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(solar_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 5544   19</code></pre>
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>solar_profit <span class="ot">&lt;-</span> energy_cost <span class="sc">%&gt;%</span></span>
+<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb117-3"><a href="#cb117-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">eprofit =</span> elcrev <span class="sc">-</span> ttlcost,</span>
+<span id="cb117-4"><a href="#cb117-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">eannprof =</span> elcrev <span class="sc">-</span> anncost <span class="sc">+</span> recredit,</span>
+<span id="cb117-5"><a href="#cb117-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">emonprof =</span> elcrev<span class="sc">/</span><span class="dv">12</span> <span class="sc">-</span> moncost <span class="sc">+</span> recredit<span class="sc">/</span><span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in `mutate()`:
+ℹ In argument: `eprofit = elcrev - ttlcost`.
+Caused by error:
+! object 'ttlcost' not found</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(solar_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   5544 obs. of  19 variables:
- $ sprop    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ al_regs  : chr  "Black Belt" "Black Belt" "Black Belt" "Black Belt" ...
- $ array    : chr  "Fixed" "Fixed" "Fixed" "Tracking" ...
- $ dc_kw    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ panels   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ energy   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ elcprc   : num  0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 ...
- $ elcrev   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ height   : num  4.6 6.4 8.2 4.6 6.4 8.2 4.6 6.4 8.2 4.6 ...
- $ capex    : num  1.59 1.85 2.33 1.73 1.92 ...
- $ landlease: num  1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 ...
- $ opex     : num  0 0 0 0 0 0 0 0 0 0 ...
- $ ttlcost  : num  0 0 0 0 0 0 0 0 0 0 ...
- $ recredit : num  0 0 0 0 0 0 0 0 0 0 ...
- $ anncost  : num  0 0 0 0 0 0 0 0 0 0 ...
- $ moncost  : num  0 0 0 0 0 0 0 0 0 0 ...
- $ eprofit  : num  0 0 0 0 0 0 0 0 0 0 ...
- $ eannprof : num  0 0 0 0 0 0 0 0 0 0 ...
- $ emonprof : num  0 0 0 0 0 0 0 0 0 0 ...</code></pre>
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(solar_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'solar_profit' not found</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(solar_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  sprop    al_regs    array dc_kw panels energy elcprc elcrev height    capex
-1     0 Black Belt    Fixed     0      0      0   0.01      0    4.6 1.593333
-2     0 Black Belt    Fixed     0      0      0   0.01      0    6.4 1.850000
-3     0 Black Belt    Fixed     0      0      0   0.01      0    8.2 2.330000
-4     0 Black Belt Tracking     0      0      0   0.01      0    4.6 1.733333
-5     0 Black Belt Tracking     0      0      0   0.01      0    6.4 1.921667
-6     0 Black Belt Tracking     0      0      0   0.01      0    8.2 2.110000
-  landlease opex ttlcost recredit anncost moncost eprofit eannprof emonprof
-1      1000    0       0        0       0       0       0        0        0
-2      1000    0       0        0       0       0       0        0        0
-3      1000    0       0        0       0       0       0        0        0
-4      1000    0       0        0       0       0       0        0        0
-5      1000    0       0        0       0       0       0        0        0
-6      1000    0       0        0       0       0       0        0        0</code></pre>
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(solar_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in str(solar_profit): object 'solar_profit' not found</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(solar_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     sprop  al_regs    array  dc_kw panels energy elcprc   elcrev height
-5539     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    4.6
-5540     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    6.4
-5541     1 Southern    Fixed 423.74    885 613342   0.06 36800.52    8.2
-5542     1 Southern Tracking 423.74    885 712873   0.06 42772.38    4.6
-5543     1 Southern Tracking 423.74    885 712873   0.06 42772.38    6.4
-5544     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-        capex landlease     opex   ttlcost recredit  anncost  moncost
-5539 1.593333      1000 7234.875  768504.5 4048.057 51677.57 2391.775
-5540 1.850000      1000 7234.875  892301.2 4048.057 58836.74 2679.940
-5541 2.330000      1000 7234.875 1123817.3 4048.057 72225.34 3218.846
-5542 1.733333      1000 7234.875  836030.0 4704.962 55582.57 2548.956
-5543 1.921667      1000 7234.875  926867.9 4704.962 60835.74 2760.402
-5544 2.110000      1000 7234.875 1017705.8 4704.962 66088.90 2971.848
-        eprofit   eannprof  emonprof
-5539  -731704.0 -10828.989 1012.2729
-5540  -855500.7 -17988.168  724.1078
-5541 -1087016.7 -31376.761  185.2017
-5542  -793257.6  -8105.231 1407.4890
-5543  -884095.5 -13358.394 1196.0432
-5544  -974933.4 -18611.558  984.5974</code></pre>
+<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(solar_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in head(solar_profit): object 'solar_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(solar_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in tail(solar_profit): object 'solar_profit' not found</code></pre>
 </div>
 </div>
 <section id="plot-solar-profit" class="level3" data-number="3.5.1">
 <h3 data-number="3.5.1" class="anchored" data-anchor-id="plot-solar-profit"><span class="header-section-number">3.5.1</span> Plot Solar profit</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a>lox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Northern"</span>, <span class="st">"Central"</span>, <span class="st">"Black Belt"</span>, <span class="st">"Southern"</span>)</span>
-<span id="cb123-2"><a href="#cb123-2" aria-hidden="true" tabindex="-1"></a>array_levs <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Single Axis Rotation"</span>, <span class="st">"Fixed Open Rack"</span>)</span>
-<span id="cb123-3"><a href="#cb123-3" aria-hidden="true" tabindex="-1"></a>datalot_levs <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Location 1"</span>, <span class="st">"Location 2"</span>)</span>
-<span id="cb123-4"><a href="#cb123-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">unique</span>(solar_profit<span class="sc">$</span>elcprc)) {</span>
-<span id="cb123-5"><a href="#cb123-5" aria-hidden="true" tabindex="-1"></a>    b <span class="ot">=</span> <span class="fu">ggplot</span>(</span>
-<span id="cb123-6"><a href="#cb123-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> (solar_profit <span class="sc">%&gt;%</span></span>
-<span id="cb123-7"><a href="#cb123-7" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(elcprc <span class="sc">==</span> i)),</span>
-<span id="cb123-8"><a href="#cb123-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
-<span id="cb123-9"><a href="#cb123-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> al_regs,</span>
-<span id="cb123-10"><a href="#cb123-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> eannprof, <span class="co">#Annual Profit</span></span>
-<span id="cb123-11"><a href="#cb123-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">#fill = energy,</span></span>
-<span id="cb123-12"><a href="#cb123-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="fu">factor</span>(panels),</span>
-<span id="cb123-13"><a href="#cb123-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">group =</span> <span class="fu">factor</span>(panels)</span>
-<span id="cb123-14"><a href="#cb123-14" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb123-15"><a href="#cb123-15" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb123-16"><a href="#cb123-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb123-17"><a href="#cb123-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb123-18"><a href="#cb123-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">facet_grid</span>(height <span class="sc">~</span> array) <span class="sc">+</span></span>
-<span id="cb123-19"><a href="#cb123-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_discrete</span>(<span class="at">limits =</span> lox,</span>
-<span id="cb123-20"><a href="#cb123-20" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"North"</span>, <span class="st">"Center"</span>, </span>
-<span id="cb123-21"><a href="#cb123-21" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"B Belt"</span>, <span class="st">"South"</span>)) <span class="sc">+</span></span>
-<span id="cb123-22"><a href="#cb123-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>, </span>
-<span id="cb123-23"><a href="#cb123-23" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">reverse =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb123-24"><a href="#cb123-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"Electricity Price = "</span>, i)</span>
-<span id="cb123-25"><a href="#cb123-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(b)</span>
-<span id="cb123-26"><a href="#cb123-26" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.01</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotAPFS-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.015</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotAPFS-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.02</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotAPFS-3.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.025</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotAPFS-4.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.03</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotAPFS-5.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.035</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotAPFS-6.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.04</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotAPFS-7.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.045</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotAPFS-8.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.05</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotAPFS-9.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.055</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotAPFS-10.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.06</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotAPFS-11.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a>lox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Northern"</span>, <span class="st">"Central"</span>, <span class="st">"Black Belt"</span>, <span class="st">"Southern"</span>)</span>
+<span id="cb127-2"><a href="#cb127-2" aria-hidden="true" tabindex="-1"></a>array_levs <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Single Axis Rotation"</span>, <span class="st">"Fixed Open Rack"</span>)</span>
+<span id="cb127-3"><a href="#cb127-3" aria-hidden="true" tabindex="-1"></a>datalot_levs <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Location 1"</span>, <span class="st">"Location 2"</span>)</span>
+<span id="cb127-4"><a href="#cb127-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">unique</span>(solar_profit<span class="sc">$</span>elcprc)) {</span>
+<span id="cb127-5"><a href="#cb127-5" aria-hidden="true" tabindex="-1"></a>    b <span class="ot">=</span> <span class="fu">ggplot</span>(</span>
+<span id="cb127-6"><a href="#cb127-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> (solar_profit <span class="sc">%&gt;%</span></span>
+<span id="cb127-7"><a href="#cb127-7" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(elcprc <span class="sc">==</span> i)),</span>
+<span id="cb127-8"><a href="#cb127-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
+<span id="cb127-9"><a href="#cb127-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> al_regs,</span>
+<span id="cb127-10"><a href="#cb127-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> eannprof, <span class="co">#Annual Profit</span></span>
+<span id="cb127-11"><a href="#cb127-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">#fill = energy,</span></span>
+<span id="cb127-12"><a href="#cb127-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="fu">factor</span>(panels),</span>
+<span id="cb127-13"><a href="#cb127-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">group =</span> <span class="fu">factor</span>(panels)</span>
+<span id="cb127-14"><a href="#cb127-14" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb127-15"><a href="#cb127-15" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb127-16"><a href="#cb127-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb127-17"><a href="#cb127-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb127-18"><a href="#cb127-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">facet_grid</span>(height <span class="sc">~</span> array) <span class="sc">+</span></span>
+<span id="cb127-19"><a href="#cb127-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_discrete</span>(<span class="at">limits =</span> lox,</span>
+<span id="cb127-20"><a href="#cb127-20" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"North"</span>, <span class="st">"Center"</span>, </span>
+<span id="cb127-21"><a href="#cb127-21" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"B Belt"</span>, <span class="st">"South"</span>)) <span class="sc">+</span></span>
+<span id="cb127-22"><a href="#cb127-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>, </span>
+<span id="cb127-23"><a href="#cb127-23" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">reverse =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb127-24"><a href="#cb127-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"Electricity Price = "</span>, i)</span>
+<span id="cb127-25"><a href="#cb127-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(b)</span>
+<span id="cb127-26"><a href="#cb127-26" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in unique(solar_profit$elcprc): object 'solar_profit' not found</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a>lox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Northern"</span>, <span class="st">"Central"</span>, <span class="st">"Black Belt"</span>, <span class="st">"Southern"</span>)</span>
-<span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a>array_levs <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Single Axis Rotation"</span>, <span class="st">"Fixed Open Rack"</span>)</span>
-<span id="cb135-3"><a href="#cb135-3" aria-hidden="true" tabindex="-1"></a>datalot_levs <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Location 1"</span>, <span class="st">"Location 2"</span>)</span>
-<span id="cb135-4"><a href="#cb135-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">unique</span>(solar_profit<span class="sc">$</span>elcprc)) {</span>
-<span id="cb135-5"><a href="#cb135-5" aria-hidden="true" tabindex="-1"></a>    b <span class="ot">=</span> <span class="fu">ggplot</span>(</span>
-<span id="cb135-6"><a href="#cb135-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> (solar_profit <span class="sc">%&gt;%</span></span>
-<span id="cb135-7"><a href="#cb135-7" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(elcprc <span class="sc">==</span> i)),</span>
-<span id="cb135-8"><a href="#cb135-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
-<span id="cb135-9"><a href="#cb135-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> al_regs,</span>
-<span id="cb135-10"><a href="#cb135-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> emonprof, <span class="co">#Monthly Profit.</span></span>
-<span id="cb135-11"><a href="#cb135-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">#fill = energy,</span></span>
-<span id="cb135-12"><a href="#cb135-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="fu">factor</span>(panels),</span>
-<span id="cb135-13"><a href="#cb135-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">group =</span> <span class="fu">factor</span>(panels)</span>
-<span id="cb135-14"><a href="#cb135-14" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb135-15"><a href="#cb135-15" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb135-16"><a href="#cb135-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb135-17"><a href="#cb135-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb135-18"><a href="#cb135-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">facet_grid</span>(height <span class="sc">~</span> array) <span class="sc">+</span></span>
-<span id="cb135-19"><a href="#cb135-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_discrete</span>(<span class="at">limits =</span> lox,</span>
-<span id="cb135-20"><a href="#cb135-20" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"North"</span>, <span class="st">"Center"</span>, </span>
-<span id="cb135-21"><a href="#cb135-21" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"B Belt"</span>, <span class="st">"South"</span>)) <span class="sc">+</span></span>
-<span id="cb135-22"><a href="#cb135-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>, </span>
-<span id="cb135-23"><a href="#cb135-23" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">reverse =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb135-24"><a href="#cb135-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"Electricity Price = "</span>, i)</span>
-<span id="cb135-25"><a href="#cb135-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(b)</span>
-<span id="cb135-26"><a href="#cb135-26" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.01</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotMPFS-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.015</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotMPFS-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.02</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotMPFS-3.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.025</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotMPFS-4.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.03</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotMPFS-5.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.035</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotMPFS-6.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.04</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotMPFS-7.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.045</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotMPFS-8.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.05</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotMPFS-9.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.055</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotMPFS-10.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Electricity Price =  0.06</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Simulation_files/figure-html/PlotMPFS-11.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a>lox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Northern"</span>, <span class="st">"Central"</span>, <span class="st">"Black Belt"</span>, <span class="st">"Southern"</span>)</span>
+<span id="cb129-2"><a href="#cb129-2" aria-hidden="true" tabindex="-1"></a>array_levs <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Single Axis Rotation"</span>, <span class="st">"Fixed Open Rack"</span>)</span>
+<span id="cb129-3"><a href="#cb129-3" aria-hidden="true" tabindex="-1"></a>datalot_levs <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Location 1"</span>, <span class="st">"Location 2"</span>)</span>
+<span id="cb129-4"><a href="#cb129-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">unique</span>(solar_profit<span class="sc">$</span>elcprc)) {</span>
+<span id="cb129-5"><a href="#cb129-5" aria-hidden="true" tabindex="-1"></a>    b <span class="ot">=</span> <span class="fu">ggplot</span>(</span>
+<span id="cb129-6"><a href="#cb129-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> (solar_profit <span class="sc">%&gt;%</span></span>
+<span id="cb129-7"><a href="#cb129-7" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(elcprc <span class="sc">==</span> i)),</span>
+<span id="cb129-8"><a href="#cb129-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
+<span id="cb129-9"><a href="#cb129-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> al_regs,</span>
+<span id="cb129-10"><a href="#cb129-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> emonprof, <span class="co">#Monthly Profit.</span></span>
+<span id="cb129-11"><a href="#cb129-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">#fill = energy,</span></span>
+<span id="cb129-12"><a href="#cb129-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="fu">factor</span>(panels),</span>
+<span id="cb129-13"><a href="#cb129-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">group =</span> <span class="fu">factor</span>(panels)</span>
+<span id="cb129-14"><a href="#cb129-14" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb129-15"><a href="#cb129-15" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb129-16"><a href="#cb129-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb129-17"><a href="#cb129-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb129-18"><a href="#cb129-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">facet_grid</span>(height <span class="sc">~</span> array) <span class="sc">+</span></span>
+<span id="cb129-19"><a href="#cb129-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_discrete</span>(<span class="at">limits =</span> lox,</span>
+<span id="cb129-20"><a href="#cb129-20" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"North"</span>, <span class="st">"Center"</span>, </span>
+<span id="cb129-21"><a href="#cb129-21" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"B Belt"</span>, <span class="st">"South"</span>)) <span class="sc">+</span></span>
+<span id="cb129-22"><a href="#cb129-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>, </span>
+<span id="cb129-23"><a href="#cb129-23" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">reverse =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb129-24"><a href="#cb129-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"Electricity Price = "</span>, i)</span>
+<span id="cb129-25"><a href="#cb129-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(b)</span>
+<span id="cb129-26"><a href="#cb129-26" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in unique(solar_profit$elcprc): object 'solar_profit' not found</code></pre>
 </div>
 </div>
 </section>
@@ -1853,15 +1593,15 @@ You can install a fully-featured version by running:
 <h2 data-number="4.1" class="anchored" data-anchor-id="tomato-1"><span class="header-section-number">4.1</span> Tomato</h2>
 <p>Filter return to operator, land and capital profit from Tomato:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb147"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1" aria-hidden="true" tabindex="-1"></a>tomato_profit <span class="ot">=</span> tomato <span class="sc">%&gt;%</span> </span>
-<span id="cb147-2"><a href="#cb147-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(yldvar, yield, </span>
-<span id="cb147-3"><a href="#cb147-3" aria-hidden="true" tabindex="-1"></a>         rolac17, rolac18, rolac19, rolac20, </span>
-<span id="cb147-4"><a href="#cb147-4" aria-hidden="true" tabindex="-1"></a>         rolac21, rolac22, rolac23)</span>
-<span id="cb147-5"><a href="#cb147-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(tomato_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a>tomato_profit <span class="ot">=</span> tomato <span class="sc">%&gt;%</span> </span>
+<span id="cb131-2"><a href="#cb131-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(yldvar, yield, </span>
+<span id="cb131-3"><a href="#cb131-3" aria-hidden="true" tabindex="-1"></a>         rolac17, rolac18, rolac19, rolac20, </span>
+<span id="cb131-4"><a href="#cb131-4" aria-hidden="true" tabindex="-1"></a>         rolac21, rolac22, rolac23)</span>
+<span id="cb131-5"><a href="#cb131-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(tomato_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 21  9</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb149"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a>tomato_profit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a>tomato_profit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   yldvar yield     rolac17     rolac18     rolac19     rolac20     rolac21
 3     2.0  2720  21679.3826  24399.3826  27119.3826  29839.3826  32559.3826
@@ -1911,30 +1651,30 @@ You can install a fully-featured version by running:
 </div>
 <p>Convert data to long format:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb151"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign column names for clarity</span></span>
-<span id="cb151-2"><a href="#cb151-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tomato_profit) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"yldvar"</span>, <span class="st">"yield"</span>,</span>
-<span id="cb151-3"><a href="#cb151-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac17"</span>, <span class="st">"rolac18"</span>, <span class="st">"rolac19"</span>,</span>
-<span id="cb151-4"><a href="#cb151-4" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac20"</span>, <span class="st">"rolac21"</span>, <span class="st">"rolac22"</span>,</span>
-<span id="cb151-5"><a href="#cb151-5" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac23"</span>)</span>
-<span id="cb151-6"><a href="#cb151-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-7"><a href="#cb151-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape the data frame from wide to long format</span></span>
-<span id="cb151-8"><a href="#cb151-8" aria-hidden="true" tabindex="-1"></a>tomato_long <span class="ot">&lt;-</span> <span class="fu">melt</span>(tomato_profit,</span>
-<span id="cb151-9"><a href="#cb151-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">"yldvar"</span>, <span class="st">"yield"</span>),</span>
-<span id="cb151-10"><a href="#cb151-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">measure.vars =</span> <span class="fu">c</span>(<span class="st">"rolac17"</span>, <span class="st">"rolac18"</span>, <span class="st">"rolac19"</span>,</span>
-<span id="cb151-11"><a href="#cb151-11" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"rolac20"</span>, <span class="st">"rolac21"</span>, <span class="st">"rolac22"</span>,</span>
-<span id="cb151-12"><a href="#cb151-12" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"rolac23"</span>),</span>
-<span id="cb151-13"><a href="#cb151-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">variable.name =</span> <span class="st">"price"</span>,</span>
-<span id="cb151-14"><a href="#cb151-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">value.name =</span> <span class="st">"profit"</span>)</span>
-<span id="cb151-15"><a href="#cb151-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-16"><a href="#cb151-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the 'Price' column to numeric by extracting the number</span></span>
-<span id="cb151-17"><a href="#cb151-17" aria-hidden="true" tabindex="-1"></a>tomato_long<span class="sc">$</span>price <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"rolac"</span>, <span class="st">""</span>, tomato_long<span class="sc">$</span>price))</span>
-<span id="cb151-18"><a href="#cb151-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-19"><a href="#cb151-19" aria-hidden="true" tabindex="-1"></a><span class="co"># View the resulting data frame</span></span>
-<span id="cb151-20"><a href="#cb151-20" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(tomato_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign column names for clarity</span></span>
+<span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tomato_profit) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"yldvar"</span>, <span class="st">"yield"</span>,</span>
+<span id="cb135-3"><a href="#cb135-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac17"</span>, <span class="st">"rolac18"</span>, <span class="st">"rolac19"</span>,</span>
+<span id="cb135-4"><a href="#cb135-4" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac20"</span>, <span class="st">"rolac21"</span>, <span class="st">"rolac22"</span>,</span>
+<span id="cb135-5"><a href="#cb135-5" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac23"</span>)</span>
+<span id="cb135-6"><a href="#cb135-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb135-7"><a href="#cb135-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape the data frame from wide to long format</span></span>
+<span id="cb135-8"><a href="#cb135-8" aria-hidden="true" tabindex="-1"></a>tomato_long <span class="ot">&lt;-</span> <span class="fu">melt</span>(tomato_profit,</span>
+<span id="cb135-9"><a href="#cb135-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">"yldvar"</span>, <span class="st">"yield"</span>),</span>
+<span id="cb135-10"><a href="#cb135-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">measure.vars =</span> <span class="fu">c</span>(<span class="st">"rolac17"</span>, <span class="st">"rolac18"</span>, <span class="st">"rolac19"</span>,</span>
+<span id="cb135-11"><a href="#cb135-11" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"rolac20"</span>, <span class="st">"rolac21"</span>, <span class="st">"rolac22"</span>,</span>
+<span id="cb135-12"><a href="#cb135-12" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"rolac23"</span>),</span>
+<span id="cb135-13"><a href="#cb135-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">variable.name =</span> <span class="st">"price"</span>,</span>
+<span id="cb135-14"><a href="#cb135-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">value.name =</span> <span class="st">"profit"</span>)</span>
+<span id="cb135-15"><a href="#cb135-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb135-16"><a href="#cb135-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the 'Price' column to numeric by extracting the number</span></span>
+<span id="cb135-17"><a href="#cb135-17" aria-hidden="true" tabindex="-1"></a>tomato_long<span class="sc">$</span>price <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"rolac"</span>, <span class="st">""</span>, tomato_long<span class="sc">$</span>price))</span>
+<span id="cb135-18"><a href="#cb135-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb135-19"><a href="#cb135-19" aria-hidden="true" tabindex="-1"></a><span class="co"># View the resulting data frame</span></span>
+<span id="cb135-20"><a href="#cb135-20" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(tomato_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 147   4</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb153"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(tomato_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(tomato_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   147 obs. of  4 variables:
  $ yldvar: num  2 1.9 1.8 1.7 1.6 1.5 1.4 1.3 1.2 1.1 ...
@@ -1942,7 +1682,7 @@ You can install a fully-featured version by running:
  $ price : num  17 17 17 17 17 17 17 17 17 17 ...
  $ profit: num  21679 20065 18451 16837 15223 ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb155"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tomato_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb139"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tomato_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  yldvar yield price   profit
 1    2.0  2720    17 21679.38
@@ -1952,7 +1692,7 @@ You can install a fully-featured version by running:
 5    1.6  2176    17 15223.38
 6    1.5  2040    17 13609.38</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb157"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(tomato_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb141"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(tomato_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    yldvar yield price      profit
 142    0.5   680    23   1549.3826
@@ -1966,18 +1706,18 @@ You can install a fully-featured version by running:
 <section id="plot-tomato-profit" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="plot-tomato-profit"><span class="header-section-number">4.1.1</span> Plot Tomato Profit</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb159"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tomato_long,</span>
-<span id="cb159-2"><a href="#cb159-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> price,</span>
-<span id="cb159-3"><a href="#cb159-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> profit,</span>
-<span id="cb159-4"><a href="#cb159-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="fu">factor</span>(yldvar),</span>
-<span id="cb159-5"><a href="#cb159-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">group =</span> <span class="fu">factor</span>(yield))) <span class="sc">+</span></span>
-<span id="cb159-6"><a href="#cb159-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb159-7"><a href="#cb159-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb159-8"><a href="#cb159-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
-<span id="cb159-9"><a href="#cb159-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
-<span id="cb159-10"><a href="#cb159-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb159-11"><a href="#cb159-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>,</span>
-<span id="cb159-12"><a href="#cb159-12" aria-hidden="true" tabindex="-1"></a>                              <span class="at">reverse =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb143"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb143-1"><a href="#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tomato_long,</span>
+<span id="cb143-2"><a href="#cb143-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> price,</span>
+<span id="cb143-3"><a href="#cb143-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> profit,</span>
+<span id="cb143-4"><a href="#cb143-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="fu">factor</span>(yldvar),</span>
+<span id="cb143-5"><a href="#cb143-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">group =</span> <span class="fu">factor</span>(yield))) <span class="sc">+</span></span>
+<span id="cb143-6"><a href="#cb143-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb143-7"><a href="#cb143-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb143-8"><a href="#cb143-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
+<span id="cb143-9"><a href="#cb143-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
+<span id="cb143-10"><a href="#cb143-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb143-11"><a href="#cb143-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb143-12"><a href="#cb143-12" aria-hidden="true" tabindex="-1"></a>                              <span class="at">reverse =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1987,22 +1727,22 @@ You can install a fully-featured version by running:
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb160"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tomato_long,</span>
-<span id="cb160-2"><a href="#cb160-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> yield,</span>
-<span id="cb160-3"><a href="#cb160-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> profit,</span>
-<span id="cb160-4"><a href="#cb160-4" aria-hidden="true" tabindex="-1"></a>                     <span class="co">#fill = yield,</span></span>
-<span id="cb160-5"><a href="#cb160-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="fu">factor</span>(price),</span>
-<span id="cb160-6"><a href="#cb160-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">group =</span> <span class="fu">factor</span>(price))) <span class="sc">+</span></span>
-<span id="cb160-7"><a href="#cb160-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb160-8"><a href="#cb160-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb160-9"><a href="#cb160-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
-<span id="cb160-10"><a href="#cb160-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
-<span id="cb160-11"><a href="#cb160-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb160-12"><a href="#cb160-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Vertical dashed line is 100% yield</span></span>
-<span id="cb160-13"><a href="#cb160-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> tomato_long<span class="sc">$</span>yield[<span class="dv">11</span>],</span>
-<span id="cb160-14"><a href="#cb160-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
-<span id="cb160-15"><a href="#cb160-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb160-16"><a href="#cb160-16" aria-hidden="true" tabindex="-1"></a><span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb144"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tomato_long,</span>
+<span id="cb144-2"><a href="#cb144-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> yield,</span>
+<span id="cb144-3"><a href="#cb144-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> profit,</span>
+<span id="cb144-4"><a href="#cb144-4" aria-hidden="true" tabindex="-1"></a>                     <span class="co">#fill = yield,</span></span>
+<span id="cb144-5"><a href="#cb144-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="fu">factor</span>(price),</span>
+<span id="cb144-6"><a href="#cb144-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">group =</span> <span class="fu">factor</span>(price))) <span class="sc">+</span></span>
+<span id="cb144-7"><a href="#cb144-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb144-8"><a href="#cb144-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb144-9"><a href="#cb144-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
+<span id="cb144-10"><a href="#cb144-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
+<span id="cb144-11"><a href="#cb144-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb144-12"><a href="#cb144-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Vertical dashed line is 100% yield</span></span>
+<span id="cb144-13"><a href="#cb144-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> tomato_long<span class="sc">$</span>yield[<span class="dv">11</span>],</span>
+<span id="cb144-14"><a href="#cb144-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
+<span id="cb144-15"><a href="#cb144-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb144-16"><a href="#cb144-16" aria-hidden="true" tabindex="-1"></a><span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2017,15 +1757,15 @@ You can install a fully-featured version by running:
 <h2 data-number="4.2" class="anchored" data-anchor-id="strawberry-1"><span class="header-section-number">4.2</span> Strawberry</h2>
 <p>Filter return to operator, land and capital profit from strawberry</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb161"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1" aria-hidden="true" tabindex="-1"></a>strawberry_profit <span class="ot">=</span> strawberry <span class="sc">%&gt;%</span> </span>
-<span id="cb161-2"><a href="#cb161-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(yldvar, yield, </span>
-<span id="cb161-3"><a href="#cb161-3" aria-hidden="true" tabindex="-1"></a>         rolac3, rolac4, rolac5, rolac6, </span>
-<span id="cb161-4"><a href="#cb161-4" aria-hidden="true" tabindex="-1"></a>         rolac7, rolac8, rolac9)</span>
-<span id="cb161-5"><a href="#cb161-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(strawberry_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb145"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a>strawberry_profit <span class="ot">=</span> strawberry <span class="sc">%&gt;%</span> </span>
+<span id="cb145-2"><a href="#cb145-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(yldvar, yield, </span>
+<span id="cb145-3"><a href="#cb145-3" aria-hidden="true" tabindex="-1"></a>         rolac3, rolac4, rolac5, rolac6, </span>
+<span id="cb145-4"><a href="#cb145-4" aria-hidden="true" tabindex="-1"></a>         rolac7, rolac8, rolac9)</span>
+<span id="cb145-5"><a href="#cb145-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(strawberry_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 21  9</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb163"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb163-1"><a href="#cb163-1" aria-hidden="true" tabindex="-1"></a>strawberry_profit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb147"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1" aria-hidden="true" tabindex="-1"></a>strawberry_profit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   yldvar  yield     rolac3       rolac4     rolac5     rolac6     rolac7
 3     2.0 6150.0  -1740.495   4409.50503  10559.505  16709.505  22859.505
@@ -2075,29 +1815,29 @@ You can install a fully-featured version by running:
 </div>
 <p>Convert data to long format:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb165"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb165-1"><a href="#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign column names for clarity</span></span>
-<span id="cb165-2"><a href="#cb165-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(strawberry_profit) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"yldvar"</span>, <span class="st">"yield"</span>,</span>
-<span id="cb165-3"><a href="#cb165-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac3"</span>, <span class="st">"rolac4"</span>, <span class="st">"rolac5"</span>,</span>
-<span id="cb165-4"><a href="#cb165-4" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac6"</span>, <span class="st">"rolac7"</span>, <span class="st">"rolac8"</span>,</span>
-<span id="cb165-5"><a href="#cb165-5" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac9"</span>)</span>
-<span id="cb165-6"><a href="#cb165-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape the data frame from wide to long format</span></span>
-<span id="cb165-7"><a href="#cb165-7" aria-hidden="true" tabindex="-1"></a>stberry_long <span class="ot">&lt;-</span> <span class="fu">melt</span>(strawberry_profit,</span>
-<span id="cb165-8"><a href="#cb165-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">"yldvar"</span>, <span class="st">"yield"</span>),</span>
-<span id="cb165-9"><a href="#cb165-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">measure.vars =</span> <span class="fu">c</span>(<span class="st">"rolac3"</span>, <span class="st">"rolac4"</span>, <span class="st">"rolac5"</span>,</span>
-<span id="cb165-10"><a href="#cb165-10" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"rolac6"</span>, <span class="st">"rolac7"</span>, <span class="st">"rolac8"</span>,</span>
-<span id="cb165-11"><a href="#cb165-11" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"rolac9"</span>),</span>
-<span id="cb165-12"><a href="#cb165-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">variable.name =</span> <span class="st">"price"</span>,</span>
-<span id="cb165-13"><a href="#cb165-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">value.name =</span> <span class="st">"profit"</span>)</span>
-<span id="cb165-14"><a href="#cb165-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb165-15"><a href="#cb165-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the 'Price' column to numeric by extracting the number</span></span>
-<span id="cb165-16"><a href="#cb165-16" aria-hidden="true" tabindex="-1"></a>stberry_long<span class="sc">$</span>price <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"rolac"</span>, <span class="st">""</span>, stberry_long<span class="sc">$</span>price))</span>
-<span id="cb165-17"><a href="#cb165-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb165-18"><a href="#cb165-18" aria-hidden="true" tabindex="-1"></a><span class="co"># View the resulting data frame</span></span>
-<span id="cb165-19"><a href="#cb165-19" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(stberry_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb149"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign column names for clarity</span></span>
+<span id="cb149-2"><a href="#cb149-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(strawberry_profit) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"yldvar"</span>, <span class="st">"yield"</span>,</span>
+<span id="cb149-3"><a href="#cb149-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac3"</span>, <span class="st">"rolac4"</span>, <span class="st">"rolac5"</span>,</span>
+<span id="cb149-4"><a href="#cb149-4" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac6"</span>, <span class="st">"rolac7"</span>, <span class="st">"rolac8"</span>,</span>
+<span id="cb149-5"><a href="#cb149-5" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac9"</span>)</span>
+<span id="cb149-6"><a href="#cb149-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape the data frame from wide to long format</span></span>
+<span id="cb149-7"><a href="#cb149-7" aria-hidden="true" tabindex="-1"></a>stberry_long <span class="ot">&lt;-</span> <span class="fu">melt</span>(strawberry_profit,</span>
+<span id="cb149-8"><a href="#cb149-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">"yldvar"</span>, <span class="st">"yield"</span>),</span>
+<span id="cb149-9"><a href="#cb149-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">measure.vars =</span> <span class="fu">c</span>(<span class="st">"rolac3"</span>, <span class="st">"rolac4"</span>, <span class="st">"rolac5"</span>,</span>
+<span id="cb149-10"><a href="#cb149-10" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"rolac6"</span>, <span class="st">"rolac7"</span>, <span class="st">"rolac8"</span>,</span>
+<span id="cb149-11"><a href="#cb149-11" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"rolac9"</span>),</span>
+<span id="cb149-12"><a href="#cb149-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">variable.name =</span> <span class="st">"price"</span>,</span>
+<span id="cb149-13"><a href="#cb149-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">value.name =</span> <span class="st">"profit"</span>)</span>
+<span id="cb149-14"><a href="#cb149-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb149-15"><a href="#cb149-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the 'Price' column to numeric by extracting the number</span></span>
+<span id="cb149-16"><a href="#cb149-16" aria-hidden="true" tabindex="-1"></a>stberry_long<span class="sc">$</span>price <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"rolac"</span>, <span class="st">""</span>, stberry_long<span class="sc">$</span>price))</span>
+<span id="cb149-17"><a href="#cb149-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb149-18"><a href="#cb149-18" aria-hidden="true" tabindex="-1"></a><span class="co"># View the resulting data frame</span></span>
+<span id="cb149-19"><a href="#cb149-19" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(stberry_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 147   4</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb167"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb167-1"><a href="#cb167-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(stberry_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb151"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(stberry_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   147 obs. of  4 variables:
  $ yldvar: num  2 1.9 1.8 1.7 1.6 1.5 1.4 1.3 1.2 1.1 ...
@@ -2105,7 +1845,7 @@ You can install a fully-featured version by running:
  $ price : num  3 3 3 3 3 3 3 3 3 3 ...
  $ profit: num  -1740 -2317 -2894 -3471 -4048 ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb169"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb169-1"><a href="#cb169-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(stberry_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb153"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(stberry_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  yldvar  yield price    profit
 1    2.0 6150.0     3 -1740.495
@@ -2115,7 +1855,7 @@ You can install a fully-featured version by running:
 5    1.6 4920.0     3 -4047.915
 6    1.5 4612.5     3 -4624.770</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb171"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb171-1"><a href="#cb171-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(stberry_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb155"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(stberry_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    yldvar  yield price     profit
 142    0.5 1537.5     9  -1168.320
@@ -2129,18 +1869,18 @@ You can install a fully-featured version by running:
 <section id="plot-strawberry-profit" class="level3" data-number="4.2.1">
 <h3 data-number="4.2.1" class="anchored" data-anchor-id="plot-strawberry-profit"><span class="header-section-number">4.2.1</span> Plot Strawberry Profit</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb173"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb173-1"><a href="#cb173-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> stberry_long,</span>
-<span id="cb173-2"><a href="#cb173-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> price,</span>
-<span id="cb173-3"><a href="#cb173-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> profit,</span>
-<span id="cb173-4"><a href="#cb173-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="fu">factor</span>(yldvar),</span>
-<span id="cb173-5"><a href="#cb173-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">group =</span> <span class="fu">factor</span>(yield))) <span class="sc">+</span></span>
-<span id="cb173-6"><a href="#cb173-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb173-7"><a href="#cb173-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb173-8"><a href="#cb173-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
-<span id="cb173-9"><a href="#cb173-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
-<span id="cb173-10"><a href="#cb173-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb173-11"><a href="#cb173-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>,</span>
-<span id="cb173-12"><a href="#cb173-12" aria-hidden="true" tabindex="-1"></a>                              <span class="at">reverse =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb157"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> stberry_long,</span>
+<span id="cb157-2"><a href="#cb157-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> price,</span>
+<span id="cb157-3"><a href="#cb157-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> profit,</span>
+<span id="cb157-4"><a href="#cb157-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="fu">factor</span>(yldvar),</span>
+<span id="cb157-5"><a href="#cb157-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">group =</span> <span class="fu">factor</span>(yield))) <span class="sc">+</span></span>
+<span id="cb157-6"><a href="#cb157-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb157-7"><a href="#cb157-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb157-8"><a href="#cb157-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
+<span id="cb157-9"><a href="#cb157-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
+<span id="cb157-10"><a href="#cb157-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb157-11"><a href="#cb157-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb157-12"><a href="#cb157-12" aria-hidden="true" tabindex="-1"></a>                              <span class="at">reverse =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2150,21 +1890,21 @@ You can install a fully-featured version by running:
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb174"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb174-1"><a href="#cb174-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> stberry_long,</span>
-<span id="cb174-2"><a href="#cb174-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> yield,</span>
-<span id="cb174-3"><a href="#cb174-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> profit,</span>
-<span id="cb174-4"><a href="#cb174-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="fu">factor</span>(price),</span>
-<span id="cb174-5"><a href="#cb174-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">group =</span> <span class="fu">factor</span>(price))) <span class="sc">+</span></span>
-<span id="cb174-6"><a href="#cb174-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb174-7"><a href="#cb174-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb174-8"><a href="#cb174-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
-<span id="cb174-9"><a href="#cb174-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
-<span id="cb174-10"><a href="#cb174-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb174-11"><a href="#cb174-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Vertical dashed line is 100% yield</span></span>
-<span id="cb174-12"><a href="#cb174-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> stberry_long<span class="sc">$</span>yield[<span class="dv">11</span>],</span>
-<span id="cb174-13"><a href="#cb174-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
-<span id="cb174-14"><a href="#cb174-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb174-15"><a href="#cb174-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> stberry_long,</span>
+<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> yield,</span>
+<span id="cb158-3"><a href="#cb158-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> profit,</span>
+<span id="cb158-4"><a href="#cb158-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="fu">factor</span>(price),</span>
+<span id="cb158-5"><a href="#cb158-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">group =</span> <span class="fu">factor</span>(price))) <span class="sc">+</span></span>
+<span id="cb158-6"><a href="#cb158-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb158-7"><a href="#cb158-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb158-8"><a href="#cb158-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
+<span id="cb158-9"><a href="#cb158-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
+<span id="cb158-10"><a href="#cb158-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb158-11"><a href="#cb158-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Vertical dashed line is 100% yield</span></span>
+<span id="cb158-12"><a href="#cb158-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> stberry_long<span class="sc">$</span>yield[<span class="dv">11</span>],</span>
+<span id="cb158-13"><a href="#cb158-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
+<span id="cb158-14"><a href="#cb158-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb158-15"><a href="#cb158-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2179,11 +1919,11 @@ You can install a fully-featured version by running:
 <h2 data-number="4.3" class="anchored" data-anchor-id="squash-1"><span class="header-section-number">4.3</span> Squash</h2>
 <p>Filter return to operator, land and capital profit from squash</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb175"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb175-1"><a href="#cb175-1" aria-hidden="true" tabindex="-1"></a>squash_profit <span class="ot">=</span> squash <span class="sc">%&gt;%</span> </span>
-<span id="cb175-2"><a href="#cb175-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(yldvar, yield, </span>
-<span id="cb175-3"><a href="#cb175-3" aria-hidden="true" tabindex="-1"></a>         rolac11, rolac12, rolac13, rolac14, </span>
-<span id="cb175-4"><a href="#cb175-4" aria-hidden="true" tabindex="-1"></a>         rolac15, rolac16, rolac17)</span>
-<span id="cb175-5"><a href="#cb175-5" aria-hidden="true" tabindex="-1"></a>squash_profit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb159"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1" aria-hidden="true" tabindex="-1"></a>squash_profit <span class="ot">=</span> squash <span class="sc">%&gt;%</span> </span>
+<span id="cb159-2"><a href="#cb159-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(yldvar, yield, </span>
+<span id="cb159-3"><a href="#cb159-3" aria-hidden="true" tabindex="-1"></a>         rolac11, rolac12, rolac13, rolac14, </span>
+<span id="cb159-4"><a href="#cb159-4" aria-hidden="true" tabindex="-1"></a>         rolac15, rolac16, rolac17)</span>
+<span id="cb159-5"><a href="#cb159-5" aria-hidden="true" tabindex="-1"></a>squash_profit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   yldvar yield   rolac11   rolac12     rolac13   rolac14   rolac15     rolac16
 3     2.0  2180 10309.117 12489.117 14669.11702 16849.117 19029.117 21209.11702
@@ -2233,30 +1973,30 @@ You can install a fully-featured version by running:
 </div>
 <p>Convert data to long format:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb177"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign column names for clarity</span></span>
-<span id="cb177-2"><a href="#cb177-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(squash_profit) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"yldvar"</span>, <span class="st">"yield"</span>,</span>
-<span id="cb177-3"><a href="#cb177-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac11"</span>, <span class="st">"rolac12"</span>, <span class="st">"rolac13"</span>,</span>
-<span id="cb177-4"><a href="#cb177-4" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac14"</span>, <span class="st">"rolac15"</span>, <span class="st">"rolac16"</span>,</span>
-<span id="cb177-5"><a href="#cb177-5" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac17"</span>)</span>
-<span id="cb177-6"><a href="#cb177-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-7"><a href="#cb177-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape the data frame from wide to long format</span></span>
-<span id="cb177-8"><a href="#cb177-8" aria-hidden="true" tabindex="-1"></a>squash_long <span class="ot">&lt;-</span> <span class="fu">melt</span>(squash_profit,</span>
-<span id="cb177-9"><a href="#cb177-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">"yldvar"</span>, <span class="st">"yield"</span>),</span>
-<span id="cb177-10"><a href="#cb177-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">measure.vars =</span> <span class="fu">c</span>(<span class="st">"rolac11"</span>, <span class="st">"rolac12"</span>, <span class="st">"rolac13"</span>,</span>
-<span id="cb177-11"><a href="#cb177-11" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"rolac14"</span>, <span class="st">"rolac15"</span>, <span class="st">"rolac16"</span>,</span>
-<span id="cb177-12"><a href="#cb177-12" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"rolac17"</span>),</span>
-<span id="cb177-13"><a href="#cb177-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">variable.name =</span> <span class="st">"price"</span>,</span>
-<span id="cb177-14"><a href="#cb177-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">value.name =</span> <span class="st">"profit"</span>)</span>
-<span id="cb177-15"><a href="#cb177-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-16"><a href="#cb177-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the 'Price' column to numeric by extracting the number</span></span>
-<span id="cb177-17"><a href="#cb177-17" aria-hidden="true" tabindex="-1"></a>squash_long<span class="sc">$</span>price <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"rolac"</span>, <span class="st">""</span>, squash_long<span class="sc">$</span>price))</span>
-<span id="cb177-18"><a href="#cb177-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-19"><a href="#cb177-19" aria-hidden="true" tabindex="-1"></a><span class="co"># View the resulting data frame</span></span>
-<span id="cb177-20"><a href="#cb177-20" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(squash_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb161"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign column names for clarity</span></span>
+<span id="cb161-2"><a href="#cb161-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(squash_profit) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"yldvar"</span>, <span class="st">"yield"</span>,</span>
+<span id="cb161-3"><a href="#cb161-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac11"</span>, <span class="st">"rolac12"</span>, <span class="st">"rolac13"</span>,</span>
+<span id="cb161-4"><a href="#cb161-4" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac14"</span>, <span class="st">"rolac15"</span>, <span class="st">"rolac16"</span>,</span>
+<span id="cb161-5"><a href="#cb161-5" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"rolac17"</span>)</span>
+<span id="cb161-6"><a href="#cb161-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb161-7"><a href="#cb161-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape the data frame from wide to long format</span></span>
+<span id="cb161-8"><a href="#cb161-8" aria-hidden="true" tabindex="-1"></a>squash_long <span class="ot">&lt;-</span> <span class="fu">melt</span>(squash_profit,</span>
+<span id="cb161-9"><a href="#cb161-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">"yldvar"</span>, <span class="st">"yield"</span>),</span>
+<span id="cb161-10"><a href="#cb161-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">measure.vars =</span> <span class="fu">c</span>(<span class="st">"rolac11"</span>, <span class="st">"rolac12"</span>, <span class="st">"rolac13"</span>,</span>
+<span id="cb161-11"><a href="#cb161-11" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"rolac14"</span>, <span class="st">"rolac15"</span>, <span class="st">"rolac16"</span>,</span>
+<span id="cb161-12"><a href="#cb161-12" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"rolac17"</span>),</span>
+<span id="cb161-13"><a href="#cb161-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">variable.name =</span> <span class="st">"price"</span>,</span>
+<span id="cb161-14"><a href="#cb161-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">value.name =</span> <span class="st">"profit"</span>)</span>
+<span id="cb161-15"><a href="#cb161-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb161-16"><a href="#cb161-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the 'Price' column to numeric by extracting the number</span></span>
+<span id="cb161-17"><a href="#cb161-17" aria-hidden="true" tabindex="-1"></a>squash_long<span class="sc">$</span>price <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"rolac"</span>, <span class="st">""</span>, squash_long<span class="sc">$</span>price))</span>
+<span id="cb161-18"><a href="#cb161-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb161-19"><a href="#cb161-19" aria-hidden="true" tabindex="-1"></a><span class="co"># View the resulting data frame</span></span>
+<span id="cb161-20"><a href="#cb161-20" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(squash_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 147   4</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb179"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb179-1"><a href="#cb179-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(squash_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb163"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb163-1"><a href="#cb163-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(squash_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   147 obs. of  4 variables:
  $ yldvar: num  2 1.9 1.8 1.7 1.6 1.5 1.4 1.3 1.2 1.1 ...
@@ -2264,7 +2004,7 @@ You can install a fully-featured version by running:
  $ price : num  11 11 11 11 11 11 11 11 11 11 ...
  $ profit: num  10309 9607 8906 8204 7502 ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb181"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb181-1"><a href="#cb181-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(squash_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb165"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb165-1"><a href="#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(squash_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  yldvar yield price    profit
 1    2.0  2180    11 10309.117
@@ -2274,7 +2014,7 @@ You can install a fully-featured version by running:
 5    1.6  1744    11  7502.117
 6    1.5  1635    11  6800.367</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb183"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(squash_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb167"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb167-1"><a href="#cb167-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(squash_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    yldvar yield price    profit
 142    0.5   545    17  3052.867
@@ -2288,18 +2028,18 @@ You can install a fully-featured version by running:
 <section id="profit-from-squash" class="level3" data-number="4.3.1">
 <h3 data-number="4.3.1" class="anchored" data-anchor-id="profit-from-squash"><span class="header-section-number">4.3.1</span> Profit from squash:</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb185"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb185-1"><a href="#cb185-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> squash_long,</span>
-<span id="cb185-2"><a href="#cb185-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> price,</span>
-<span id="cb185-3"><a href="#cb185-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> profit,</span>
-<span id="cb185-4"><a href="#cb185-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="fu">factor</span>(yldvar),</span>
-<span id="cb185-5"><a href="#cb185-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">group =</span> <span class="fu">factor</span>(yield))) <span class="sc">+</span></span>
-<span id="cb185-6"><a href="#cb185-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb185-7"><a href="#cb185-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb185-8"><a href="#cb185-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
-<span id="cb185-9"><a href="#cb185-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
-<span id="cb185-10"><a href="#cb185-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb185-11"><a href="#cb185-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>, </span>
-<span id="cb185-12"><a href="#cb185-12" aria-hidden="true" tabindex="-1"></a>                              <span class="at">reverse =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb169"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb169-1"><a href="#cb169-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> squash_long,</span>
+<span id="cb169-2"><a href="#cb169-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> price,</span>
+<span id="cb169-3"><a href="#cb169-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> profit,</span>
+<span id="cb169-4"><a href="#cb169-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="fu">factor</span>(yldvar),</span>
+<span id="cb169-5"><a href="#cb169-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">group =</span> <span class="fu">factor</span>(yield))) <span class="sc">+</span></span>
+<span id="cb169-6"><a href="#cb169-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb169-7"><a href="#cb169-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb169-8"><a href="#cb169-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
+<span id="cb169-9"><a href="#cb169-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
+<span id="cb169-10"><a href="#cb169-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb169-11"><a href="#cb169-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>, </span>
+<span id="cb169-12"><a href="#cb169-12" aria-hidden="true" tabindex="-1"></a>                              <span class="at">reverse =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2309,21 +2049,21 @@ You can install a fully-featured version by running:
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb186"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb186-1"><a href="#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> squash_long,</span>
-<span id="cb186-2"><a href="#cb186-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> yield,</span>
-<span id="cb186-3"><a href="#cb186-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> profit,</span>
-<span id="cb186-4"><a href="#cb186-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="fu">factor</span>(price),</span>
-<span id="cb186-5"><a href="#cb186-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">group =</span> <span class="fu">factor</span>(price))) <span class="sc">+</span></span>
-<span id="cb186-6"><a href="#cb186-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb186-7"><a href="#cb186-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb186-8"><a href="#cb186-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
-<span id="cb186-9"><a href="#cb186-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
-<span id="cb186-10"><a href="#cb186-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb186-11"><a href="#cb186-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Vertical dashed line is 100% yield</span></span>
-<span id="cb186-12"><a href="#cb186-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> squash_long<span class="sc">$</span>yield[<span class="dv">11</span>],</span>
-<span id="cb186-13"><a href="#cb186-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
-<span id="cb186-14"><a href="#cb186-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb186-15"><a href="#cb186-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb170"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> squash_long,</span>
+<span id="cb170-2"><a href="#cb170-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> yield,</span>
+<span id="cb170-3"><a href="#cb170-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> profit,</span>
+<span id="cb170-4"><a href="#cb170-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> <span class="fu">factor</span>(price),</span>
+<span id="cb170-5"><a href="#cb170-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">group =</span> <span class="fu">factor</span>(price))) <span class="sc">+</span></span>
+<span id="cb170-6"><a href="#cb170-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb170-7"><a href="#cb170-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb170-8"><a href="#cb170-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
+<span id="cb170-9"><a href="#cb170-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
+<span id="cb170-10"><a href="#cb170-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb170-11"><a href="#cb170-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Vertical dashed line is 100% yield</span></span>
+<span id="cb170-12"><a href="#cb170-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> squash_long<span class="sc">$</span>yield[<span class="dv">11</span>],</span>
+<span id="cb170-13"><a href="#cb170-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
+<span id="cb170-14"><a href="#cb170-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb170-15"><a href="#cb170-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2345,118 +2085,71 @@ You can install a fully-featured version by running:
 <li>The last variable (tav_profit) is the final profit from tomato agrivoltaic system which is the result of our interest.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb187"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb187-1"><a href="#cb187-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate all combinations of rows from both matrices in a vectorized way</span></span>
-<span id="cb187-2"><a href="#cb187-2" aria-hidden="true" tabindex="-1"></a>solar_expanded <span class="ot">&lt;-</span> solar_profit[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(solar_profit), </span>
-<span id="cb187-3"><a href="#cb187-3" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">each =</span> <span class="fu">nrow</span>(tomato_long)), ]</span>
-<span id="cb187-4"><a href="#cb187-4" aria-hidden="true" tabindex="-1"></a>tomato_expanded <span class="ot">&lt;-</span> tomato_long[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(tomato_long), </span>
-<span id="cb187-5"><a href="#cb187-5" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">times =</span> <span class="fu">nrow</span>(solar_profit)), ]</span>
-<span id="cb187-6"><a href="#cb187-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-7"><a href="#cb187-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the new column for tav_profit directly</span></span>
-<span id="cb187-8"><a href="#cb187-8" aria-hidden="true" tabindex="-1"></a>tav_profit_values <span class="ot">&lt;-</span> solar_expanded<span class="sc">$</span>eannprof <span class="sc">+</span> tomato_expanded<span class="sc">$</span>profit</span>
-<span id="cb187-9"><a href="#cb187-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-10"><a href="#cb187-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the matrices and the calculated tav_profit column</span></span>
-<span id="cb187-11"><a href="#cb187-11" aria-hidden="true" tabindex="-1"></a>tav_profit <span class="ot">&lt;-</span> <span class="fu">cbind</span>(solar_expanded, </span>
-<span id="cb187-12"><a href="#cb187-12" aria-hidden="true" tabindex="-1"></a>                     tomato_expanded, </span>
-<span id="cb187-13"><a href="#cb187-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">tav_profit =</span> tav_profit_values)</span>
-<span id="cb187-14"><a href="#cb187-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-15"><a href="#cb187-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to a data frame and ensure the correct format</span></span>
-<span id="cb187-16"><a href="#cb187-16" aria-hidden="true" tabindex="-1"></a>tav_profit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(tav_profit)</span>
-<span id="cb187-17"><a href="#cb187-17" aria-hidden="true" tabindex="-1"></a>tav_profit <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">lapply</span>(tav_profit, unlist))</span>
-<span id="cb187-18"><a href="#cb187-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-19"><a href="#cb187-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the structure and data</span></span>
-<span id="cb187-20"><a href="#cb187-20" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 814968     24</code></pre>
+<div class="sourceCode cell-code" id="cb171"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb171-1"><a href="#cb171-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate all combinations of rows from both matrices in a vectorized way</span></span>
+<span id="cb171-2"><a href="#cb171-2" aria-hidden="true" tabindex="-1"></a>solar_expanded <span class="ot">&lt;-</span> solar_profit[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(solar_profit), </span>
+<span id="cb171-3"><a href="#cb171-3" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">each =</span> <span class="fu">nrow</span>(tomato_long)), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'solar_profit' not found</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb189"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb189-1"><a href="#cb189-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   814968 obs. of  24 variables:
- $ sprop     : num  0 0 0 0 0 0 0 0 0 0 ...
- $ al_regs   : chr  "Black Belt" "Black Belt" "Black Belt" "Black Belt" ...
- $ array     : chr  "Fixed" "Fixed" "Fixed" "Fixed" ...
- $ dc_kw     : num  0 0 0 0 0 0 0 0 0 0 ...
- $ panels    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ energy    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ elcprc    : num  0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 ...
- $ elcrev    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ height    : num  4.6 4.6 4.6 4.6 4.6 4.6 4.6 4.6 4.6 4.6 ...
- $ capex     : num  1.59 1.59 1.59 1.59 1.59 ...
- $ landlease : num  1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 ...
- $ opex      : num  0 0 0 0 0 0 0 0 0 0 ...
- $ ttlcost   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ recredit  : num  0 0 0 0 0 0 0 0 0 0 ...
- $ anncost   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ moncost   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ eprofit   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ eannprof  : num  0 0 0 0 0 0 0 0 0 0 ...
- $ emonprof  : num  0 0 0 0 0 0 0 0 0 0 ...
- $ yldvar    : num  2 1.9 1.8 1.7 1.6 1.5 1.4 1.3 1.2 1.1 ...
- $ yield     : num  2720 2584 2448 2312 2176 ...
- $ price     : num  17 17 17 17 17 17 17 17 17 17 ...
- $ profit    : num  21679 20065 18451 16837 15223 ...
- $ tav_profit: num  21679 20065 18451 16837 15223 ...</code></pre>
+<div class="sourceCode cell-code" id="cb173"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb173-1"><a href="#cb173-1" aria-hidden="true" tabindex="-1"></a>tomato_expanded <span class="ot">&lt;-</span> tomato_long[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(tomato_long), </span>
+<span id="cb173-2"><a href="#cb173-2" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">times =</span> <span class="fu">nrow</span>(solar_profit)), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in nrow(solar_profit): object 'solar_profit' not found</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb191"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb191-1"><a href="#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  sprop    al_regs array dc_kw panels energy elcprc elcrev height    capex
-1     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-2     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-3     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-4     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-5     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-6     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-  landlease opex ttlcost recredit anncost moncost eprofit eannprof emonprof
-1      1000    0       0        0       0       0       0        0        0
-2      1000    0       0        0       0       0       0        0        0
-3      1000    0       0        0       0       0       0        0        0
-4      1000    0       0        0       0       0       0        0        0
-5      1000    0       0        0       0       0       0        0        0
-6      1000    0       0        0       0       0       0        0        0
-  yldvar yield price   profit tav_profit
-1    2.0  2720    17 21679.38   21679.38
-2    1.9  2584    17 20065.38   20065.38
-3    1.8  2448    17 18451.38   18451.38
-4    1.7  2312    17 16837.38   16837.38
-5    1.6  2176    17 15223.38   15223.38
-6    1.5  2040    17 13609.38   13609.38</code></pre>
+<div class="sourceCode cell-code" id="cb175"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb175-1"><a href="#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the new column for tav_profit directly</span></span>
+<span id="cb175-2"><a href="#cb175-2" aria-hidden="true" tabindex="-1"></a>tav_profit_values <span class="ot">&lt;-</span> solar_expanded<span class="sc">$</span>eannprof <span class="sc">+</span> tomato_expanded<span class="sc">$</span>profit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'solar_expanded' not found</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb193"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb193-1"><a href="#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       sprop  al_regs    array  dc_kw panels energy elcprc   elcrev height
-814963     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814964     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814965     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814966     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814967     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814968     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-       capex landlease     opex ttlcost recredit anncost  moncost   eprofit
-814963  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814964  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814965  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814966  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814967  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814968  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-        eannprof emonprof yldvar yield price      profit tav_profit
-814963 -18611.56 984.5974    0.5   680    23   1549.3826  -17062.17
-814964 -18611.56 984.5974    0.4   544    23   -880.6174  -19492.17
-814965 -18611.56 984.5974    0.3   408    23  -3310.6174  -21922.17
-814966 -18611.56 984.5974    0.2   272    23  -5740.6174  -24352.17
-814967 -18611.56 984.5974    0.1   136    23  -8170.6174  -26782.17
-814968 -18611.56 984.5974    0.0     0    23 -10600.6174  -29212.17</code></pre>
+<div class="sourceCode cell-code" id="cb177"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the matrices and the calculated tav_profit column</span></span>
+<span id="cb177-2"><a href="#cb177-2" aria-hidden="true" tabindex="-1"></a>tav_profit <span class="ot">&lt;-</span> <span class="fu">cbind</span>(solar_expanded, </span>
+<span id="cb177-3"><a href="#cb177-3" aria-hidden="true" tabindex="-1"></a>                     tomato_expanded, </span>
+<span id="cb177-4"><a href="#cb177-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">tav_profit =</span> tav_profit_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in cbind(solar_expanded, tomato_expanded, tav_profit = tav_profit_values): object 'solar_expanded' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb179"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb179-1"><a href="#cb179-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to a data frame and ensure the correct format</span></span>
+<span id="cb179-2"><a href="#cb179-2" aria-hidden="true" tabindex="-1"></a>tav_profit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in as.data.frame(tav_profit): object 'tav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb181"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb181-1"><a href="#cb181-1" aria-hidden="true" tabindex="-1"></a>tav_profit <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">lapply</span>(tav_profit, unlist))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in lapply(tav_profit, unlist): object 'tav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb183"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the structure and data</span></span>
+<span id="cb183-2"><a href="#cb183-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'tav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb185"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb185-1"><a href="#cb185-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in str(tav_profit): object 'tav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb187"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb187-1"><a href="#cb187-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in head(tav_profit): object 'tav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb189"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb189-1"><a href="#cb189-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(tav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in tail(tav_profit): object 'tav_profit' not found</code></pre>
 </div>
 </div>
 <section id="saving-results-locally" class="level3" data-number="5.1.1">
 <h3 data-number="5.1.1" class="anchored" data-anchor-id="saving-results-locally"><span class="header-section-number">5.1.1</span> Saving results locally</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb195"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb195-1"><a href="#cb195-1" aria-hidden="true" tabindex="-1"></a><span class="co">#write_csv(tav_profit, "tav_profit.csv")</span></span>
-<span id="cb195-2"><a href="#cb195-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_feather</span>(tav_profit,</span>
-<span id="cb195-3"><a href="#cb195-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sink =</span> <span class="st">"Data/tav_profit.feather"</span>,</span>
-<span id="cb195-4"><a href="#cb195-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="dv">2</span>,</span>
-<span id="cb195-5"><a href="#cb195-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">chunk_size =</span> <span class="dv">65536</span>L,</span>
-<span id="cb195-6"><a href="#cb195-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">compression =</span> <span class="fu">c</span>(<span class="st">"default"</span>),</span>
-<span id="cb195-7"><a href="#cb195-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#compression = c("default", "lz4", "lz4_frame", "uncompressed", "zstd"),</span></span>
-<span id="cb195-8"><a href="#cb195-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">compression_level =</span> <span class="cn">NULL</span></span>
-<span id="cb195-9"><a href="#cb195-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb191"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb191-1"><a href="#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="co">#write_csv(tav_profit, "tav_profit.csv")</span></span>
+<span id="cb191-2"><a href="#cb191-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_feather</span>(tav_profit,</span>
+<span id="cb191-3"><a href="#cb191-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sink =</span> <span class="st">"Data/tav_profit.feather"</span>,</span>
+<span id="cb191-4"><a href="#cb191-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="dv">2</span>,</span>
+<span id="cb191-5"><a href="#cb191-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">chunk_size =</span> <span class="dv">65536</span>L,</span>
+<span id="cb191-6"><a href="#cb191-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">compression =</span> <span class="fu">c</span>(<span class="st">"default"</span>),</span>
+<span id="cb191-7"><a href="#cb191-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#compression = c("default", "lz4", "lz4_frame", "uncompressed", "zstd"),</span></span>
+<span id="cb191-8"><a href="#cb191-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">compression_level =</span> <span class="cn">NULL</span></span>
+<span id="cb191-9"><a href="#cb191-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in write_feather(tav_profit, sink = "Data/tav_profit.feather", version = 2, : object 'tav_profit' not found</code></pre>
+</div>
 </div>
 </section>
 </section>
@@ -2467,118 +2160,71 @@ You can install a fully-featured version by running:
 <li>The last variable (sbav_profit) is the final profit from strawberry agrivoltaic system which is the result of our interest.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb196"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb196-1"><a href="#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate all combinations of rows from both matrices in a vectorized way</span></span>
-<span id="cb196-2"><a href="#cb196-2" aria-hidden="true" tabindex="-1"></a>solar_expanded <span class="ot">&lt;-</span> solar_profit[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(solar_profit), </span>
-<span id="cb196-3"><a href="#cb196-3" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">each =</span> <span class="fu">nrow</span>(stberry_long)), ]</span>
-<span id="cb196-4"><a href="#cb196-4" aria-hidden="true" tabindex="-1"></a>stberry_expanded <span class="ot">&lt;-</span> stberry_long[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(stberry_long),</span>
-<span id="cb196-5"><a href="#cb196-5" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">times =</span> <span class="fu">nrow</span>(solar_profit)), ]</span>
-<span id="cb196-6"><a href="#cb196-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb196-7"><a href="#cb196-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the new column for sbav_profit directly</span></span>
-<span id="cb196-8"><a href="#cb196-8" aria-hidden="true" tabindex="-1"></a>sbav_profit_values <span class="ot">&lt;-</span> solar_expanded<span class="sc">$</span>eannprof <span class="sc">+</span> stberry_expanded<span class="sc">$</span>profit</span>
-<span id="cb196-9"><a href="#cb196-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb196-10"><a href="#cb196-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the matrices and the calculated sbav_profit column</span></span>
-<span id="cb196-11"><a href="#cb196-11" aria-hidden="true" tabindex="-1"></a>sbav_profit <span class="ot">&lt;-</span> <span class="fu">cbind</span>(solar_expanded, </span>
-<span id="cb196-12"><a href="#cb196-12" aria-hidden="true" tabindex="-1"></a>                     stberry_expanded, </span>
-<span id="cb196-13"><a href="#cb196-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sbav_profit =</span> sbav_profit_values)</span>
-<span id="cb196-14"><a href="#cb196-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb196-15"><a href="#cb196-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to a data frame and ensure the correct format</span></span>
-<span id="cb196-16"><a href="#cb196-16" aria-hidden="true" tabindex="-1"></a>sbav_profit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(sbav_profit)</span>
-<span id="cb196-17"><a href="#cb196-17" aria-hidden="true" tabindex="-1"></a>sbav_profit <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">lapply</span>(sbav_profit, unlist))</span>
-<span id="cb196-18"><a href="#cb196-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb196-19"><a href="#cb196-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the structure and data</span></span>
-<span id="cb196-20"><a href="#cb196-20" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 814968     24</code></pre>
+<div class="sourceCode cell-code" id="cb193"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb193-1"><a href="#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate all combinations of rows from both matrices in a vectorized way</span></span>
+<span id="cb193-2"><a href="#cb193-2" aria-hidden="true" tabindex="-1"></a>solar_expanded <span class="ot">&lt;-</span> solar_profit[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(solar_profit), </span>
+<span id="cb193-3"><a href="#cb193-3" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">each =</span> <span class="fu">nrow</span>(stberry_long)), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'solar_profit' not found</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb198"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb198-1"><a href="#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   814968 obs. of  24 variables:
- $ sprop      : num  0 0 0 0 0 0 0 0 0 0 ...
- $ al_regs    : chr  "Black Belt" "Black Belt" "Black Belt" "Black Belt" ...
- $ array      : chr  "Fixed" "Fixed" "Fixed" "Fixed" ...
- $ dc_kw      : num  0 0 0 0 0 0 0 0 0 0 ...
- $ panels     : num  0 0 0 0 0 0 0 0 0 0 ...
- $ energy     : num  0 0 0 0 0 0 0 0 0 0 ...
- $ elcprc     : num  0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 ...
- $ elcrev     : num  0 0 0 0 0 0 0 0 0 0 ...
- $ height     : num  4.6 4.6 4.6 4.6 4.6 4.6 4.6 4.6 4.6 4.6 ...
- $ capex      : num  1.59 1.59 1.59 1.59 1.59 ...
- $ landlease  : num  1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 ...
- $ opex       : num  0 0 0 0 0 0 0 0 0 0 ...
- $ ttlcost    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ recredit   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ anncost    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ moncost    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ eprofit    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ eannprof   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ emonprof   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ yldvar     : num  2 1.9 1.8 1.7 1.6 1.5 1.4 1.3 1.2 1.1 ...
- $ yield      : num  6150 5842 5535 5228 4920 ...
- $ price      : num  3 3 3 3 3 3 3 3 3 3 ...
- $ profit     : num  -1740 -2317 -2894 -3471 -4048 ...
- $ sbav_profit: num  -1740 -2317 -2894 -3471 -4048 ...</code></pre>
+<div class="sourceCode cell-code" id="cb195"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb195-1"><a href="#cb195-1" aria-hidden="true" tabindex="-1"></a>stberry_expanded <span class="ot">&lt;-</span> stberry_long[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(stberry_long),</span>
+<span id="cb195-2"><a href="#cb195-2" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">times =</span> <span class="fu">nrow</span>(solar_profit)), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in nrow(solar_profit): object 'solar_profit' not found</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb200"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb200-1"><a href="#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  sprop    al_regs array dc_kw panels energy elcprc elcrev height    capex
-1     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-2     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-3     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-4     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-5     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-6     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-  landlease opex ttlcost recredit anncost moncost eprofit eannprof emonprof
-1      1000    0       0        0       0       0       0        0        0
-2      1000    0       0        0       0       0       0        0        0
-3      1000    0       0        0       0       0       0        0        0
-4      1000    0       0        0       0       0       0        0        0
-5      1000    0       0        0       0       0       0        0        0
-6      1000    0       0        0       0       0       0        0        0
-  yldvar  yield price    profit sbav_profit
-1    2.0 6150.0     3 -1740.495   -1740.495
-2    1.9 5842.5     3 -2317.350   -2317.350
-3    1.8 5535.0     3 -2894.205   -2894.205
-4    1.7 5227.5     3 -3471.060   -3471.060
-5    1.6 4920.0     3 -4047.915   -4047.915
-6    1.5 4612.5     3 -4624.770   -4624.770</code></pre>
+<div class="sourceCode cell-code" id="cb197"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb197-1"><a href="#cb197-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the new column for sbav_profit directly</span></span>
+<span id="cb197-2"><a href="#cb197-2" aria-hidden="true" tabindex="-1"></a>sbav_profit_values <span class="ot">&lt;-</span> solar_expanded<span class="sc">$</span>eannprof <span class="sc">+</span> stberry_expanded<span class="sc">$</span>profit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'solar_expanded' not found</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb202"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb202-1"><a href="#cb202-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       sprop  al_regs    array  dc_kw panels energy elcprc   elcrev height
-814963     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814964     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814965     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814966     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814967     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814968     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-       capex landlease     opex ttlcost recredit anncost  moncost   eprofit
-814963  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814964  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814965  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814966  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814967  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814968  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-        eannprof emonprof yldvar  yield price     profit sbav_profit
-814963 -18611.56 984.5974    0.5 1537.5     9  -1168.320   -19779.88
-814964 -18611.56 984.5974    0.4 1230.0     9  -3590.175   -22201.73
-814965 -18611.56 984.5974    0.3  922.5     9  -6012.030   -24623.59
-814966 -18611.56 984.5974    0.2  615.0     9  -8433.885   -27045.44
-814967 -18611.56 984.5974    0.1  307.5     9 -10855.740   -29467.30
-814968 -18611.56 984.5974    0.0    0.0     9 -13277.595   -31889.15</code></pre>
+<div class="sourceCode cell-code" id="cb199"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb199-1"><a href="#cb199-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the matrices and the calculated sbav_profit column</span></span>
+<span id="cb199-2"><a href="#cb199-2" aria-hidden="true" tabindex="-1"></a>sbav_profit <span class="ot">&lt;-</span> <span class="fu">cbind</span>(solar_expanded, </span>
+<span id="cb199-3"><a href="#cb199-3" aria-hidden="true" tabindex="-1"></a>                     stberry_expanded, </span>
+<span id="cb199-4"><a href="#cb199-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sbav_profit =</span> sbav_profit_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in cbind(solar_expanded, stberry_expanded, sbav_profit = sbav_profit_values): object 'solar_expanded' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb201"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb201-1"><a href="#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to a data frame and ensure the correct format</span></span>
+<span id="cb201-2"><a href="#cb201-2" aria-hidden="true" tabindex="-1"></a>sbav_profit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in as.data.frame(sbav_profit): object 'sbav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb203"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb203-1"><a href="#cb203-1" aria-hidden="true" tabindex="-1"></a>sbav_profit <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">lapply</span>(sbav_profit, unlist))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in lapply(sbav_profit, unlist): object 'sbav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb205"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb205-1"><a href="#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the structure and data</span></span>
+<span id="cb205-2"><a href="#cb205-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'sbav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb207"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb207-1"><a href="#cb207-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in str(sbav_profit): object 'sbav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb209"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb209-1"><a href="#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in head(sbav_profit): object 'sbav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb211"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb211-1"><a href="#cb211-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(sbav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in tail(sbav_profit): object 'sbav_profit' not found</code></pre>
 </div>
 </div>
 <section id="saving-results-locally-1" class="level3" data-number="5.2.1">
 <h3 data-number="5.2.1" class="anchored" data-anchor-id="saving-results-locally-1"><span class="header-section-number">5.2.1</span> Saving results locally</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb204"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb204-1"><a href="#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="co">#write_csv(sbav_profit, "tav_profit.csv")</span></span>
-<span id="cb204-2"><a href="#cb204-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_feather</span>(sbav_profit,</span>
-<span id="cb204-3"><a href="#cb204-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sink =</span> <span class="st">"Data/sbav_profit.feather"</span>,</span>
-<span id="cb204-4"><a href="#cb204-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="dv">2</span>,</span>
-<span id="cb204-5"><a href="#cb204-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">chunk_size =</span> <span class="dv">65536</span>L,</span>
-<span id="cb204-6"><a href="#cb204-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">compression =</span> <span class="fu">c</span>(<span class="st">"default"</span>),</span>
-<span id="cb204-7"><a href="#cb204-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#compression = c("default", "lz4", "lz4_frame", "uncompressed", "zstd"),</span></span>
-<span id="cb204-8"><a href="#cb204-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">compression_level =</span> <span class="cn">NULL</span></span>
-<span id="cb204-9"><a href="#cb204-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb213"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb213-1"><a href="#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="co">#write_csv(sbav_profit, "tav_profit.csv")</span></span>
+<span id="cb213-2"><a href="#cb213-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_feather</span>(sbav_profit,</span>
+<span id="cb213-3"><a href="#cb213-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sink =</span> <span class="st">"Data/sbav_profit.feather"</span>,</span>
+<span id="cb213-4"><a href="#cb213-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="dv">2</span>,</span>
+<span id="cb213-5"><a href="#cb213-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">chunk_size =</span> <span class="dv">65536</span>L,</span>
+<span id="cb213-6"><a href="#cb213-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">compression =</span> <span class="fu">c</span>(<span class="st">"default"</span>),</span>
+<span id="cb213-7"><a href="#cb213-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#compression = c("default", "lz4", "lz4_frame", "uncompressed", "zstd"),</span></span>
+<span id="cb213-8"><a href="#cb213-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">compression_level =</span> <span class="cn">NULL</span></span>
+<span id="cb213-9"><a href="#cb213-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in write_feather(sbav_profit, sink = "Data/sbav_profit.feather", : object 'sbav_profit' not found</code></pre>
+</div>
 </div>
 </section>
 </section>
@@ -2589,118 +2235,71 @@ You can install a fully-featured version by running:
 <li>The last variable (sqav_profit) is the final profit from squash agrivoltaic system which is the result of our interest.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb205"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb205-1"><a href="#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Efficient calculation of all combinations of rows from both matrices</span></span>
-<span id="cb205-2"><a href="#cb205-2" aria-hidden="true" tabindex="-1"></a>solar_expanded <span class="ot">&lt;-</span> solar_profit[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(solar_profit), </span>
-<span id="cb205-3"><a href="#cb205-3" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">each =</span> <span class="fu">nrow</span>(squash_long)), ]</span>
-<span id="cb205-4"><a href="#cb205-4" aria-hidden="true" tabindex="-1"></a>squash_expanded <span class="ot">&lt;-</span> squash_long[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(squash_long), </span>
-<span id="cb205-5"><a href="#cb205-5" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">times =</span> <span class="fu">nrow</span>(solar_profit)), ]</span>
-<span id="cb205-6"><a href="#cb205-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb205-7"><a href="#cb205-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the new column for sqav_profit directly</span></span>
-<span id="cb205-8"><a href="#cb205-8" aria-hidden="true" tabindex="-1"></a>sqav_profit_values <span class="ot">&lt;-</span> solar_expanded<span class="sc">$</span>eannprof <span class="sc">+</span> squash_expanded<span class="sc">$</span>profit</span>
-<span id="cb205-9"><a href="#cb205-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb205-10"><a href="#cb205-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the matrices and the calculated sqav_profit column</span></span>
-<span id="cb205-11"><a href="#cb205-11" aria-hidden="true" tabindex="-1"></a>sqav_profit <span class="ot">&lt;-</span> <span class="fu">cbind</span>(solar_expanded, </span>
-<span id="cb205-12"><a href="#cb205-12" aria-hidden="true" tabindex="-1"></a>                     squash_expanded, </span>
-<span id="cb205-13"><a href="#cb205-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sqav_profit =</span> sqav_profit_values)</span>
-<span id="cb205-14"><a href="#cb205-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb205-15"><a href="#cb205-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to a data frame and ensure the correct format</span></span>
-<span id="cb205-16"><a href="#cb205-16" aria-hidden="true" tabindex="-1"></a>sqav_profit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(sqav_profit)</span>
-<span id="cb205-17"><a href="#cb205-17" aria-hidden="true" tabindex="-1"></a>sqav_profit <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">lapply</span>(sqav_profit, unlist))</span>
-<span id="cb205-18"><a href="#cb205-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb205-19"><a href="#cb205-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the structure and data</span></span>
-<span id="cb205-20"><a href="#cb205-20" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 814968     24</code></pre>
+<div class="sourceCode cell-code" id="cb215"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb215-1"><a href="#cb215-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Efficient calculation of all combinations of rows from both matrices</span></span>
+<span id="cb215-2"><a href="#cb215-2" aria-hidden="true" tabindex="-1"></a>solar_expanded <span class="ot">&lt;-</span> solar_profit[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(solar_profit), </span>
+<span id="cb215-3"><a href="#cb215-3" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">each =</span> <span class="fu">nrow</span>(squash_long)), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'solar_profit' not found</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb207"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb207-1"><a href="#cb207-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   814968 obs. of  24 variables:
- $ sprop      : num  0 0 0 0 0 0 0 0 0 0 ...
- $ al_regs    : chr  "Black Belt" "Black Belt" "Black Belt" "Black Belt" ...
- $ array      : chr  "Fixed" "Fixed" "Fixed" "Fixed" ...
- $ dc_kw      : num  0 0 0 0 0 0 0 0 0 0 ...
- $ panels     : num  0 0 0 0 0 0 0 0 0 0 ...
- $ energy     : num  0 0 0 0 0 0 0 0 0 0 ...
- $ elcprc     : num  0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 ...
- $ elcrev     : num  0 0 0 0 0 0 0 0 0 0 ...
- $ height     : num  4.6 4.6 4.6 4.6 4.6 4.6 4.6 4.6 4.6 4.6 ...
- $ capex      : num  1.59 1.59 1.59 1.59 1.59 ...
- $ landlease  : num  1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 ...
- $ opex       : num  0 0 0 0 0 0 0 0 0 0 ...
- $ ttlcost    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ recredit   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ anncost    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ moncost    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ eprofit    : num  0 0 0 0 0 0 0 0 0 0 ...
- $ eannprof   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ emonprof   : num  0 0 0 0 0 0 0 0 0 0 ...
- $ yldvar     : num  2 1.9 1.8 1.7 1.6 1.5 1.4 1.3 1.2 1.1 ...
- $ yield      : num  2180 2071 1962 1853 1744 ...
- $ price      : num  11 11 11 11 11 11 11 11 11 11 ...
- $ profit     : num  10309 9607 8906 8204 7502 ...
- $ sqav_profit: num  10309 9607 8906 8204 7502 ...</code></pre>
+<div class="sourceCode cell-code" id="cb217"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb217-1"><a href="#cb217-1" aria-hidden="true" tabindex="-1"></a>squash_expanded <span class="ot">&lt;-</span> squash_long[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(squash_long), </span>
+<span id="cb217-2"><a href="#cb217-2" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">times =</span> <span class="fu">nrow</span>(solar_profit)), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in nrow(solar_profit): object 'solar_profit' not found</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb209"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb209-1"><a href="#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  sprop    al_regs array dc_kw panels energy elcprc elcrev height    capex
-1     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-2     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-3     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-4     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-5     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-6     0 Black Belt Fixed     0      0      0   0.01      0    4.6 1.593333
-  landlease opex ttlcost recredit anncost moncost eprofit eannprof emonprof
-1      1000    0       0        0       0       0       0        0        0
-2      1000    0       0        0       0       0       0        0        0
-3      1000    0       0        0       0       0       0        0        0
-4      1000    0       0        0       0       0       0        0        0
-5      1000    0       0        0       0       0       0        0        0
-6      1000    0       0        0       0       0       0        0        0
-  yldvar yield price    profit sqav_profit
-1    2.0  2180    11 10309.117   10309.117
-2    1.9  2071    11  9607.367    9607.367
-3    1.8  1962    11  8905.617    8905.617
-4    1.7  1853    11  8203.867    8203.867
-5    1.6  1744    11  7502.117    7502.117
-6    1.5  1635    11  6800.367    6800.367</code></pre>
+<div class="sourceCode cell-code" id="cb219"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb219-1"><a href="#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the new column for sqav_profit directly</span></span>
+<span id="cb219-2"><a href="#cb219-2" aria-hidden="true" tabindex="-1"></a>sqav_profit_values <span class="ot">&lt;-</span> solar_expanded<span class="sc">$</span>eannprof <span class="sc">+</span> squash_expanded<span class="sc">$</span>profit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'solar_expanded' not found</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb211"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb211-1"><a href="#cb211-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       sprop  al_regs    array  dc_kw panels energy elcprc   elcrev height
-814963     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814964     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814965     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814966     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814967     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-814968     1 Southern Tracking 423.74    885 712873   0.06 42772.38    8.2
-       capex landlease     opex ttlcost recredit anncost  moncost   eprofit
-814963  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814964  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814965  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814966  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814967  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-814968  2.11      1000 7234.875 1017706 4704.962 66088.9 2971.848 -974933.4
-        eannprof emonprof yldvar yield price    profit sqav_profit
-814963 -18611.56 984.5974    0.5   545    17  3052.867   -15558.69
-814964 -18611.56 984.5974    0.4   436    17  1697.117   -16914.44
-814965 -18611.56 984.5974    0.3   327    17   341.367   -18270.19
-814966 -18611.56 984.5974    0.2   218    17 -1014.383   -19625.94
-814967 -18611.56 984.5974    0.1   109    17 -2370.133   -20981.69
-814968 -18611.56 984.5974    0.0     0    17 -3725.883   -22337.44</code></pre>
+<div class="sourceCode cell-code" id="cb221"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb221-1"><a href="#cb221-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the matrices and the calculated sqav_profit column</span></span>
+<span id="cb221-2"><a href="#cb221-2" aria-hidden="true" tabindex="-1"></a>sqav_profit <span class="ot">&lt;-</span> <span class="fu">cbind</span>(solar_expanded, </span>
+<span id="cb221-3"><a href="#cb221-3" aria-hidden="true" tabindex="-1"></a>                     squash_expanded, </span>
+<span id="cb221-4"><a href="#cb221-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sqav_profit =</span> sqav_profit_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in cbind(solar_expanded, squash_expanded, sqav_profit = sqav_profit_values): object 'solar_expanded' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb223"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb223-1"><a href="#cb223-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to a data frame and ensure the correct format</span></span>
+<span id="cb223-2"><a href="#cb223-2" aria-hidden="true" tabindex="-1"></a>sqav_profit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in as.data.frame(sqav_profit): object 'sqav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb225"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb225-1"><a href="#cb225-1" aria-hidden="true" tabindex="-1"></a>sqav_profit <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">lapply</span>(sqav_profit, unlist))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in lapply(sqav_profit, unlist): object 'sqav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb227"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb227-1"><a href="#cb227-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the structure and data</span></span>
+<span id="cb227-2"><a href="#cb227-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'sqav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb229"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb229-1"><a href="#cb229-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in str(sqav_profit): object 'sqav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb231"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb231-1"><a href="#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in head(sqav_profit): object 'sqav_profit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb233"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb233-1"><a href="#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(sqav_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in tail(sqav_profit): object 'sqav_profit' not found</code></pre>
 </div>
 </div>
 <section id="saving-results-locally-2" class="level3" data-number="5.3.1">
 <h3 data-number="5.3.1" class="anchored" data-anchor-id="saving-results-locally-2"><span class="header-section-number">5.3.1</span> Saving results locally</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb213"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb213-1"><a href="#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="co">#write_csv(sqav_profit, "tav_profit.csv")</span></span>
-<span id="cb213-2"><a href="#cb213-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_feather</span>(sqav_profit,</span>
-<span id="cb213-3"><a href="#cb213-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sink =</span> <span class="st">"Data/sqav_profit.feather"</span>,</span>
-<span id="cb213-4"><a href="#cb213-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="dv">2</span>,</span>
-<span id="cb213-5"><a href="#cb213-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">chunk_size =</span> <span class="dv">65536</span>L,</span>
-<span id="cb213-6"><a href="#cb213-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">compression =</span> <span class="fu">c</span>(<span class="st">"default"</span>),</span>
-<span id="cb213-7"><a href="#cb213-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#compression = c("default", "lz4", "lz4_frame", "uncompressed", "zstd"),</span></span>
-<span id="cb213-8"><a href="#cb213-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">compression_level =</span> <span class="cn">NULL</span></span>
-<span id="cb213-9"><a href="#cb213-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb235"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb235-1"><a href="#cb235-1" aria-hidden="true" tabindex="-1"></a><span class="co">#write_csv(sqav_profit, "tav_profit.csv")</span></span>
+<span id="cb235-2"><a href="#cb235-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_feather</span>(sqav_profit,</span>
+<span id="cb235-3"><a href="#cb235-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sink =</span> <span class="st">"Data/sqav_profit.feather"</span>,</span>
+<span id="cb235-4"><a href="#cb235-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="dv">2</span>,</span>
+<span id="cb235-5"><a href="#cb235-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">chunk_size =</span> <span class="dv">65536</span>L,</span>
+<span id="cb235-6"><a href="#cb235-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">compression =</span> <span class="fu">c</span>(<span class="st">"default"</span>),</span>
+<span id="cb235-7"><a href="#cb235-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#compression = c("default", "lz4", "lz4_frame", "uncompressed", "zstd"),</span></span>
+<span id="cb235-8"><a href="#cb235-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">compression_level =</span> <span class="cn">NULL</span></span>
+<span id="cb235-9"><a href="#cb235-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in write_feather(sqav_profit, sink = "Data/sqav_profit.feather", : object 'sqav_profit' not found</code></pre>
+</div>
 </div>
 </section>
 </section>
