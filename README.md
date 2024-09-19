@@ -1,2 +1,1 @@
-# Speciality crop agrivoltaics profit in Alabama.
- 
+# Collocating Specialty Crops and Solar panels in Alabama, Southeastern USA.
