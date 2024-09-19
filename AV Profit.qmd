@@ -318,11 +318,11 @@ height <- c(4.6, 6.4, 8.2) # Panel height
 #             0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 
 #             1.10, 1.20, 1.30, 1.40, 1.50, 1.60, 
 #             1.70, 1.80, 1.90, 2.00)
-yldvar <- c(1)
+yldvar <- c(0, 0.5, 1, 1.5, 2)
 al_regs <- c("Northern", "Central", 
              "Black Belt", "Southern") # Regions AL
 price <- c(17, 20, 23) # Crop Price
-elcprc <- c(0.03, 0.04, 0.05) # Electricity Price
+elcprc <- c(0.04) # Electricity Price
 
 # Define the required columns
 required_columns <- c("sprop", "array", "height", 
@@ -451,8 +451,8 @@ heatmap_plot <- pheatmap((ct_tav_pft),
 
 ```{r}
 ggsave(heatmap_plot,
-       height = 12,
-       width = 16,
+       height = 18,
+       width = 24,
        units = "in",
        limitsize = FALSE,
        file = paste0("Plots/TAV Profits Crosstabbed", ".png"))
@@ -883,11 +883,11 @@ height <- c(4.6, 6.4, 8.2)
 #             0.60, 0.70, 0.80, 0.90, 1.00, 
 #             1.10, 1.20, 1.30, 1.40, 1.50,
 #             1.60, 1.70, 1.80, 1.90, 2.00)
-yldvar <- c(1)
+yldvar <- c(0, 0.5, 1, 1.5, 2)
 al_regs <- c("Northern", "Central", 
              "Black Belt", "Southern")
 price <- c(3, 6, 9)
-elcprc <- c(0.03, 0.04, 0.05) # Electricity Price
+elcprc <- c(0.04) # Electricity Price
 
 # Define the required columns
 required_columns <- c("sprop", "array", "height", 
@@ -1015,8 +1015,8 @@ heatmap_plot <- pheatmap((ct_sbav_pft),
 
 ```{r}
 ggsave(heatmap_plot,
-       height = 12,
-       width = 16,
+       height = 18,
+       width = 24,
        units = "in",
        limitsize = FALSE,
        file = paste0("Plots/SBAV Profits Crosstabbed", ".png"))
