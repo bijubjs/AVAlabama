@@ -19,7 +19,7 @@ editor_options:
 
 \newpage
 
-Analysis in this file start by loading data saved after simulating tomato, strawberry, and squash AV profits. See simulation file for more details. The result tables I have here are quite big. Results are summarized in separate excel file (Results.xlsx).
+Analysis in this file start by loading data saved after simulating tomato and strawberry AV profits. See simulation file for more details. The result tables I have here are quite big. Results are summarized in separate excel files.
 
 # Setting Up
 

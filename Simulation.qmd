@@ -19,7 +19,7 @@ editor_options:
 
 \newpage
 
-Techno-economic analysis of agrivoltaic systems in Alabama. A paper for [Choice Magazine](https://www.aaea.org/publications/choices-magazine){.uri}, AAEA.
+Collocating Specialty Crops and Solar panels in Alabama, Southeastern USA. A paper for [Choice Magazine](https://www.aaea.org/publications/choices-magazine){.uri}, AAEA.
 
 # Setting Up
 
@@ -585,7 +585,7 @@ for (i in unique(energy_revenue$elcprc)) {
 
 -   moncost = Monthly payment to repay loan ($P_{mon}$) = $\frac{P_o((i/12)(1 + (i/12))^{t*12})}{(1+(i/12))^{t*12} - 1)}$, where $P_o$ = CAPEX loan burrowed to repay in $t$ years; $t = 25$, and $i$ = annual interest rate at $5\%$.
 
--   reap = Rural Energy for America Program reimburses 50% of capex (ttlcost) upfront. The waiting time for reimbursement is about 6 months. So, 50% of ttlcost acquire simple interest for six months.
+-   reap = Rural Energy for America Program reimburses 50% of capex (ttlcost) upfront. The waiting time for reimbursement is about 6 months. So, 50% of ttlcost acquire simple interest for six months. This is changed to 25% and 50%.
 
 -   inscst = insurance cost. \$5 per \$1000 capex.
 
@@ -604,7 +604,7 @@ for (i in unique(energy_revenue$elcprc)) {
 ```{r SSC2}
 i = 0.07 # Discount/interest Rate
 n = 25 # Life Span of solar panels (Years)
-reapprop = 25/100  # Percentage of CAPEX covered by REAP program.
+reapprop = 50/100  # Percentage of CAPEX covered by REAP program.
 
 expanded_data <- energy_revenue %>%
   slice(rep(1:n(),
