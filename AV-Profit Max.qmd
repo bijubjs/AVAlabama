@@ -1,0 +1,154 @@
+---
+title: "AV Profit"
+author: "Bijesh Mishra, Ph.D."
+date: "`r Sys.Date()`"
+toc: true
+number-sections: true
+colorlinks: true
+format:
+    pdf: default
+    html:
+      link-external-icon: true
+      link-external-newwindow: true
+    ipynb: default
+    docx: default
+editor: visual
+editor_options:
+  chunk_output_type: inline
+---
+
+\newpage
+
+Analysis in this file start by loading data saved after simulating tomato and strawberry AV profits. See simulation file for more details. The result tables I have here are quite big. Results are summarized in separate excel files.
+
+# Setting Up
+
+## Housekeeping
+
+```{r, warning=FALSE, error=TRUE}
+# #| echo: TRUE
+rm(list = ls()) # Clean the environment.
+options(
+  warn=0, # Warnings. options(warn=-1) / options(warn=0)
+  scipen=999 # No scientific notations.
+  )
+```
+
+## Working directory
+
+Codes and output are suppressed. Errors and warnings are visible. No warning and no error means code is working as it should.
+
+```{r, echo=FALSE, results='hide', error=TRUE, eval=FALSE, warning=TRUE}
+path_mac = "/Users/bmishra/Library/CloudStorage/OneDrive-AuburnUniversity/Collaboration/Ngbede M/Choice-paper"
+path_office = "Users\\bzm0094\\OneDrive - Auburn University\\Collaboration\\Ngbede M\\Choice-paper"
+ifelse(Sys.info()[6] == "bmishra",
+       setwd(path_mac),
+       setwd(path_office))
+```
+
+## Load libraries
+
+```{r}
+library(tidyverse, warn.conflicts = FALSE, quietly = TRUE)
+library(psych, warn.conflicts = FALSE, quietly = TRUE)
+library(likert,  warn.conflicts = FALSE, quietly = TRUE)
+library(mice,  warn.conflicts = FALSE, quietly = TRUE)
+library(openxlsx2, warn.conflicts = FALSE, quietly = TRUE)
+library(ggpubr, warn.conflicts = FALSE, quietly = TRUE)
+library(gmodels,  warn.conflicts = FALSE, quietly = TRUE)
+library(reshape2, warn.conflicts = FALSE, quietly = TRUE)
+library(arrow, warn.conflicts = FALSE, quietly = TRUE)
+library(plot3D, warn.conflicts = FALSE, quietly = TRUE)
+library(plotly, warn.conflicts = FALSE, quietly = TRUE)
+library(lattice, warn.conflicts = FALSE, quietly = TRUE)
+library(purrr, warn.conflicts = FALSE, quietly = TRUE)
+library(furrr, warn.conflicts = FALSE, quietly = TRUE)
+library(pheatmap, warn.conflicts = FALSE, quietly = TRUE)
+library(grid, warn.conflicts = FALSE, quietly = TRUE)
+library(data.table, warn.conflicts = FALSE, quietly = TRUE)
+library(parallel, warn.conflicts = FALSE, quietly = TRUE)
+```
+
+# Import data
+
+Import necessary data.
+
+## Tomato AV
+
+Parameters defining agrivoltaic systems:
+
+-   sprop = proportion of solar in agrivoltaic system (0 to 1 in 0.5 increment.) Length = 21.
+
+-   panels = number of solar panels. Length = 16. Some sprop have same number of panels.
+
+-   al_regs = four regions of Alabama. Northern, Central, Black Belt, Southern. Length = 4.
+
+-   array = Solar array; Sun tracking (Tracking) and non-tracking (Fixed). Length = 2.
+
+-   elecprc = electricity price (1 cents to 6 cents). Length = 6.
+
+-   height = clearance height of solar panels. 4.6 ft., 6.4 ft., and 8.2 ft. Length = 3.
+
+-   yldvar = crop yield variation (10% to 200%) = Length 21.
+
+-   yield = crop yield variation based on yldvar. (same as yldvar) = Length = 21.
+
+Calculated results using above parameters:
+
+-   dc_kw = DC system size (kW) See [PVWatts® Calculator](https://pvwatts.nrel.gov/pvwatts.php).
+
+-   energy = total energy generated from solar system. See: [PVWatts® Calculator](https://pvwatts.nrel.gov/pvwatts.php).
+
+-   capex = AV system capex per kW. See: [Capex Cost for AV](https://www.nrel.gov/docs/fy21osti/77811.pdf) table 1 and table 3.
+
+-   ttlcost = total solar system cost in AV. See: [Capex Cost for AV](https://www.nrel.gov/docs/fy21osti/77811.pdf) table 1 and table 3.
+
+-   anncost = annualized total cost.
+
+-   moncost = monthly total cost.
+
+-   price = crop yield price per bucket.
+
+-   eprofit = profit from electricity.
+
+Result of Interests:
+
+-   eannprof = annualized total profit from electricity.
+
+-   emonprof = monthly total profit from electricity.
+
+-   profit = profit from crops.
+
+-   tav_profit = total profit from solar and tomato.
+
+```{r}
+tav_profit <- as.data.frame(
+  read_feather(file = "Data/tav_profit.feather")
+  )
+dim(tav_profit)
+```
+
+# TAV Production Function
+
+```{r}
+model <- glm(formula = tav_profit ~ al_regs + array + 
+               panels + elcprc + height + yield + price,
+             family = gaussian,
+            data = tav_profit,
+            method = "glm.fit",
+            singular.ok = FALSE)
+summary(model)
+```
+
+## Strawberry AV
+
+See tomato for variable descriptions.
+
+sbav_profit = total profit from solar and strawberry.
+
+```{r}
+sbav_profit <- as.data.frame(
+  read_feather(file = "Data/sbav_profit.feather")
+  )
+dim(sbav_profit)
+```

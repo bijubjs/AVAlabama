@@ -1,0 +1,7 @@
+pheight	cost	tracker
+4.6	1.5933333333333335	Fixed
+4.6	1.7333333333333334	Tracking
+6.4	1.85	Fixed
+8.2	2.33	Fixed
+8.2	2.1100000000000003	Tracking
+6.4	1.9216666666666669	Tracking
