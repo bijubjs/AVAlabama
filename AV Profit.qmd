@@ -134,7 +134,7 @@ dim(tav_profit)
 
 -   tavp_wocp = tav_profit - profit from 100% crop at their respective prices. This variable gives an idea where av profit stands in relation to crop profit. It helps to identify relative profitability of agrivoltaic system compared to crop only.
 
-    ```{r, eval=TRUE,echo=TRUE}
+    ```{r}
     # Calculate the profit:
     # Step 1: Filter the dataframe to get the unique profit values for each price when yldvar is 1
     unique_profits <- unique(tav_profit[tav_profit$yldvar == 1, 
@@ -318,7 +318,7 @@ height <- c(4.6, 6.4, 8.2) # Panel height
 #             0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 
 #             1.10, 1.20, 1.30, 1.40, 1.50, 1.60, 
 #             1.70, 1.80, 1.90, 2.00)
-yldvar <- c(0, 0.5, 1, 1.5, 2)
+yldvar <- c(0.5, 1, 1.5)
 al_regs <- c("Northern", "Central", 
              "Black Belt", "Southern") # Regions AL
 price <- c(17, 20, 23) # Crop Price
@@ -406,7 +406,7 @@ rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
 write_xlsx(x = ct_tav_pft %>%
   dplyr::mutate(Row_Names = rownames(ct_tav_pft)) %>%
   dplyr::select(Row_Names, everything()),
-           file = "Results/Profit Crosstabed TAV.xlsx",
+           file = "Results/Profit Ctab TAV.xlsx",
            as_table = TRUE)
 dim(ct_tav_pft)
 ```
@@ -417,36 +417,65 @@ dim(ct_tav_pft)
 -   Tomato profit.
 
 ```{r}
-#uniquevalue = unique(as.vector(as.matrix(ct_tav_pft[-1])))
-#uniquevalue
-colorcount = length(unique(as.vector(as.matrix(ct_tav_pft[-1]))))
-colorcount
-heatmap_plot <- pheatmap((ct_tav_pft),
-                         #clustering_distance_rows = "correlation",
-                         clustering_distance_rows = "euclidean",
-                         clustering_distance_cols = "euclidean",
-                         clustering_method = "complete",
-                         angle_col = 90,
-                         na_col = "white",
-                         color = colorRampPalette(
-                           c("red","yellow","green")
-                           )(colorcount),
-                         #cutree_rows = 5,
-                         #cutree_cols = 4,
-                         cutree_rows = 5,
-                         cutree_cols = 4,
-                         cluster_rows = FALSE,
-                         cluster_cols = FALSE,
-                         show_rownames = TRUE,
-                         show_colnames = TRUE,
-                         display_numbers = FALSE,
-                         number_format = "%.2f",
-                         cellheight = 14,
-                         cellwidth = 13,
-                         fontsize = 12,
-                         fontsize_row = 12,
-                         fontsize_col = 12,
-                         )
+# Calculate color count based on unique values, excluding zero
+colorcount <- length(unique(as.vector(as.matrix(ct_tav_pft[-1]))))
+
+# Define custom breaks to ensure zero is distinctly marked
+# Calculate min and max values to define the range
+min_val <- min(ct_tav_pft, na.rm = TRUE)
+max_val <- max(ct_tav_pft, na.rm = TRUE)
+
+# Create breaks that ensure zero is in the middle
+breaks <- seq(min_val, max_val, length.out = colorcount)
+
+# Separate color palettes for negative and positive values
+# Negative values: Shades of red
+neg_colors <- colorRampPalette(c("#890800",
+                                 "#FF1709",
+                                 "#FF8F89"))(sum(breaks < 0))
+
+# Define the color for zero separately
+zero_color <- "#FF8F89"
+
+# Positive values: Shades of green
+pos_colors <- colorRampPalette(c("#99E699",
+                                 "#32CD32",
+                                 "#196719"))(sum(breaks > 0))
+
+# Combine negative colors, zero, and positive colors
+custom_colors <- c(neg_colors,
+                   zero_color,
+                   pos_colors)
+
+# Generate heatmap with the custom color scheme
+heatmap_plot <- pheatmap(
+  (ct_tav_pft),
+  clustering_distance_rows = "euclidean",
+  clustering_distance_cols = "euclidean",
+  clustering_method = "complete",
+  angle_col = 90,
+  na_col = "white",
+  color = custom_colors,
+  breaks = breaks,
+  cutree_rows = 5,
+  cutree_cols = 4,
+  cluster_rows = FALSE,
+  cluster_cols = FALSE,
+  show_rownames = TRUE,
+  show_colnames = TRUE,
+  display_numbers = FALSE,
+  number_format = "%.2f",
+  cellheight = 18,
+  cellwidth = 18,
+  fontsize = 12,
+  fontsize_row = 12,
+  fontsize_col = 12
+)
+
+
+
+
+
 ```
 
 ```{r}
@@ -455,7 +484,7 @@ ggsave(heatmap_plot,
        width = 24,
        units = "in",
        limitsize = FALSE,
-       file = paste0("Plots/TAV Profits Crosstabbed", ".png"))
+       file = paste0("Plots/TAV Profits CTabs", ".png"))
 #rm(colorcount); rm(heatmap_plot)
 ```
 
@@ -562,7 +591,7 @@ write.csv(as.data.frame(ct_tavp_wocp),
 
 ## tavp_wocp Heatmap
 
-```{r, eval=TRUE,results='hide',echo=TRUE,error=TRUE,warning=TRUE}
+```{r}
 colorcount = length(unique(as.vector(as.matrix(ct_tavp_wocp[-1]))))
 colorcount
 heatmap_plot <- pheatmap(t(ct_tavp_wocp),
@@ -883,7 +912,7 @@ height <- c(4.6, 6.4, 8.2)
 #             0.60, 0.70, 0.80, 0.90, 1.00, 
 #             1.10, 1.20, 1.30, 1.40, 1.50,
 #             1.60, 1.70, 1.80, 1.90, 2.00)
-yldvar <- c(0, 0.5, 1, 1.5, 2)
+yldvar <- c(0.5, 1, 1.5)
 al_regs <- c("Northern", "Central", 
              "Black Belt", "Southern")
 price <- c(3, 6, 9)
@@ -973,7 +1002,7 @@ rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
 write_xlsx(x = ct_sbav_pft %>%
   dplyr::mutate(Row_Names = rownames(ct_sbav_pft)) %>%
   dplyr::select(Row_Names, everything()),
-           file = "Results/Profit Crosstabed SBAV.xlsx",
+           file = "Results/Profit Ctab SBAV.xlsx",
            as_table = TRUE)
 dim(ct_sbav_pft)
 ```
@@ -981,36 +1010,60 @@ dim(ct_sbav_pft)
 ## sbav_profit Heatmap
 
 ```{r}
-#uniquevalue = unique(as.vector(as.matrix(ct_tav_pft[-1])))
-#uniquevalue
-colorcount = length(unique(as.vector(as.matrix(ct_sbav_pft[-1]))))
-colorcount
-heatmap_plot <- pheatmap((ct_sbav_pft),
-                         #clustering_distance_rows = "correlation",
-                         clustering_distance_rows = "euclidean",
-                         clustering_distance_cols = "euclidean",
-                         clustering_method = "complete",
-                         angle_col = 90,
-                         na_col = "white",
-                         color = colorRampPalette(
-                           c("red","yellow","green")
-                           )(colorcount),
-                         #cutree_rows = 5,
-                         #cutree_cols = 4,
-                         cutree_rows = 5,
-                         cutree_cols = 4,
-                         cluster_rows = FALSE,
-                         cluster_cols = FALSE,
-                         show_rownames = TRUE,
-                         show_colnames = TRUE,
-                         display_numbers = FALSE,
-                         number_format = "%.2f",
-                         cellheight = 14,
-                         cellwidth = 13,
-                         fontsize = 12,
-                         fontsize_row = 12,
-                         fontsize_col = 12,
-                         )
+# Calculate color count based on unique values, excluding zero
+colorcount <- length(unique(as.vector(as.matrix(ct_sbav_pft[-1]))))
+
+# Define custom breaks to ensure zero is distinctly marked
+# Calculate min and max values to define the range
+min_val <- min(ct_sbav_pft, na.rm = TRUE)
+max_val <- max(ct_sbav_pft, na.rm = TRUE)
+
+# Create breaks that ensure zero is in the middle
+breaks <- seq(min_val, max_val, length.out = colorcount)
+
+# Separate color palettes for negative and positive values
+# Negative values: Shades of red
+neg_colors <- colorRampPalette(c("#890800",
+                                 "#FF1709",
+                                 "#FF8F89"))(sum(breaks < 0))
+
+# Define the color for zero separately
+zero_color <- "#FF8F89"
+
+# Positive values: Shades of green
+pos_colors <- colorRampPalette(c("#99E699",
+                                 "#32CD32",
+                                 "#196719"))(sum(breaks > 0))
+
+# Combine negative colors, zero, and positive colors
+custom_colors <- c(neg_colors,
+                   zero_color,
+                   pos_colors)
+
+# Generate heatmap with the custom color scheme
+heatmap_plot <- pheatmap(
+  (ct_sbav_pft),
+  clustering_distance_rows = "euclidean",
+  clustering_distance_cols = "euclidean",
+  clustering_method = "complete",
+  angle_col = 90,
+  na_col = "white",
+  color = custom_colors,
+  breaks = breaks,
+  cutree_rows = 5,
+  cutree_cols = 4,
+  cluster_rows = FALSE,
+  cluster_cols = FALSE,
+  show_rownames = TRUE,
+  show_colnames = TRUE,
+  display_numbers = FALSE,
+  number_format = "%.2f",
+  cellheight = 18,
+  cellwidth = 18,
+  fontsize = 12,
+  fontsize_row = 12,
+  fontsize_col = 12
+)
 ```
 
 ```{r}
@@ -1019,7 +1072,7 @@ ggsave(heatmap_plot,
        width = 24,
        units = "in",
        limitsize = FALSE,
-       file = paste0("Plots/SBAV Profits Crosstabbed", ".png"))
+       file = paste0("Plots/SBAV Profits Ctab", ".png"))
 rm(heatmap_plot);
 ```
 

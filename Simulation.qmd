@@ -33,18 +33,6 @@ options(
   )
 ```
 
-## Working directory
-
-Codes and output are suppressed. Errors and warnings are visible. No warning and no error means code is working as it should.
-
-```{r WD,echo=FALSE,eval=TRUE,results='hide',error=TRUE,warning=TRUE}
-path_mac = "/Users/bmishra/Library/CloudStorage/OneDrive-AuburnUniversity/Collaboration/Ngbede M/Choice-paper"
-path_office = "C:\\Users\\bzm0094\\OneDrive - Auburn University\\Collaboration\\Ngbede M\\Choice-paper"
-ifelse(Sys.info()[6] == "bmishra",
-       setwd(path_mac),
-       setwd(path_office))
-```
-
 ## Load libraries
 
 ```{r Libs}
@@ -604,7 +592,7 @@ for (i in unique(energy_revenue$elcprc)) {
 ```{r SSC2}
 i = 0.07 # Discount/interest Rate
 n = 25 # Life Span of solar panels (Years)
-reapprop = 50/100  # Percentage of CAPEX covered by REAP program.
+reapprop = 25/100  # Percentage of CAPEX covered by REAP program.
 
 expanded_data <- energy_revenue %>%
   slice(rep(1:n(),
