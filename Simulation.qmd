@@ -573,11 +573,7 @@ for (i in unique(energy_revenue$elcprc)) {
 
 -   moncost = Monthly payment to repay loan ($P_{mon}$) = $\frac{P_o((i/12)(1 + (i/12))^{t*12})}{(1+(i/12))^{t*12} - 1)}$, where $P_o$ = CAPEX loan burrowed to repay in $t$ years; $t = 25$, and $i$ = annual interest rate at $5\%$.
 
--   reap = Rural Energy for America Program reimburses 50% of capex (ttlcost) upfront. The waiting time for reimbursement is about 6 months. So, 50% of ttlcost acquire simple interest for six months. This is changed to 25% and 50%.
-
 -   inscst = insurance cost. \$5 per \$1000 capex.
-
--   taxcredit = 30% tax credit of annual cost covered through federal tax exemption.
 
 -   eprofit = profit from electricity after subtracting total cost (ttlcost) from total revenue (elcrev).
 
@@ -589,10 +585,18 @@ for (i in unique(energy_revenue$elcprc)) {
 
 -   eannprofwoincentives = Annual profit without incentives.
 
+Policy Components:
+
+-   taxcr = 30% tax credit of annual cost covered through federal tax exemption (Investment tax credit).
+
+-   reap = Rural Energy for America Program reimburses 50% of capex (ttlcost) upfront. The waiting time for reimbursement is about 6 months. So, 50% of ttlcost acquire simple interest for six months. This is changed to 25% and 50%.
+
+-   recredit = renewable energy credit (\$6.60/MWh).
+
 ```{r SSC2}
 i = 0.07 # Discount/interest Rate
 n = 25 # Life Span of solar panels (Years)
-reapprop = 25/100  # Percentage of CAPEX covered by REAP program.
+reapprop = 50/100  # Percentage of CAPEX covered by REAP program.
 
 expanded_data <- energy_revenue %>%
   slice(rep(1:n(),
@@ -627,7 +631,7 @@ energy_cost <- left_join(energy_cost,
     reap = reapprop*ttlcost - (reapprop*ttlcost)*i*0.5/100, #Return
     
     # Annualized cost - reap:
-    annlzcost = (ttlcost - reap)*(i*(1+i)^n)/((1+i)^n-1),
+    annlzcost = (ttlcost - reap + inscst)*(i*(1+i)^n)/((1+i)^n-1),
     
     # Annualized Cost of total cost:
     annoftotcost = ttlcost*(i*(1+i)^n)/((1+i)^n-1),
@@ -892,6 +896,25 @@ write_xlsx(x = tav_profit %>%
 tictoc::toc()
 ```
 
+```{r, eval=FALSE}
+write_xlsx(x = tav_profit %>%
+             filter(sprop %in% c(0, 0.25, 0.50, 0.75, 1),
+                    yldvar == 1,
+                    price == 20,
+                    elcprc == 0.04)%>%
+             dplyr::select(sprop, panels, height, array, 
+                           al_regs, yldvar, yield, price, 
+                           elcprc, tav_profit) %>% 
+             mutate(al_regs1 = case_when(
+               al_regs == "Northern" ~ 1,
+    al_regs == "Central" ~ 2,
+    al_regs == "Black Belt" ~ 3,
+    al_regs == "Southern" ~ 4,
+    TRUE ~ NA_real_)),
+           file = "Results/Profit TAV WriteUp.xlsx",
+           as_table = TRUE)
+```
+
 ## Profit from strawberry agrivoltaic system
 
 -   Joint profit from strawberry (stberry_long) and solar energy production (solar_profit) from 1 acre of land.
@@ -936,4 +959,23 @@ write_xlsx(x = sbav_profit[sample(nrow(tav_profit), 100),],
            file = "Results/SBAV Profit Sample.xlsx",
            as_table = TRUE)
 tictoc::toc()
+```
+
+```{r, eval=FALSE}
+write_xlsx(x = sbav_profit %>%
+             filter(sprop %in% c(0, 0.25, 0.50, 0.75, 1),
+                    yldvar == 1,
+                    price == 9,
+                    elcprc == 0.04)%>%
+             dplyr::select(sprop, panels, height, array, al_regs, 
+                           #price, elcprc, yldvar, yield, 
+                           sbav_profit) %>% 
+             mutate(al_regs1 = case_when(
+               al_regs == "Northern" ~ 1,
+    al_regs == "Central" ~ 2,
+    al_regs == "Black Belt" ~ 3,
+    al_regs == "Southern" ~ 4,
+    TRUE ~ NA_real_)),
+           file = "Results/Profit SBAV WriteUp.xlsx",
+           as_table = TRUE)
 ```
