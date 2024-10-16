@@ -5,7 +5,7 @@ Southeastern US is well suited for Agrivoltaics--the practice of co-locating sol
 ## Keywords
 Agrivoltaics, Tomato, Strawberry, Benefit-cost analysis, Rural Energy for America Program
 
-## Coauthors
+## Authors
 Bijesh Mishra, Ruiqing Miao, Ngbede Musa, Dennis Brothers, Denis A. Nadolnyak, Paul Mwebaze, James McCall, Madhu Khanna
 
 ## TAV Profits
