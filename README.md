@@ -1,5 +1,10 @@
 # Collocating Specialty Crops and Solar panels in Alabama, Southeastern USA
 
+## CAPEX
+![PV CAPEX ($/kWh)](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/CAPEX%20Solar%20Panels%20.png?raw=true)
+
+Plots/CAPEX Solar Panels.png
+
 ## TAV Profits:
 REAP 50%
 ![TAV Profits R50 Crosstabbed](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/TAV%20Profits%20Ctab%20R50.png?raw=true)
