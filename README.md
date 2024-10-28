@@ -1,6 +1,6 @@
 # Collocating Specialty Crops and Solar panels in Alabama, Southeastern USA
 ## Abstract
-Southeastern US is well suited for Agrivoltaics--the practice of co-locating solar panels with crops--because of the high solar potential and large tracts of agricultural land. However, agrivoltaic farm profitability in the region is not understood. We calculated the farm profitability of tomato and strawberry agrivoltaic systems. We further discussed the implication of the Rural Energy for America Program on agrivoltaic farm profitability and its potential role in increasing the adoption of agrivoltaics in rural America. The Rural Energy for America Program could motivate farmers to adopt agrivoltaics and provide access to solar energy for rural America.
+Agrivoltaic farm profitability in the southeastern US is poorly understood. We calculated the profitability of the tomato and strawberry agrivoltaics farms. We found that compensating 50\% capital expenditure costs through the Rural Energy for America Program makes agrivoltaics more attractive to producers but that at 25\% does not.
 
 ## Keywords
 Agrivoltaics, Tomato, Strawberry, Benefit-cost analysis, Rural Energy for America Program
