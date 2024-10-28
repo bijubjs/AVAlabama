@@ -25,4 +25,4 @@ REAP Differences
 ![SBAV REAP Differences](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/SBAV%20REAP%20Differences.png?raw=true)
 
 ## CAPEX ($/W)
-![PV CAPEX ($/W)](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/CAPEX%20Solar%20Panels.png?raw=true)
+![PV CAPEX ($/W)](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/CAPEX%20Solar%20Panels%20R25.png?raw=true)
