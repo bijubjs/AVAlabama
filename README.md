@@ -3,7 +3,7 @@
 Agrivoltaic farm profitability in the southeastern US is poorly understood. We calculated the profitability of the tomato and strawberry agrivoltaics farms. We found that compensating 50\% capital expenditure costs through the Rural Energy for America Program makes agrivoltaics more attractive to producers but that at 25\% does not.
 
 ## Keywords
-Agrivoltaics, Tomato, Strawberry, Benefit-cost analysis, Rural Energy for America Program
+Benefit-cost analysis, Photovoltaic, Solar energy, Strawberry, Tomato
 
 ## Authors
 Bijesh Mishra, Ruiqing Miao, Ngbede Musa, Dennis Brothers, Denis A. Nadolnyak, Paul Mwebaze, James McCall, Madhu Khanna
