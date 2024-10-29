@@ -1,7 +1,7 @@
 # Collocating Specialty Crops and Solar panels in Alabama, Southeastern USA
 
 ## Authors
-Bijesh Mishra, Ruiqing Miao, Ngbede Musa, Dennis Brothers, Madhu Khanna, Denis A. Nadolnyak, Paul Mwebaze, James McCall.
+Bijesh Mishra, Ruiqing Miao, Ngbede Musa, Dennis Brothers, Madhu Khanna, Adam N. Rabinowitz, Paul Mwebaze, James McCall.
 
 ## Abstract
 Agrivoltaic farm profitability in the southeastern US is poorly understood. We calculated the profitability of the tomato and strawberry agrivoltaics farms. We found that compensating 50\% capital expenditure costs through the Rural Energy for America Program makes agrivoltaics more attractive to producers but that at 25\% does not.
