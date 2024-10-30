@@ -1,7 +1,16 @@
 # Specialty Crop Agrivoltaics in the Southeastern USA: Rural Energy for America Program and Farm Profitability
 
 ## Authors
-Bijesh Mishra, Ruiqing Miao, Ngbede Musa, Dennis Brothers, Madhu Khanna, Adam N. Rabinowitz, Paul Mwebaze, James McCall.
+Bijesh Mishra<sup>1*</sup>, Ruiqing Miao<sup>1*</sup>, Ngbede Musa<sup>1</sup>, Dennis Brothers<sup>1</sup>, Madhu Khanna<sup>2</sup>, Adam N. Rabinowitz<sup>1</sup>, Paul Mwebaze<sup>2</sup>, James McCall<sup>3</sup>
+
+<sup>1</sup>Auburn University, Auburn, AL, 36849
+
+<sup>2</sup>University of Illinois Urbana-Champaign, Urbana, IL, 61801
+
+<sup>3</sup>National Renewable Energy Lab, Denver, CO, 80401
+
+<sup>*</sup>Corresponding authors: bzm0094@auburn.edu; rzm0050@auburn.edu
+
 
 ## Abstract
 Agrivoltaic farm profitability in the southeastern US is poorly understood. We calculated the profitability of the tomato and strawberry agrivoltaics farms. We found that compensating 50\% capital expenditure costs through the Rural Energy for America Program makes agrivoltaics more attractive to producers but that at 25\% does not.
