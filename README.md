@@ -14,6 +14,11 @@ Benefit-cost analysis, Photovoltaic, Solar energy, Strawberry, Tomato
 ![PV CAPEX ($/W)](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/CAPEX%20Solar%20Panels%20R25.png?raw=true)
 Figure: AV Capital investment cost (CAPEX).
 
+## TAV at Benchmark
+![TAV Benchmark]((https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/TAV%20at%20Benchmark.png)?raw=true)
+
+## SBAV at Benchmark
+![SBAV Benchmark]((https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/SBAV%20at%20Benchmark.png)?raw=true)
 
 ## TAV Profits
 TAV profits in the four regions of Alabama under various solar energy system configurations. The vertical axis indicates electricity price, tomato price, tomato yield, and regions of Alabama. For example, the label "Northern 0.5 17" on the first row means the northern region of Alabama, 50% yield of 1,360 carton tomatoes, and $17 per carton tomato. The horizontal axis has PVD, solar array types, and solar panel ground clearance height (ft.). For example, the label "0.10 Fixed 4.6" on the first column means 10% PVD, fixed-tilt solar panels mounted 4.6 ft. above the ground. Green and red colored blocks represent profits and losses from TAVs respectively. Profits and losses increase as blocks turn darker in color.
