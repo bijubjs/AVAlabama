@@ -13,8 +13,12 @@ Benefit-cost analysis, Photovoltaic, Solar energy, Strawberry, Tomato
 ![PV CAPEX ($/W)](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/CAPEX%20Solar%20Panels%20R25.png?raw=true)
 Figure: AV Capital investment cost (CAPEX).
 
+# Tomato Agrivoltaics
+
 ## TAV at Benchmark
 ![TAV Benchmark](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/TAV%20at%20Benchmark.png?raw=true)
+
+# Strawberry Agrivoltaics
 
 ## SBAV at Benchmark
 ![SBAV Benchmark](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/SBAV%20at%20Benchmark.png?raw=true)
