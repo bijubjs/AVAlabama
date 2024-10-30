@@ -19,7 +19,7 @@ Figure: AV Capital investment cost (CAPEX).
 ## TAV Profits at Benchmark Yield and Prices
 ![TAV Benchmark](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/TAV%20at%20Benchmark.png?raw=true)
 
-## TAV Profits
+## TAV Profits 2,160 Scenarios
 TAV profits in the four regions of Alabama under various solar energy system configurations. The vertical axis indicates electricity price, tomato price, tomato yield, and regions of Alabama. For example, "Northern 0.5 17" on the first row means the northern region of Alabama, 50% yield of 1,360 cartons of tomatoes, and $17 per carton of tomato. The horizontal axis has PVD, solar array types, and solar panel ground clearance height (ft.). For example, "0.10 Fixed 4.6" on the first column means 10% PVD, fixed-tilt solar panels mounted 4.6 ft. above the ground. Green and red colored blocks represent profits and losses from TAVs respectively. Profits and losses increase as blocks turn darker in color.
 
 ![TAV Profits R50](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/TAV%20Profits%20CTab%20R50.png?raw=true)
@@ -32,7 +32,7 @@ Figure: TAV profit after 25\% of total PV CAPEX is compensated through a REAP wi
 ## SBAV Profits at Benchmark Yield and Prices
 ![SBAV Benchmark](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/SBAV%20at%20Benchmark.png?raw=true)
 
-## SBAV Profits
+## SBAV Profits 2,160 Scenarios
 SAV profits in the four regions of Alabama under various solar energy system configurations. The vertical axis has electricity prices, strawberry prices, strawberry yield, and regions of Alabama. For example, the label, "Northern 0.5 3" on the first row represents the northern region of Alabama, strawberry yield at 50% of 3,075 buckets, and $3 per bucket strawberry. The horizontal axis has PVD, solar panel array types, and solar panel ground clearance height (ft.). For example, the label "0.10 Fixed 4.6" on the first column represents 10% PVD, fixed-tilt solar panels mounted 4.6 ft. above the ground. Green and red colored blocks represent profits and losses from TAVs respectively. Profits and losses increase as blocks turn darker in color.
 
 ![SBAV Profits R50](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/SBAV%20Profits%20Ctab%20R50.png?raw=true)
