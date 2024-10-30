@@ -16,7 +16,7 @@ Figure: AV Capital investment cost (CAPEX).
 
 # Tomato Agrivoltaics
 
-## TAV Profits at Benchmark Yield and Prices.
+## TAV Profits at Benchmark Yield and Prices
 ![TAV Benchmark](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/TAV%20at%20Benchmark.png?raw=true)
 
 ## TAV Profits
@@ -29,7 +29,7 @@ Figure: TAV profit after 25\% of total PV CAPEX is compensated through a REAP wi
 
 
 # Strawberry Agrivoltaics
-## SBAV Profits at Benchmark Yield and Prices.
+## SBAV Profits at Benchmark Yield and Prices
 ![SBAV Benchmark](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/SBAV%20at%20Benchmark.png?raw=true)
 
 ## SBAV Profits
