@@ -1,4 +1,4 @@
-# Specialty Crop Agrivoltaics in the Southeastern USA: Rural Energy for America Program and Farm Profitability
+# Specialty Crop Agrivoltaics in the Southeastern USA: Profitability and Role of Rural Energy for America Program
 
 ## Authors
 Bijesh Mishra<sup>1*</sup>, Ruiqing Miao<sup>1*</sup>, Ngbede Musa<sup>1</sup>, Dennis Brothers<sup>1</sup>, Madhu Khanna<sup>2</sup>, Adam N. Rabinowitz<sup>1</sup>, Paul Mwebaze<sup>2</sup>, James McCall<sup>3</sup>
