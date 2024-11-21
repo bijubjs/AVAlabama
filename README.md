@@ -13,7 +13,7 @@ Bijesh Mishra<sup>1*</sup>, Ruiqing Miao<sup>1*</sup>, Ngbede Musa<sup>1</sup>, 
 
 
 ## Abstract
-Agrivoltaic farm profitability in the southeastern US is poorly understood. We calculated the profitability of the tomato and strawberry agrivoltaics farms. We found that compensating 50\% capital expenditure costs through the Rural Energy for America Program makes agrivoltaics more attractive to producers but that at 25\% does not.
+Agrivoltaic profitability in the southeastern US is poorly understood. This study examines the profitability of tomato and strawberry agrivoltaics in Alabama. We found that reducing the Rural Energy for America Program’s coverage of capital investment of agrivoltaics from 50\% to 25\% will make agrivoltaics unprofitable.
 
 ## Keywords
 Benefit-cost analysis, Photovoltaic, Solar energy, Strawberry, Tomato
