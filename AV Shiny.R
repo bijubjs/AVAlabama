@@ -7,7 +7,7 @@ library(moments) # For skewness and kurtosis calculations
 
 # Load the datasets
 # Tomato AV:
-tav <- as.data.frame(read_feather(file = "Data/tav_profit.feather")) %>% 
+tav <- as.data.frame(read_feather(file = "Data/tav_profit R50.feather")) %>% 
   rename(avprofit = tav_profit) %>% 
   mutate(
     avtype = "tav",
@@ -16,7 +16,7 @@ tav <- as.data.frame(read_feather(file = "Data/tav_profit.feather")) %>%
   )
 
 # Strawberry AV:
-sbav <- as.data.frame(read_feather(file = "Data/sbav_profit.feather")) %>% 
+sbav <- as.data.frame(read_feather(file = "Data/sbav_profit R50.feather")) %>% 
   rename(avprofit = sbav_profit) %>% 
   mutate(
     avtype = "sbav",
@@ -25,8 +25,8 @@ sbav <- as.data.frame(read_feather(file = "Data/sbav_profit.feather")) %>%
   )
 
 # Squash AV:
-sqav <- as.data.frame(read_feather(file = "Data/sqav_profit.feather")) %>% 
-  rename(avprofit = sqav_profit) %>% 
+sqav <- as.data.frame(read_feather(file = "Data/sqav_profit R50.feather")) %>%
+  rename(avprofit = sqav_profit) %>%
   mutate(
     avtype = "sqav",
     avprofit = round(avprofit, 0),

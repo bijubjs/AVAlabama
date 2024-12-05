@@ -176,14 +176,12 @@ head(strawberry); tail(strawberry)
 squash <- read_xlsx("Data/Parameters.xlsx",
                     sheet = "Squash",
                     start_row = 2,
-                    start_col = 8,
+                    start_col = 9,
                     skip_empty_rows = TRUE,
                     skip_empty_cols = TRUE,
                     col_names = TRUE) %>% 
   rename(yield = Yield,
          yldvar = `Yield Variation (%)`)
-str(squash)
-head(squash); tail(squash)
 ```
 
 ## Electricity price
@@ -315,7 +313,7 @@ ggsave(
 
 ```{r PConf}
 panconf <- wb_read(file = "Data/Parameters.xlsx",
-                sheet = "Panel Spacing",
+                sheet = "PV Spacing",
                 start_row = 2,
                 start_col = 1,
                 skip_empty_rows = TRUE,
@@ -846,6 +844,26 @@ ggplot(data = stberry_long,
   guides(color = guide_legend(reverse = TRUE))
 ```
 
+## Squash
+
+```{r}
+squash_profit = squash %>% 
+  dplyr::select(yldvar, yield, 
+         rolac11, rolac12, rolac13, rolac14,
+         rolac15, rolac16, rolac17)
+# Reshape the data frame from wide to long format
+squash_long <- melt(squash_profit,
+                id.vars = c("yldvar", "yield"),
+                measure.vars = c("rolac11", "rolac12", "rolac13",
+                                 "rolac14","rolac15", "rolac16",
+                                 "rolac17"),
+                variable.name = "price",
+                value.name = "profit")
+
+# Convert the 'Price' column to numeric by extracting the number
+squash_long$price <- as.numeric(gsub("rolac", "", squash_long$price))
+```
+
 # Profit from agrivoltaics
 
 Total profit from solar and crops for all combinations of AVs simulated.
@@ -955,7 +973,7 @@ write_feather(sbav_profit,
   compression_level = NULL
 )
 tictoc::tic("Using Base R Matrix:")
-write_xlsx(x = sbav_profit[sample(nrow(tav_profit), 100),],
+write_xlsx(x = sbav_profit[sample(nrow(sbav_profit), 100),],
            file = "Results/SBAV Profit Sample R50.xlsx",
            as_table = TRUE)
 tictoc::toc()
@@ -977,5 +995,55 @@ write_xlsx(x = sbav_profit %>%
     al_regs == "Southern" ~ 4,
     TRUE ~ NA_real_)),
            file = "Results/Profit SBAV WriteUp R50.xlsx",
+           as_table = TRUE)
+```
+
+## Profit from Squash agrivoltaic system
+
+```{r}
+solar_expanded <- solar_profit[rep(1:nrow(solar_profit), 
+                                   each = nrow(squash_long)), ]
+squash_expanded <- squash_long[rep(1:nrow(squash_long), 
+                                   times = nrow(solar_profit)), ]
+
+# Calculate the new column for tav_profit directly
+sqav_profit_values <- solar_expanded$eannprof + squash_expanded$profit
+
+# Combine the matrices and the calculated tav_profit column
+sqav_profit <- cbind(solar_expanded, 
+                     squash_expanded, 
+                     sqav_profit = sqav_profit_values)
+
+# Convert to a data frame and ensure the correct format
+sqav_profit <- as.data.frame(sqav_profit)
+sqav_profit <- data.frame(lapply(sqav_profit, unlist))
+
+write_feather(sqav_profit,
+  sink = "Data/sqav_profit R50.feather",
+  version = 2,
+  chunk_size = 65536L,
+  compression = c("default"),
+  compression_level = NULL
+)
+
+write_xlsx(x = sqav_profit[sample(nrow(sqav_profit), 100),],
+           file = "Results/SQAV Profit Sample R50.xlsx",
+           as_table = TRUE)
+
+write_xlsx(x = sqav_profit %>%
+             filter(sprop %in% c(0, 0.25, 0.50, 0.75, 1),
+                    yldvar == 1,
+                    price == 14,
+                    elcprc == 0.04)%>%
+             dplyr::select(sprop, panels, height, array, 
+                           al_regs, yldvar, yield, price, 
+                           elcprc, sqav_profit) %>% 
+             mutate(al_regs1 = case_when(
+               al_regs == "Northern" ~ 1,
+    al_regs == "Central" ~ 2,
+    al_regs == "Black Belt" ~ 3,
+    al_regs == "Southern" ~ 4,
+    TRUE ~ NA_real_)),
+           file = "Results/Profit SQAV WriteUp R50.xlsx",
            as_table = TRUE)
 ```
