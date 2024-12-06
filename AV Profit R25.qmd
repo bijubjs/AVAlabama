@@ -195,7 +195,7 @@ dim(tav_be_yld)
 rm(results); rm(split_data); rm(process_subset)
 ```
 
-```{r, eval=FALSE}
+```{r}
 write_xlsx(x = tav_be_yld,
            file = "Results/TAV Tomato Breakeven Yield R25.xlsx",
            as_table = TRUE)
@@ -285,7 +285,7 @@ sbav_be_yld <- rbindlist(results,
 rm(results); rm(split_data); rm(process_subset)
 ```
 
-```{r, eval=FALSE}
+```{r}
 write_xlsx(x = sbav_be_yld,
            file = "Results/SBAV Strawberry Breakeven Yield R25.xlsx",
            as.table = TRUE)
@@ -666,7 +666,7 @@ rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
     dim(ct_tavp_wocp);rm(result_matrix)
     ```
 
-```{r, eval=FALSE}
+```{r}
 write.csv(as.data.frame(ct_tavp_wocp),
           row.names = TRUE,
           file = "Results/ct_tavp_wocp R25.csv")
@@ -700,7 +700,7 @@ heatmap_plot <- pheatmap(t(ct_tavp_wocp),
                          )
 ```
 
-```{r, eval=FALSE}
+```{r}
 ggsave(heatmap_plot,
        height = 8,
        width = 12,
@@ -799,7 +799,7 @@ ct_tav_be_yld <- as.data.frame(result_matrix) # Table in Excel.
 dim(ct_tav_be_yld); rm(result_matrix)
 ```
 
-```{r, eval=FALSE}
+```{r}
 write.csv(as.data.frame(ct_tav_be_yld),
           row.names = TRUE,
           file = "Results/ct_tav_be_yld R25.csv")
@@ -839,7 +839,7 @@ heatmap_plot <- pheatmap((ct_tav_be_yld),
                          )
 ```
 
-```{r, eval=FALSE}
+```{r}
 ggsave(heatmap_plot,
        height = 8,
        width = 12,
@@ -848,11 +848,11 @@ ggsave(heatmap_plot,
 rm(heatmap_plot); rm(colorcount); rm(uniquevalue)
 ```
 
-## Plotting Tomato Profits by Panels
+## Plot Tomato Profits by Panels
 
 You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, eval=FALSE}
+```{r}
 combinations <- expand.grid(
   yldvar = c(0, 0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield
   price = c(17, 20, 23), # Tomato price
@@ -910,16 +910,16 @@ for (combo in seq_len(nrow(combinations))) {
   }
   print(combinations[combo,])
   print(tav_sp_plot)
-  ggsave(file = paste0("Plots/tav_sp_ R25", combo, ".png"))
+  ggsave(file = paste0("Plots/tav_sp_R25", combo, ".png"))
   #break
 }
 ```
 
-## Plotting Tomato Profits by Yields
+## Plot Tomato Profits by Yields
 
 You can see plot breakdown based on solar proportion, crop price, and electricity price. You can see variation for all crop yield variation in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, eval=FALSE}
+```{r}
 combinations <- expand.grid(
   sprop = c(0, 0.25, 0.50, 0.75, 1.00), # Solar proportion
   price = c(17, 20, 23), # Tomato price
@@ -976,7 +976,7 @@ for (combo in seq_len(nrow(combinations))) {
   }
   print(combinations[combo,])
   print(tav_yv_plot)
-  ggsave(file = paste0("Plots/tav_yv_ R25", combo, ".png"))
+  ggsave(file = paste0("Plots/tav_yv_R25", combo, ".png"))
   #break
 }
 ```
@@ -1153,7 +1153,7 @@ array <- c("Fixed", "Tracking") # Solar Array
 height <- c(4.6, 6.4, 8.2) # Panel height
 yldvar <- c(1) # Yield Variability
 al_regs <- c("Northern", "Central", "Black Belt", "Southern")
-price <- c(9) # Crop Price
+price <- c(6) # Crop Price
 elcprc <- c(0.04) # Electricity Price
 
 # Define the required columns
@@ -1344,7 +1344,7 @@ ct_sbavp_wocp <- as.data.frame(result_matrix) #Table in Excel.
 rm(result_matrix)
 ```
 
-```{r, eval=FALSE}
+```{r}
 write.csv(as.data.frame(ct_sbavp_wocp),
           row.names = TRUE,
           #col.names = TRUE,
@@ -1380,7 +1380,7 @@ heatmap_plot <- pheatmap(t(ct_sbavp_wocp),
                          )
 ```
 
-```{r, eval=FALSE}
+```{r}
 ggsave(heatmap_plot,
        height = 8,
        width = 12,
@@ -1474,7 +1474,7 @@ for (i in seq_len(nrow(result_matrix))) {
 ct_sbav_be_yld <- as.data.frame(result_matrix) # Table in Excel.
 ```
 
-```{r, eval=FALSE}
+```{r}
 write.csv(as.data.frame(ct_sbav_be_yld),
           row.names = TRUE,
           file = "Results/ct_sbav_be_yld R25.csv")
@@ -1515,7 +1515,7 @@ heatmap_plot <- pheatmap((ct_sbav_be_yld),
                          )
 ```
 
-```{r, eval=FALSE}
+```{r}
 ggsave(heatmap_plot,
        height = 8,
        width = 12,
@@ -1524,11 +1524,11 @@ ggsave(heatmap_plot,
 rm(heatmap_plot); rm(colorcount); rm(uniquevalue)
 ```
 
-## Plotting Strawberry Profit by Panels
+## Plot Strawberry Profit by Panels
 
 You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, eval=FALSE}
+```{r}
 combinations <- expand.grid(
   yldvar = c(0, 0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield
   price = c(3, 6, 9), # Strawberry price
@@ -1590,11 +1590,11 @@ for (combo in seq_len(nrow(combinations))) {
 }
 ```
 
-## Plotting Strawberry Profit by Yields
+## Plot Strawberry Profit by Yields
 
 You can see plot breakdown based on solar proportion, crop price, and electricity price. You can see variation for all crop yield variation in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, eval=FALSE}
+```{r}
 combinations <- expand.grid(
   sprop = c(0, 0.25, 0.50, 0.75, 1.00), # Solar proportion
   price = c(3, 6, 9), # Strawberry price

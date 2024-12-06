@@ -370,7 +370,7 @@ str(energy_output)
 head(energy_output); tail(energy_output)
 ```
 
-### Energy output by solar panels counts
+### By \# of panels
 
 Plotting Energy output by number of solar panels in one acres of AV system from fixed and single axis rotation system for two zipcodes (1, 2) within each of the four regions of AL.
 
@@ -392,7 +392,7 @@ ggplot(data = energy_output,
   guides(color = guide_legend(ncol = 2, reverse = TRUE))
 ```
 
-### Energy output by DC System Size
+### By DC System Size
 
 Plotting Energy output by DC System Size from fixed and single axis rotation system for two zipcodes (1, 2) within each of the four regions of AL.
 
@@ -414,7 +414,7 @@ ggplot(data = energy_output,
 
 # Solar Energy Calculation
 
-## Simulation for energy revenue
+## Simulation: Energy Revenue
 
 -   elcprc = electricity price. See Electricity price data for more detail.
 
@@ -470,7 +470,7 @@ str(energy_revenue)
 head(energy_revenue); tail(energy_revenue)
 ```
 
-## Simulation 2 for energy revenue
+## Simulation 2: Energy Revenue
 
 This simulation has same result as above (Cross checking above code and output). Results are suppressed but errors and warnings are not. No error and no warnings means code is working as it should.
 
@@ -497,9 +497,9 @@ str(result_matrix)
 head(result_matrix); tail(result_matrix)
 ```
 
-## Plotting revenue from energy production
+## Plot Revenue from Energy
 
-### Breakdown by number of solar panels
+### By \# of panels
 
 I am using data from simulation 1 for this visualization. This code plots one chart per electricity cost. There are 11 electricity cost resulting into 11 charts. Electricity revenue is average revenue of first and second lots of simulation.
 
@@ -526,7 +526,7 @@ for (i in unique(energy_revenue$elcprc)) {
 }
 ```
 
-### Breakdown by proportion of land under solar
+### By Land in Solar
 
 -   Two proportions may have same number of solar panels (Eg. 0.80 and 0.85, 0.20 and 0.25). So, total lines in the chart may not match with total number of legend levels. Some proportions are overlapping in the chart. See panel configuration for more detail.
 
@@ -868,7 +868,7 @@ squash_long$price <- as.numeric(gsub("rolac", "", squash_long$price))
 
 Total profit from solar and crops for all combinations of AVs simulated.
 
-## Profit from tomato agrivoltaic system
+## Profit from TAV
 
 -   Joint profit from tomato (tomato_long) and solar energy production (solar_profit) from 1 acre of land.
 -   The last variable (tav_profit) is the final profit from tomato agrivoltaic system which is the result of our interest.
@@ -933,7 +933,7 @@ write_xlsx(x = tav_profit %>%
            as_table = TRUE)
 ```
 
-## Profit from strawberry agrivoltaic system
+## Profit from SBAV
 
 -   Joint profit from strawberry (stberry_long) and solar energy production (solar_profit) from 1 acre of land.
 -   The last variable (sbav_profit) is the final profit from strawberry agrivoltaic system which is the result of our interest.
@@ -998,7 +998,7 @@ write_xlsx(x = sbav_profit %>%
            as_table = TRUE)
 ```
 
-## Profit from Squash agrivoltaic system
+## Profit from SQAV
 
 ```{r}
 solar_expanded <- solar_profit[rep(1:nrow(solar_profit), 
