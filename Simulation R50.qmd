@@ -665,6 +665,25 @@ str(solar_profit)
 head(solar_profit); tail(solar_profit)
 ```
 
+## Profit from Solar
+
+Profit from solar alone at 100% PVD
+
+```{r}
+pf_solar_r50 <- solar_profit %>% 
+  filter(sprop == 1,
+         elcprc == 0.04) %>% 
+  select(al_regs, array, height, eannprof, eannprofworeap)
+cat("Maximum profit from solar at 100% PVD at 50% REAP = ",
+    max(pf_solar_r50$eannprof),
+    fill = TRUE)
+pf_solar_r50[which.max(pf_solar_r50$eannprof),]
+cat("Minimum profit from solar at 100% PVD at 50% REAP = ",
+    min(pf_solar_r50$eannprof),
+    fill = TRUE)
+pf_solar_r50[which.min(pf_solar_r50$eannprof),]
+```
+
 ### Plot Solar profit
 
 Solar annual profit by number of solar panels

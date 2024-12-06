@@ -206,19 +206,19 @@ write_xlsx(x = tav_be_yld,
 At 50% REAP, how much money should be spent as tax credit to make AV as profitable as Crops, if crop yield decrased by 50%?
 
 ```{r}
-tcc_tav_tomato <- tav_profit %>% 
+tcc_tav_tomato_r50 <- tav_profit %>% 
   filter(yldvar == 1,
          elcprc == 0.04,
          price == 20,
          sprop >= 0.1
          )
-tcc_tav_tomato[which.max(tcc_tav_tomato$eannprofworeap)]
+tcc_tav_tomato_r50[which.max(tcc_tav_tomato_r50$eannprofworeap),]
 cat("Minimum REAP Compensation to make TAV as profitable as Tomato: ",
-    abs(max(tcc_tav_tomato$eannprofworeap)) + 9619.38, fill = TRUE)
+    abs(max(tcc_tav_tomato_r50$eannprofworeap)) + 9619.38, fill = TRUE)
 
-tcc_tav_tomato[which.min(tcc_tav_tomato$eannprofworeap)]
+tcc_tav_tomato_r50[which.min(tcc_tav_tomato_r50$eannprofworeap),]
 cat("Maximum REAP Compensation to make TAV as profitable as Tomato: ",
-    abs(min(tcc_tav_tomato$eannprofworeap)) + 9619.38, fill = TRUE)
+    abs(min(tcc_tav_tomato_r50$eannprofworeap)) + 9619.38, fill = TRUE)
 ```
 
 ## Strawberry AV
@@ -315,19 +315,19 @@ dim(sbav_be_yld)
 ### Tax Credit for SBAV
 
 ```{r}
-tcc_sbav_stberry <- sbav_profit %>%
+tcc_sbav_stberry_r50 <- sbav_profit %>%
   filter(yldvar == 1,
          elcprc == 0.04,
          price == 6,
          sprop >= 0.1
          )
-tcc_sbav_stberry[which.max(tcc_sbav_stberry$eannprofworeap)]
+tcc_sbav_stberry_r50[which.max(tcc_sbav_stberry_r50$eannprofworeap)]
 cat("Minimum REAP Compensation to make SBAV profitable as Strawberry: ",
-    abs(max(tcc_sbav_stberry$eannprofworeap)) + 1715.96, fill = TRUE)
+    abs(max(tcc_sbav_stberry_r50$eannprofworeap)) + 1715.96, fill = TRUE)
 
-tcc_sbav_stberry[which.min(tcc_sbav_stberry$eannprofworeap)]
+tcc_sbav_stberry_r50[which.min(tcc_sbav_stberry_r50$eannprofworeap)]
 cat("Maximum REAP Compensation to make SBAV profitable as Strawberry: ",
-    abs(min(tcc_sbav_stberry$eannprofworeap)) + 1715.96, fill = TRUE)
+    abs(min(tcc_sbav_stberry_r50$eannprofworeap)) + 1715.96, fill = TRUE)
 ```
 
 # Tomato AV Results

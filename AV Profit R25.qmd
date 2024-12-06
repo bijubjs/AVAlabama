@@ -201,6 +201,24 @@ write_xlsx(x = tav_be_yld,
            as_table = TRUE)
 ```
 
+### Tax Credit for TAV
+
+```{r}
+tcc_tav_tomato_r25 <- tav_profit %>% 
+  filter(yldvar == 1,
+         elcprc == 0.04,
+         price == 20,
+         sprop >= 0.1
+         )
+tcc_tav_tomato_r25[which.max(tcc_tav_tomato_r25$eannprofworeap),]
+cat("Minimum REAP Compensation to make TAV as profitable as Tomato: ",
+    abs(max(tcc_tav_tomato_r25$eannprofworeap)) + 9619.38, fill = TRUE)
+
+tcc_tav_tomato_r25[which.min(tcc_tav_tomato_r25$eannprofworeap),]
+cat("Maximum REAP Compensation to make TAV as profitable as Tomato: ",
+    abs(min(tcc_tav_tomato_r25$eannprofworeap)) + 9619.38, fill = TRUE)
+```
+
 ## Strawberry AV
 
 See tomato for variable descriptions.
@@ -290,6 +308,24 @@ write_xlsx(x = sbav_be_yld,
            file = "Results/SBAV Strawberry Breakeven Yield R25.xlsx",
            as.table = TRUE)
 dim(sbav_be_yld)
+```
+
+### Tax Credit for SBAV
+
+```{r}
+tcc_sbav_stberry_r25 <- sbav_profit %>%
+  filter(yldvar == 1,
+         elcprc == 0.04,
+         price == 6,
+         sprop >= 0.1
+         )
+tcc_sbav_stberry_r25[which.max(tcc_sbav_stberry_r25$eannprofworeap)]
+cat("Minimum REAP Compensation to make SBAV profitable as Strawberry: ",
+    abs(max(tcc_sbav_stberry_r25$eannprofworeap)) + 1715.96, fill = TRUE)
+
+tcc_sbav_stberry_r25[which.min(tcc_sbav_stberry_r25$eannprofworeap)]
+cat("Maximum REAP Compensation to make SBAV profitable as Strawberry: ",
+    abs(min(tcc_sbav_stberry_r25$eannprofworeap)) + 1715.96, fill = TRUE)
 ```
 
 # Tomato AV Results
@@ -852,7 +888,7 @@ rm(heatmap_plot); rm(colorcount); rm(uniquevalue)
 
 You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r}
+```{r, eval=FALSE}
 combinations <- expand.grid(
   yldvar = c(0, 0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield
   price = c(17, 20, 23), # Tomato price
@@ -919,7 +955,7 @@ for (combo in seq_len(nrow(combinations))) {
 
 You can see plot breakdown based on solar proportion, crop price, and electricity price. You can see variation for all crop yield variation in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r}
+```{r, eval=FALSE}
 combinations <- expand.grid(
   sprop = c(0, 0.25, 0.50, 0.75, 1.00), # Solar proportion
   price = c(17, 20, 23), # Tomato price
@@ -1528,7 +1564,7 @@ rm(heatmap_plot); rm(colorcount); rm(uniquevalue)
 
 You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r}
+```{r, eval=FALSE}
 combinations <- expand.grid(
   yldvar = c(0, 0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield
   price = c(3, 6, 9), # Strawberry price
@@ -1594,7 +1630,7 @@ for (combo in seq_len(nrow(combinations))) {
 
 You can see plot breakdown based on solar proportion, crop price, and electricity price. You can see variation for all crop yield variation in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r}
+```{r, eval=FALSE}
 combinations <- expand.grid(
   sprop = c(0, 0.25, 0.50, 0.75, 1.00), # Solar proportion
   price = c(3, 6, 9), # Strawberry price
