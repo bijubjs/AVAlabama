@@ -1,5 +1,5 @@
 ---
-title: "AV Profit"
+title: "AV Profit REAP25"
 author: "Bijesh Mishra, Ph.D."
 date: "`r Sys.Date()`"
 toc: true
@@ -203,6 +203,8 @@ write_xlsx(x = tav_be_yld,
 
 ### Tax Credit for TAV
 
+How much money should be spent as REAP or tax credit to make AV as profitable as crop?
+
 ```{r}
 tcc_tav_tomato_r25 <- tav_profit %>% 
   filter(yldvar == 1,
@@ -311,6 +313,8 @@ dim(sbav_be_yld)
 ```
 
 ### Tax Credit for SBAV
+
+How much money should be spent as REAP or tax credit to make AV as profitable as crop?
 
 ```{r}
 tcc_sbav_stberry_r25 <- sbav_profit %>%

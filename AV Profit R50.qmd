@@ -1,5 +1,5 @@
 ---
-title: "AV Profit"
+title: "AV Profit REAP50"
 author: "Bijesh Mishra, Ph.D."
 date: "`r Sys.Date()`"
 toc: true
@@ -203,7 +203,7 @@ write_xlsx(x = tav_be_yld,
 
 ### Tax Credit for TAV
 
-At 50% REAP, how much money should be spent as tax credit to make AV as profitable as Crops, if crop yield decrased by 50%?
+How much money should be spent as REAP or tax credit to make AV as profitable as crop?
 
 ```{r}
 tcc_tav_tomato_r50 <- tav_profit %>% 
@@ -219,6 +219,27 @@ cat("Minimum REAP Compensation to make TAV as profitable as Tomato: ",
 tcc_tav_tomato_r50[which.min(tcc_tav_tomato_r50$eannprofworeap),]
 cat("Maximum REAP Compensation to make TAV as profitable as Tomato: ",
     abs(min(tcc_tav_tomato_r50$eannprofworeap)) + 9619.38, fill = TRUE)
+```
+
+## TAV = Tomato Scenario
+
+Which scenario produces same profit as or above tomato alone at 50% REAP?
+
+```{r}
+tav_equals_tomato_r50 <- tav_profit %>% 
+  filter(yldvar == 0.5,
+         elcprc == 0.04,
+         price == 20,
+         sprop >= 0.1,
+         tav_profit == 9619.38
+         )
+# tav_equals_tomato_r50[which.max(tav_equals_tomato_r50$tav_profit),]
+# cat("Minimum REAP Compensation to make TAV as profitable as Tomato: ",
+#     abs(max(tcc_tav_tomato_r50$eannprofworeap)) + 9619.38, fill = TRUE)
+
+# tcc_tav_tomato_r50[which.min(tcc_tav_tomato_r50$eannprofworeap),]
+# cat("Maximum REAP Compensation to make TAV as profitable as Tomato: ",
+#     abs(min(tcc_tav_tomato_r50$eannprofworeap)) + 9619.38, fill = TRUE)
 ```
 
 ## Strawberry AV
@@ -314,6 +335,8 @@ dim(sbav_be_yld)
 
 ### Tax Credit for SBAV
 
+How much money should be spent as REAP or tax credit to make AV as profitable as crop?
+
 ```{r}
 tcc_sbav_stberry_r50 <- sbav_profit %>%
   filter(yldvar == 1,
@@ -328,6 +351,27 @@ cat("Minimum REAP Compensation to make SBAV profitable as Strawberry: ",
 tcc_sbav_stberry_r50[which.min(tcc_sbav_stberry_r50$eannprofworeap)]
 cat("Maximum REAP Compensation to make SBAV profitable as Strawberry: ",
     abs(min(tcc_sbav_stberry_r50$eannprofworeap)) + 1715.96, fill = TRUE)
+```
+
+## SBAV = Strawberry Scenario
+
+Which scenario produces same profit as or above tomato alone at 50% REAP?
+
+```{r}
+sbav_equals_sberry_r50 <- sbav_profit %>% 
+  filter(yldvar == 0.5,
+         elcprc == 0.04,
+         price == 20,
+         sprop >= 0.1,
+         sbav_profit == 9619.38
+         )
+# tav_equals_tomato_r50[which.max(tav_equals_tomato_r50$tav_profit),]
+# cat("Minimum REAP Compensation to make TAV as profitable as Tomato: ",
+#     abs(max(tcc_tav_tomato_r50$eannprofworeap)) + 9619.38, fill = TRUE)
+
+# tcc_tav_tomato_r50[which.min(tcc_tav_tomato_r50$eannprofworeap),]
+# cat("Maximum REAP Compensation to make TAV as profitable as Tomato: ",
+#     abs(min(tcc_tav_tomato_r50$eannprofworeap)) + 9619.38, fill = TRUE)
 ```
 
 # Tomato AV Results

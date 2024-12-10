@@ -1,5 +1,5 @@
 ---
-title: "Choice Paper Simulation"
+title: "AV Simulation REAP50"
 author: "Bijesh Mishra, Ph.D."
 date: "`r Sys.Date()`"
 toc: true
@@ -871,7 +871,7 @@ squash_profit = squash %>%
          rolac11, rolac12, rolac13, rolac14,
          rolac15, rolac16, rolac17)
 # Reshape the data frame from wide to long format
-squash_long <- melt(squash_profit,
+squash_long <- reshape2::melt(squash_profit,
                 id.vars = c("yldvar", "yield"),
                 measure.vars = c("rolac11", "rolac12", "rolac13",
                                  "rolac14","rolac15", "rolac16",
@@ -975,8 +975,21 @@ sbav_profit <- cbind(solar_expanded,
 # Convert to a data frame and ensure the correct format
 sbav_profit <- as.data.frame(sbav_profit)
 sbav_profit <- data.frame(lapply(sbav_profit, unlist))
-str(sbav_profit)
-head(sbav_profit); tail(sbav_profit)
+str(sbav_profit); head(sbav_profit); tail(sbav_profit)
+```
+
+## Filtering Strawberry Results
+
+```{r}
+sbav_profit %>% 
+  dplyr::filter(height == 8.2,
+         array == "Tracking",
+         elcprc == 0.04,
+         sprop == 0.70,
+         yldvar == 1,
+         price == 3) %>% 
+  dplyr::select(height, array, elcprc, al_regs,
+                yldvar, price, sprop, sbav_profit)
 ```
 
 ### Saving results locally
@@ -1002,7 +1015,7 @@ tictoc::toc()
 write_xlsx(x = sbav_profit %>%
              filter(sprop %in% c(0, 0.25, 0.50, 0.75, 1),
                     yldvar == 1,
-                    price == 9,
+                    price == 6,
                     elcprc == 0.04)%>%
              dplyr::select(sprop, panels, height, array, al_regs, 
                            #price, elcprc, yldvar, yield, 
@@ -1019,7 +1032,7 @@ write_xlsx(x = sbav_profit %>%
 
 ## Profit from SQAV
 
-```{r}
+```{r SQAV}
 solar_expanded <- solar_profit[rep(1:nrow(solar_profit), 
                                    each = nrow(squash_long)), ]
 squash_expanded <- squash_long[rep(1:nrow(squash_long), 
@@ -1036,6 +1049,17 @@ sqav_profit <- cbind(solar_expanded,
 # Convert to a data frame and ensure the correct format
 sqav_profit <- as.data.frame(sqav_profit)
 sqav_profit <- data.frame(lapply(sqav_profit, unlist))
+
+# Create a new variable
+sqav_profit <- sqav_profit %>%
+  group_by(price) %>%  # Control for unique prices
+  mutate(
+    sqavp_ge_sq = if_else(yldvar == 1 & sqav_profit >= profit, 1, 0)
+  ) %>%
+  ungroup()
+
+# SQAV Profit Greater or Equal to Squash
+sqavp_ge_squash = sqav_profit %>% filter(sqavp_ge_sq == 1)
 
 write_feather(sqav_profit,
   sink = "Data/sqav_profit R50.feather",
@@ -1065,4 +1089,22 @@ write_xlsx(x = sqav_profit %>%
     TRUE ~ NA_real_)),
            file = "Results/Profit SQAV WriteUp R50.xlsx",
            as_table = TRUE)
+
+write_xlsx(
+  x = sqavp_ge_squash %>%
+    dplyr::filter(sqavp_ge_sq == 1) %>%
+    dplyr::select(
+      sprop, panels, height, array, al_regs, 
+      yldvar, yield, price, elcprc, sqav_profit
+    ) %>%
+    mutate(al_regs1 = case_when(
+      al_regs == "Northern" ~ 1,
+      al_regs == "Central" ~ 2,
+      al_regs == "Black Belt" ~ 3,
+      al_regs == "Southern" ~ 4,
+      TRUE ~ NA_real_
+    )),
+  file = "Results/Profit SQAV GE Squash R50.xlsx",
+  as_table = TRUE
+)
 ```
