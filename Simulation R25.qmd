@@ -218,7 +218,7 @@ pvsc <- wb_read(file = "Data/Parameters.xlsx",
 str(pvsc)
 ```
 
-## Capex (NREL)
+## Capex and Plot
 
 Variable Descriptions:
 
@@ -241,8 +241,6 @@ capex <- read.table(file = "Data/CAPEX.txt",
          array = tracker)
 capex
 ```
-
-### Plotting capex
 
 ```{r CpxPlt}
 capex %>%

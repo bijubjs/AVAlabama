@@ -120,7 +120,7 @@ tav_profit <- as.data.frame(
 dim(tav_profit)
 ```
 
-### Calculate tavp_wocp
+### TAVP - Tomato Profit
 
 -   Profit at 100% crop yield at their respective price is subtracted from tav_profit.
 
@@ -128,7 +128,6 @@ dim(tav_profit)
 
     ```{r}
     # Calculate the profit:
-    # Step 1: Filter the dataframe to get the unique profit values for each price when yldvar is 1
     unique_profits <- unique(tav_profit[tav_profit$yldvar == 1, 
                                         c("price", "profit")])
 
@@ -136,7 +135,7 @@ dim(tav_profit)
     profit_lookup <- setNames(unique_profits$profit, 
                               unique_profits$price)
 
-    # Step 3: Create the new variable tavp_wocp by subtracting the unique profit from tav_profit
+    # Step 3: tavp_wocp = tav_profit - unique profit
     tav_profit$tavp_wocp <- mapply(function(
         tav_profit,
         price
@@ -148,16 +147,15 @@ dim(tav_profit)
       return(tav_profit - profit_to_subtract)
     }, tav_profit$tav_profit, tav_profit$price)
     unique_profits # 7 Prices give 7 Profits at 100% Yield.
-    tav_profit[1:21,] # Sample data.
-    rm(unique_profits); rm(profit_lookup)
+    rm(unique_profits, profit_lookup)
     ```
 
-### TAV Profit \> Tomato Alone
+### TAVP GE Tomato
 
 Tomato yield where tomato AV start becoming more profitable than tomato alone.
 
 ```{r}
-# Convert the data frame to a data.table for faster operations
+# Convert dataframe to a data.table
 setDT(tav_profit)
 
 # Function to process each subset
@@ -190,9 +188,7 @@ tav_be_yld <- rbindlist(results,
                         fill = TRUE) %>% 
   select(al_regs, array, sprop, panels, elcprc, price,
          height, profit, yldvar, yield, tav_profit, tavp_wocp)
-dim(tav_be_yld)
-# Dimension and Clean up
-rm(results); rm(split_data); rm(process_subset)
+dim(tav_be_yld); rm(results, split_data, process_subset)
 ```
 
 ```{r}
@@ -206,19 +202,19 @@ write_xlsx(x = tav_be_yld,
 How much money should be spent as REAP or tax credit to make AV as profitable as crop?
 
 ```{r}
-tcc_tav_tomato_r25 <- tav_profit %>% 
+tcc_tav_tomato <- tav_profit %>% 
   filter(yldvar == 1,
          elcprc == 0.04,
          price == 20,
          sprop >= 0.1
          )
-tcc_tav_tomato_r25[which.max(tcc_tav_tomato_r25$eannprofworeap),]
+tcc_tav_tomato[which.max(tcc_tav_tomato$eannprofworeap),]
 cat("Minimum REAP Compensation to make TAV as profitable as Tomato: ",
-    abs(max(tcc_tav_tomato_r25$eannprofworeap)) + 9619.38, fill = TRUE)
+    abs(max(tcc_tav_tomato$eannprofworeap)) + 9619.38, fill = TRUE)
 
-tcc_tav_tomato_r25[which.min(tcc_tav_tomato_r25$eannprofworeap),]
+tcc_tav_tomato[which.min(tcc_tav_tomato$eannprofworeap),]
 cat("Maximum REAP Compensation to make TAV as profitable as Tomato: ",
-    abs(min(tcc_tav_tomato_r25$eannprofworeap)) + 9619.38, fill = TRUE)
+    abs(min(tcc_tav_tomato$eannprofworeap)) + 9619.38, fill = TRUE)
 ```
 
 ## Strawberry AV
@@ -234,15 +230,14 @@ sbav_profit <- as.data.frame(
 dim(sbav_profit)
 ```
 
-### Calculate sbvp_wocp
+### SBAVP - Strawberry Profit
 
 -   Profit at 100% crop at their respective price is subtracted from sbav_profit.
 
 -   sbavp_wocp = sbav_profit - profit from 100% crop at their respective prices. This variable gives an idea where av profit stands in relation to crop profit. It helps to identify relative profitability of agrivoltaic system compared to crop only.
 
     ```{r}
-    # Calculate the profit:
-    # Step 1: Filter the dataframe to get the unique profit values for each price when yldvar is 1
+    # Step 1: Unique Profit
     unique_profits <- unique(sbav_profit[sbav_profit$yldvar == 1, 
                                         c("price", "profit")])
 
@@ -250,7 +245,7 @@ dim(sbav_profit)
     profit_lookup <- setNames(unique_profits$profit, 
                               unique_profits$price)
 
-    # Step 3: Create the new variable sbavp_wocp by subtracting the unique profit from sqav_profit
+    # Step 3: sbavp_wocp = sqav_profit - unique profit
     sbav_profit$sbavp_wocp <- mapply(function(sbav_profit, price) {
       profit_to_subtract <- ifelse(price %in% 
                                      names(profit_lookup), 
@@ -259,10 +254,10 @@ dim(sbav_profit)
     }, sbav_profit$sbav_profit, sbav_profit$price)
 
     unique_profits # 7 Prices give 7 Profits at 100% Yield.
-    rm(unique_profits); rm(profit_lookup)
+    rm(unique_profits, profit_lookup)
     ```
 
-    ### SBAV Profit \> Strawberry Alone
+    ### SBAVP GE Strawberry Profit
 
 Strawberry yield where strawberry AV profit start becoming more profitable than strawberry alone.
 
@@ -302,55 +297,46 @@ sbav_be_yld <- rbindlist(results,
          height, profit, yldvar, yield, sbav_profit, sbavp_wocp)
 
 # Clean up
-rm(results); rm(split_data); rm(process_subset)
+rm(results, split_data, process_subset)
 ```
 
 ```{r}
 write_xlsx(x = sbav_be_yld,
            file = "Results/SBAV Strawberry Breakeven Yield R25.xlsx",
-           as.table = TRUE)
-dim(sbav_be_yld)
+           as_table = TRUE)
 ```
 
 ### Tax Credit for SBAV
 
-How much money should be spent as REAP or tax credit to make AV as profitable as crop?
+How much money should be spent as incentive to make AV as profitable as crop?
 
 ```{r}
-tcc_sbav_stberry_r25 <- sbav_profit %>%
+tcc_sbav_stberry <- sbav_profit %>%
   filter(yldvar == 1,
          elcprc == 0.04,
          price == 6,
          sprop >= 0.1
          )
-tcc_sbav_stberry_r25[which.max(tcc_sbav_stberry_r25$eannprofworeap)]
-cat("Minimum REAP Compensation to make SBAV profitable as Strawberry: ",
-    abs(max(tcc_sbav_stberry_r25$eannprofworeap)) + 1715.96, fill = TRUE)
+tcc_sbav_stberry[which.max(tcc_sbav_stberry$eannprofworeap)]
+cat("Minimum Compensation to make SBAV profitable as Strawberry: ",
+    abs(max(tcc_sbav_stberry$eannprofworeap)) + 4175.66, fill = TRUE)
 
-tcc_sbav_stberry_r25[which.min(tcc_sbav_stberry_r25$eannprofworeap)]
-cat("Maximum REAP Compensation to make SBAV profitable as Strawberry: ",
-    abs(min(tcc_sbav_stberry_r25$eannprofworeap)) + 1715.96, fill = TRUE)
+tcc_sbav_stberry[which.min(tcc_sbav_stberry$eannprofworeap)]
+cat("Maximum Compensation to make SBAV profitable as Strawberry: ",
+    abs(min(tcc_sbav_stberry$eannprofworeap)) + 4175.66, fill = TRUE)
 ```
 
 # Tomato AV Results
 
-## tav_profit Crosstab
+## TAV Profit CrossTab
 
 ```{r}
 # Define the values for each variable
-# sprop <- c(0, 0.05, 0.10, 0.15, 0.20, 0.25,
-#            0.30, 0.35, 0.40, 0.45, 0.50,
-#            0.55, 0.60, 0.65, 0.70, 0.75, 
-#            0.80, 0.85, 0.90, 0.95, 1.00)
 sprop <- c(0.10, 0.20, 0.30, 0.40, 0.50,
-          0.60, 0.70, 0.80, 0.90, 1.00)
+          0.60, 0.70, 0.80, 0.90, 1.00) # Panel Density
 array <- c("Fixed", "Tracking") # Solar Array
 height <- c(4.6, 6.4, 8.2) # Panel height
-# yldvar <- c(0, 0.10, 0.20, 0.30, 0.40, 
-#             0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 
-#             1.10, 1.20, 1.30, 1.40, 1.50, 1.60, 
-#             1.70, 1.80, 1.90, 2.00)
-yldvar <- c(0.5, 1, 1.5)
+yldvar <- c(0.5, 1, 1.5) # Yield
 al_regs <- c("Northern", "Central", 
              "Black Belt", "Southern") # Regions AL
 price <- c(17, 20, 23) # Crop Price
@@ -426,9 +412,10 @@ for (i in seq_len(nrow(result_matrix))) {
 }
 
 ct_tav_pft <- as.data.frame(result_matrix) # Table in Excel.
-# Display the result matrix
-rm(result_matrix); rm(sprop); rm(array); rm(height); 
-rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
+rm(result_matrix, sprop, array, height, elcprc, price, yldvar, al_regs)
+rm(col_indices, col_names, i, missing_columns, required_columns)
+rm(row_condition, row_names, valid_indices)
+rm(param_combinations, row_data, merged_data)
 ```
 
 ```{r}
@@ -437,13 +424,13 @@ write_xlsx(x = ct_tav_pft %>%
   dplyr::select(Row_Names, everything()),
            file = "Results/Profit Ctab TAV R25.xlsx",
            as_table = TRUE)
-dim(ct_tav_pft)
 ```
 
-## tav_profit Heatmap
+## TAV Profit HeatMap
 
 -   Heatmap of 324\*30 dimension matrix
 -   Tomato profit.
+-   Included in the manuscript.
 
 ```{r}
 # Calculate color count based on unique values, excluding zero
@@ -507,10 +494,13 @@ ggsave(heatmap_plot,
        units = "in",
        limitsize = FALSE,
        file = paste0("Plots/TAV Profits CTab R25", ".png"))
-#rm(colorcount); rm(heatmap_plot)
+rm(breaks, colorcount, custom_colors, max_val, min_val, neg_colors)
+rm(pos_colors, zero_color, heatmap_plot)
 ```
 
-## tav_profit manuscript
+## TAV Profit Manuscript
+
+This table is summarized in the manuscript.
 
 ```{r}
 # Define the values for each variable
@@ -606,12 +596,12 @@ write_xlsx(x = tav_prof_man %>%
   dplyr::select(Row_Names, everything()),
            file = "Results/Profit TAV Manuscript R25.xlsx",
            as_table = TRUE)
-# Display the result matrix
-rm(result_matrix); rm(sprop); rm(array); rm(height); 
-rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
+rm(result_matrix, sprop, array, height, elcprc, price, yldvar, al_regs)
+rm(param_combinations, merged_data, row_data, col_names, i)
+rm(missing_columns, required_columns, row_condition, row_names)
 ```
 
-## tavp_wocp Crosstab
+## TAVP - Tomato Profit CrossTab
 
 -   Heatmap of 324\*30 dimension matrix.
 
@@ -703,7 +693,9 @@ rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
       }
     }
     ct_tavp_wocp <- as.data.frame(result_matrix) # Table in Excel.
-    dim(ct_tavp_wocp);rm(result_matrix)
+    rm(result_matrix, merged_data, param_combinations, row_data)
+    rm(al_regs, array, col_names, elcprc, height, i, missing_columns)
+    rm(price, required_columns, row_names, sprop, yldvar, row_condition)
     ```
 
 ```{r}
@@ -712,11 +704,10 @@ write.csv(as.data.frame(ct_tavp_wocp),
           file = "Results/ct_tavp_wocp R25.csv")
 ```
 
-## tavp_wocp Heatmap
+## TAVP - Tomato Profit HeatMap
 
 ```{r}
 colorcount = length(unique(as.vector(as.matrix(ct_tavp_wocp[-1]))))
-colorcount
 heatmap_plot <- pheatmap(t(ct_tavp_wocp),
                          #clustering_distance_rows = "correlation",
                          clustering_distance_rows = "euclidean",
@@ -746,10 +737,12 @@ ggsave(heatmap_plot,
        width = 12,
        units = "in",
        file = paste0("Plots/gp_tavp_wocp R25", ".png"))
-rm(heatmap_plot); rm(colorcount)
+rm(heatmap_plot, colorcount)
 ```
 
-## tav_be_yld Crosstab
+## TAV Breakeven Yield
+
+Tomato Yield at which TAV profit become breakeven with Tomato profit.
 
 ```{r}
 # Define the values for each variable
@@ -761,10 +754,6 @@ price <- c(17, 20, 23) # Crop Price
 elcprc <- c(0.02, 0.03, 0.04) # Electricity Price
 #elcprc <- c(0.04) # Electricity Price
 yldvar <- c(1)
-# yldvar <- c(0, 0.10, 0.20, 0.30, 0.40,
-#             0.50, 0.60, 0.70, 0.80, 0.90, 1.00,
-#             1.10, 1.20, 1.30, 1.40, 1.50, 
-#             1.60, 1.70, 1.80, 1.90, 2.00)
 
 # Define the required columns
 required_columns <- c("sprop", "array", "height", 
@@ -836,7 +825,9 @@ for (i in seq_len(nrow(result_matrix))) {
   }
 }
 ct_tav_be_yld <- as.data.frame(result_matrix) # Table in Excel.
-dim(ct_tav_be_yld); rm(result_matrix)
+rm(result_matrix, merged_data, row_data, param_combinations)
+rm(al_regs, array, col_names, elcprc, height, i, missing_columns)
+rm(price, required_columns, row_condition, row_names, sprop, yldvar)
 ```
 
 ```{r}
@@ -845,13 +836,11 @@ write.csv(as.data.frame(ct_tav_be_yld),
           file = "Results/ct_tav_be_yld R25.csv")
 ```
 
-## tav_be_yld Heatmap
+## TAV Breakeven Yield HeatMap
 
 ```{r}
 uniquevalue = unique(as.vector(as.matrix(ct_tav_be_yld[-1])))
-uniquevalue
 colorcount = length(unique(as.vector(as.matrix(ct_tav_be_yld[-1]))))
-colorcount
 heatmap_plot <- pheatmap((ct_tav_be_yld),
                          #clustering_distance_rows = "correlation",
                          clustering_distance_rows = "euclidean",
@@ -885,7 +874,7 @@ ggsave(heatmap_plot,
        width = 12,
        units = "in",
        file = paste0("Plots/gp_tav_be_yld R25", ".png"))
-rm(heatmap_plot); rm(colorcount); rm(uniquevalue)
+rm(heatmap_plot, colorcount, uniquevalue)
 ```
 
 ## Plot Tomato Profits by Panels
@@ -953,6 +942,7 @@ for (combo in seq_len(nrow(combinations))) {
   ggsave(file = paste0("Plots/tav_sp_R25", combo, ".png"))
   #break
 }
+rm(combinations, combo)
 ```
 
 ## Plot Tomato Profits by Yields
@@ -1019,11 +1009,12 @@ for (combo in seq_len(nrow(combinations))) {
   ggsave(file = paste0("Plots/tav_yv_R25", combo, ".png"))
   #break
 }
+rm(combinations, combo)
 ```
 
 # Strawberry AV Results
 
-## sbav_profit Crosstab
+## SBAV Profit CrossTab
 
 ```{r}
 # Define the values for each variable
@@ -1103,10 +1094,10 @@ for (i in seq_len(nrow(result_matrix))) {
   }
 }
 ct_sbav_pft <- as.data.frame(result_matrix) #Table in Excel.
-# Display the result matrix
-ct_sbav_pft <- as.data.frame(result_matrix) # Table in Excel.
-rm(result_matrix); rm(sprop); rm(array); rm(height); 
-rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
+rm(result_matrix, sprop, array, height, elcprc, price, yldvar, al_regs)
+rm(col_indices, col_names, i, missing_columns, required_columns)
+rm(row_condition, row_names, valid_indices)
+rm(param_combinations, row_data, merged_data)
 ```
 
 ```{r}
@@ -1115,10 +1106,9 @@ write_xlsx(x = ct_sbav_pft %>%
   dplyr::select(Row_Names, everything()),
            file = "Results/Profit Ctab SBAV R25.xlsx",
            as_table = TRUE)
-dim(ct_sbav_pft)
 ```
 
-## sbav_profit Heatmap
+## SBAV Profit HeatMap
 
 ```{r}
 # Calculate color count based on unique values, excluding zero
@@ -1182,9 +1172,13 @@ ggsave(heatmap_plot,
        units = "in",
        limitsize = FALSE,
        file = paste0("Plots/SBAV Profits Ctab R25", ".png"))
+rm(breaks, colorcount, custom_colors, max_val, min_val, neg_colors)
+rm(pos_colors, zero_color, heatmap_plot)
 ```
 
-## sbav_profit manuscript
+## SBAV Profit Manuscript
+
+This table is in manuscript.
 
 ```{r}
 # Define the values for each variable
@@ -1273,18 +1267,17 @@ for (i in seq_len(nrow(result_matrix))) {
   }
 }
 sbav_prof_man <- as.data.frame(result_matrix) # Table in Excel.
-
 write_xlsx(x = sbav_prof_man %>%
   dplyr::mutate(Row_Names = rownames(sbav_prof_man)) %>%
   dplyr::select(Row_Names, everything()),
            file = "Results/Profit SBAV Manuscript R25.xlsx",
            as_table = TRUE)
-# Display the result matrix
-rm(result_matrix); rm(sprop); rm(array); rm(height); 
-rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
+rm(result_matrix, sprop, array, height, elcprc, price, yldvar, al_regs)
+rm(param_combinations, merged_data, row_data, col_names, i)
+rm(missing_columns, required_columns, row_condition, row_names)
 ```
 
-## sbavp_wocp Crosstab
+## SBAVP - Strawberry Profit CrossTab
 
 -   Row naming: Electricity Price_Crop Price_Solar Proportion_Alabama Regions
 
@@ -1381,7 +1374,9 @@ for (i in seq_len(nrow(result_matrix))) {
   }
 }
 ct_sbavp_wocp <- as.data.frame(result_matrix) #Table in Excel.
-rm(result_matrix)
+rm(result_matrix, merged_data, param_combinations, row_data)
+rm(al_regs, array, col_names, elcprc, height, i, missing_columns)
+rm(price, required_columns, row_names, sprop, yldvar, row_condition)
 ```
 
 ```{r}
@@ -1389,10 +1384,9 @@ write.csv(as.data.frame(ct_sbavp_wocp),
           row.names = TRUE,
           #col.names = TRUE,
           file = "Results/ct_sbavp_wocp R25.csv")
-dim(ct_sbavp_wocp)
 ```
 
-## sbavp_wocp Heatmap
+## SBAVP - Strawberry Profit HeatMap
 
 -   Heatmap of 324\*30 dimension matrix.
 
@@ -1426,11 +1420,10 @@ ggsave(heatmap_plot,
        width = 12,
        units = "in",
        file = paste0("Plots/gp_sbavp_wocp R25", ".png"))
-rm(heatmap_plot)
-rm(colorcount)
+rm(heatmap_plot, colorcount)
 ```
 
-## sbav_be_yld Crosstab
+## SBAV Breakeven Yield Crosstab
 
 ```{r}
 sprop <- c(0.05, 0.25, 0.50, 0.75, 0.80, 0.85, 0.90, 1)
@@ -1512,22 +1505,22 @@ for (i in seq_len(nrow(result_matrix))) {
   }
 }
 ct_sbav_be_yld <- as.data.frame(result_matrix) # Table in Excel.
+rm(result_matrix, merged_data, row_data, param_combinations)
+rm(al_regs, array, col_names, elcprc, height, i, missing_columns)
+rm(price, required_columns, row_condition, row_names, sprop, yldvar)
 ```
 
 ```{r}
 write.csv(as.data.frame(ct_sbav_be_yld),
           row.names = TRUE,
           file = "Results/ct_sbav_be_yld R25.csv")
-dim(ct_sbav_be_yld)
 ```
 
-## sbav_be_yld Heatmap
+## SBAV Breakeven Yield HeatMap
 
 ```{r}
 uniquevalue <- unique(as.vector(as.matrix(ct_sbav_be_yld[-1])))
-uniquevalue
 colorcount <- length(unique(as.vector(as.matrix(ct_sbav_be_yld[-1]))))
-colorcount
 heatmap_plot <- pheatmap((ct_sbav_be_yld),
                          #clustering_distance_rows = "correlation",
                          clustering_distance_rows = "euclidean",
@@ -1628,6 +1621,7 @@ for (combo in seq_len(nrow(combinations))) {
   ggsave(file = paste0("Plots/sbav_sp_ R25", combo, ".png"))
   #break
 }
+rm(combinations, combo)
 ```
 
 ## Plot Strawberry Profit by Yields
@@ -1694,4 +1688,5 @@ for (combo in seq_len(nrow(combinations))) {
   ggsave(file = paste0("Plots/sbav_yv_ R25", combo, ".png"))
   #break
 }
+rm(combinations, combo)
 ```
