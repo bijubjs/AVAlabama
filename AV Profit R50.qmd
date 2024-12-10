@@ -206,19 +206,23 @@ write_xlsx(x = tav_be_yld,
 How much money should be spent as REAP or tax credit to make AV as profitable as crop?
 
 ```{r}
-tcc_tav_tomato_r50 <- tav_profit %>% 
+tcc_tav_tomato <- tav_profit %>% 
   filter(yldvar == 1,
          elcprc == 0.04,
          price == 20,
          sprop >= 0.1
          )
-tcc_tav_tomato_r50[which.max(tcc_tav_tomato_r50$eannprofworeap),]
-cat("Minimum REAP Compensation to make TAV as profitable as Tomato: ",
-    abs(max(tcc_tav_tomato_r50$eannprofworeap)) + 9619.38, fill = TRUE)
+tcc_tav_tomato[which.max(tcc_tav_tomato$eannprofworeap),]
+cat("Minimum REAP Compensation to make 
+    TAV as profitable as Tomato: ",
+    abs(max(tcc_tav_tomato$eannprofworeap)) + 9619.38, 
+    fill = TRUE)
 
-tcc_tav_tomato_r50[which.min(tcc_tav_tomato_r50$eannprofworeap),]
-cat("Maximum REAP Compensation to make TAV as profitable as Tomato: ",
-    abs(min(tcc_tav_tomato_r50$eannprofworeap)) + 9619.38, fill = TRUE)
+tcc_tav_tomato[which.min(tcc_tav_tomato$eannprofworeap),]
+cat("Maximum REAP Compensation to make 
+    TAV as profitable as Tomato: ",
+    abs(min(tcc_tav_tomato$eannprofworeap)) + 9619.38,
+    fill = TRUE)
 ```
 
 ## TAV = Tomato Scenario
@@ -338,19 +342,23 @@ dim(sbav_be_yld)
 How much money should be spent as REAP or tax credit to make AV as profitable as crop?
 
 ```{r}
-tcc_sbav_stberry_r50 <- sbav_profit %>%
+tcc_sbav_stberry <- sbav_profit %>%
   filter(yldvar == 1,
          elcprc == 0.04,
          price == 6,
          sprop >= 0.1
          )
-tcc_sbav_stberry_r50[which.max(tcc_sbav_stberry_r50$eannprofworeap)]
-cat("Minimum REAP Compensation to make SBAV profitable as Strawberry: ",
-    abs(max(tcc_sbav_stberry_r50$eannprofworeap)) + 1715.96, fill = TRUE)
+tcc_sbav_stberry[which.max(tcc_sbav_stberry$eannprofworeap)]
+cat("Minimum REAP Compensation to make SBAV 
+    profitable as Strawberry: ",
+    abs(max(tcc_sbav_stberry$eannprofworeap)) + 4175.66,
+    fill = TRUE)
 
-tcc_sbav_stberry_r50[which.min(tcc_sbav_stberry_r50$eannprofworeap)]
-cat("Maximum REAP Compensation to make SBAV profitable as Strawberry: ",
-    abs(min(tcc_sbav_stberry_r50$eannprofworeap)) + 1715.96, fill = TRUE)
+tcc_sbav_stberry[which.min(tcc_sbav_stberry$eannprofworeap)]
+cat("Maximum REAP Compensation to make 
+    SBAV profitable as Strawberry: ",
+    abs(min(tcc_sbav_stberry$eannprofworeap)) + 4175.66,
+    fill = TRUE)
 ```
 
 ## SBAV = Strawberry Scenario
@@ -667,9 +675,10 @@ rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
               0.80, 0.85, 0.90, 0.95, 1.00)
     array <- c("Fixed", "Tracking") # Solar Array
     height <- c(4.6, 6.4, 8.2) # Panel height
-    yldvar <- c(0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 
-                1.00, 1.10, 1.20, 1.30, 1.40, 1.50, 1.60, 1.70, 1.80, 
-                1.90, 2.00)
+    yldvar <- c(0, 0.10, 0.20, 0.30, 0.40, 
+                0.50, 0.60, 0.70, 0.80, 0.90, 
+                1.00, 1.10, 1.20, 1.30, 1.40,
+                1.50, 1.60, 1.70, 1.80, 1.90, 2.00)
     al_regs <- c("Northern", "Central", "Black Belt", "Southern") # Regions of AL
     price <- c(17, 18, 19, 20, 21, 22, 23) # Crop Price
     elcprc <- c(0.03, 0.04, 0.05) # Electricity Price
@@ -795,7 +804,8 @@ rm(heatmap_plot); rm(colorcount)
 
 ```{r}
 # Define the values for each variable
-sprop <- c(0.05, 0.25, 0.50, 0.75, 0.80, 0.85, 0.90, 1)
+sprop <- c(0.05, 0.25, 0.50, 0.75, 
+           0.80, 0.85, 0.90, 1)
 array <- c("Fixed", "Tracking") # Solar Array
 height <- c(4.6, 6.4, 8.2) # Panel height
 al_regs <- c("Northern", "Central", "Black Belt", "Southern")
@@ -936,7 +946,8 @@ You can see plot breakdown based on yield variation, crop price, and electricity
 
 ```{r, eval=FALSE}
 combinations <- expand.grid(
-  yldvar = c(0, 0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield
+  yldvar = c(0, 0.1, 0.3, 0.5, 0.7,
+             1, 1.20, 1.5, 1.80, 2), # Yield
   price = c(17, 20, 23), # Tomato price
   elcprc = c(0.03, 0.04, 0.05) #Electricity price
 )
@@ -1340,12 +1351,16 @@ rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
 
 ```{r}
 # Define the values for each variable
-sprop <- c(0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50,
-           0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00)
+sprop <- c(0, 0.05, 0.10, 0.15, 0.20, 0.25, 
+           0.30, 0.35, 0.40, 0.45, 0.50,
+           0.55, 0.60, 0.65, 0.70, 0.75,
+           0.80, 0.85, 0.90, 0.95, 1.00)
 array <- c("Fixed", "Tracking")
 height <- c(4.6, 6.4, 8.2)
-yldvar <- c(0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 
-            1.10, 1.20, 1.30, 1.40, 1.50, 1.60, 1.70, 1.80, 1.90, 2.00)
+yldvar <- c(0, 0.10, 0.20, 0.30, 0.40, 0.50,
+            0.60, 0.70, 0.80, 0.90, 1.00, 
+            1.10, 1.20, 1.30, 1.40, 1.50, 
+            1.60, 1.70, 1.80, 1.90, 2.00)
 al_regs <- c("Northern", "Central", "Black Belt", "Southern")
 price <- c(3, 4, 5, 6, 7, 8, 9)
 elcprc <- c(0.03, 0.04, 0.05)
@@ -1667,7 +1682,7 @@ for (combo in seq_len(nrow(combinations))) {
   }
   print(combinations[combo,])
   print(sbav_sp_plot)
-  ggsave(file = paste0("Plots/sbav_sp_ R50", combo, ".png"))
+  ggsave(file = paste0("Plots/sbav_sp_R50", combo, ".png"))
   #break
 }
 ```
@@ -1733,7 +1748,7 @@ for (combo in seq_len(nrow(combinations))) {
   }
   print(combinations[combo,])
   print(sbav_yv_plot)
-  ggsave(file = paste0("Plots/sbav_yv_ R50", combo, ".png"))
+  ggsave(file = paste0("Plots/sbav_yv_R50", combo, ".png"))
   #break
 }
 ```

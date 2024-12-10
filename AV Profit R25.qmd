@@ -29,7 +29,7 @@ Analysis in this file start by loading data saved after simulating tomato and st
 
 ## Housekeeping
 
-```{r, warning=FALSE, error=TRUE}
+```{r Housekeeping, warning=FALSE, error=TRUE}
 # #| echo: TRUE
 rm(list = ls()) # Clean the environment.
 options(
@@ -40,7 +40,7 @@ options(
 
 ## Load libraries
 
-```{r}
+```{r Libraries}
 library(tidyverse, warn.conflicts = FALSE, quietly = TRUE)
 library(psych, warn.conflicts = FALSE, quietly = TRUE)
 library(likert,  warn.conflicts = FALSE, quietly = TRUE)
@@ -113,7 +113,7 @@ Result of Interests:
 
 -   tav_profit = total profit from solar and tomato.
 
-```{r}
+```{r ReadData}
 tav_profit <- as.data.frame(
   read_feather(file = "Data/tav_profit R25.feather")
   )

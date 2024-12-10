@@ -26,11 +26,8 @@ Collocating Specialty Crops and Solar panels in Alabama, Southeastern USA. A pap
 ## Housekeeping
 
 ```{r HK}
-rm(list = ls()) # Clean the environment.
-options(
-  warn=0, # Warnings. options(warn=-1) / options(warn=0)
-  scipen=999 # No scientific notations.
-  )
+rm(list = ls())
+options(warn=0, scipen=999)
 ```
 
 ## Load libraries
@@ -38,15 +35,15 @@ options(
 ```{r Libs}
 library(tidyverse, warn.conflicts = FALSE, quietly = TRUE)
 library(psych, warn.conflicts = FALSE, quietly = TRUE)
-library(likert,  warn.conflicts = FALSE, quietly = TRUE) # Likert Items
+library(likert,  warn.conflicts = FALSE, quietly = TRUE)
 library(mice,  warn.conflicts = FALSE, quietly = TRUE)
 library(openxlsx2, warn.conflicts = FALSE, quietly = TRUE)
-library(ggpubr, warn.conflicts = FALSE, quietly = TRUE) # Scatter plot
-library(gmodels,  warn.conflicts = FALSE, quietly = TRUE) # Crosstab
-library(reshape2, warn.conflicts = FALSE, quietly = TRUE) # Reshape data
-library(pacman,  warn.conflicts = FALSE, quietly = TRUE) # Package Management
-library(progress, warn.conflicts = FALSE, quietly = TRUE) #progress bar
-library(arrow, warn.conflicts = FALSE, quietly = TRUE) #progress bar
+library(ggpubr, warn.conflicts = FALSE, quietly = TRUE)
+library(gmodels,  warn.conflicts = FALSE, quietly = TRUE)
+library(reshape2, warn.conflicts = FALSE, quietly = TRUE)
+library(pacman,  warn.conflicts = FALSE, quietly = TRUE)
+library(progress, warn.conflicts = FALSE, quietly = TRUE)
+library(arrow, warn.conflicts = FALSE, quietly = TRUE)
 ```
 
 ## Theme for plots
@@ -143,7 +140,6 @@ tomato <- read_xlsx("Data/Parameters.xlsx",
   rename(yield = Yield,
          yldvar = `Yield Variation (%)`)
 str(tomato)
-head(tomato); tail(tomato)
 ```
 
 ## Strawberry
@@ -163,7 +159,6 @@ strawberry <- read_xlsx("Data/Parameters.xlsx",
   rename(yield = Yield,
          yldvar = `Yield Variation (%)`)
 str(strawberry)
-head(strawberry); tail(strawberry)
 ```
 
 ## Squash
@@ -183,7 +178,6 @@ squash <- read_xlsx("Data/Parameters.xlsx",
   rename(yield = Yield,
          yldvar = `Yield Variation (%)`)
 str(squash)
-head(squash); tail(squash)
 ```
 
 ## Electricity price
@@ -196,7 +190,6 @@ Electricity price (\$/kWh) was retail electricity price range for Alabama based 
 elec_price <- read_xlsx("Data/Parameters.xlsx",
                               sheet = "Electricity Price") %>%
   rename(epr_kwh = `Electricity Price ($/kWh)`)
-str(elec_price)
 elec_price
 ```
 
@@ -223,7 +216,6 @@ pvsc <- wb_read(file = "Data/Parameters.xlsx",
          tcost = `Total Cost ($/W)`
          )
 str(pvsc)
-head(pvsc); tail(pvsc)
 ```
 
 ## Capex (NREL)
@@ -247,7 +239,6 @@ capex <- read.table(file = "Data/CAPEX.txt",
   rename(capex = cost,
          height = pheight,
          array = tracker)
-str(capex)
 capex
 ```
 
@@ -322,7 +313,6 @@ panconf <- wb_read(file = "Data/Parameters.xlsx",
                 skip_empty_cols = TRUE,
                 col_names = TRUE)
 str(panconf)
-head(panconf); tail(panconf)
 ```
 
 ## Energy output
@@ -369,7 +359,6 @@ energy_output <- read_xlsx("Data/Parameters.xlsx",
       TRUE ~ array)
     )
 str(energy_output)
-head(energy_output); tail(energy_output)
 ```
 
 ### By \# of Panels
@@ -390,8 +379,11 @@ ggplot(data = energy_output,
   geom_point() +
   facet_grid(datalot~array) +
   scale_x_discrete(limits = lox,
-                   labels = c("North", "Center", "B Belt", "South")) +
-  guides(color = guide_legend(ncol = 2, reverse = TRUE))
+                   labels = c("North", "Center", 
+                              "B Belt", "South")) +
+  guides(color = guide_legend(ncol = 2, 
+                              reverse = TRUE))
+rm(lox); rm(array_levs); rm(datalot_levs)
 ```
 
 ### By DC System Size
@@ -410,8 +402,11 @@ ggplot(data = energy_output,
   geom_point() +
   facet_grid(datalot~array) +
   scale_x_discrete(limits = lox,
-                   labels = c("North", "Center", "B Belt", "South")) +
-  guides(color = guide_legend(ncol = 2, reverse = TRUE))
+                   labels = c("North", "Center", 
+                              "B Belt", "South")) +
+  guides(color = guide_legend(ncol = 2, 
+                              reverse = TRUE))
+rm(lox)
 ```
 
 # Solar Energy
@@ -469,34 +464,7 @@ if(any(is.na(energy_revenue))) {
   print("No NAs found in the result data frame.")
 }
 str(energy_revenue)
-head(energy_revenue); tail(energy_revenue)
-```
-
-## Simulation 2: Energy Revenue
-
-This simulation has same result as above (Cross checking above code and output). Results are suppressed but errors and warnings are not. No error and no warnings means code is working as it should.
-
-```{r Sim2, eval=FALSE}
-## | results='hide'
-# Sample data
-set.seed(123)
-matrix1 <- energy_output # dimension of matrix is 176*7
-matrix2 <- elec_price # dimension of matrix is 11*1
-
-# Initializing the result matrix
-result_matrix <- data.frame(matrix(ncol = nrow(matrix2),
-                                   nrow = 0))
-colnames(result_matrix) <- c(colnames(matrix1),  "elcrev", "elcprc")
-
-# Loop to multiply first and second matrices
-for (i in 1:nrow(matrix2)) {
-  temp_matrix <- matrix1
-  temp_matrix$E_Prc <- matrix2[i, ]
-  temp_matrix$E_Rev <- matrix1$energy[j] * matrix2$epr_kwh[i]
-  result_matrix <- rbind(result_matrix, temp_matrix)
-}
-str(result_matrix)
-head(result_matrix); tail(result_matrix)
+rm(matrix1, matrix2, new_row, i, j, row_index)
 ```
 
 ## Plots: Energy Revenue
@@ -521,11 +489,14 @@ for (i in unique(energy_revenue$elcprc)) {
   geom_point()+
   facet_grid(.~array) +
   scale_x_discrete(limits = lox,
-                   labels = c("North", "Center", "B Belt", "South")) +
-   guides(color = guide_legend(ncol = 2, reverse = TRUE))
+                   labels = c("North", "Center", 
+                              "B Belt", "South")) +
+   guides(color = guide_legend(ncol = 2, 
+                               reverse = TRUE))
  cat("Electricity Price = ", i)
  print(a)
 }
+rm(array_levs, datalot_levs, i, lox, a)
 ```
 
 ### By Land in Solar
@@ -548,11 +519,14 @@ for (i in unique(energy_revenue$elcprc)) {
   geom_point()+
   facet_grid(.~array) +
   scale_x_discrete(limits = lox,
-                   labels = c("North", "Center", "B Belt", "South")) +
-   guides(color = guide_legend(ncol = 2, reverse = TRUE))
+                   labels = c("North", "Center",
+                              "B Belt", "South")) +
+   guides(color = guide_legend(ncol = 2,
+                               reverse = TRUE))
  cat("Electricity Price = ", i)
  print(a)
 }
+rm(lox, array_levs, datalot_levs, i, a)
 ```
 
 ## Cost and Profit from solar
@@ -664,24 +638,25 @@ write_xlsx(file = "Results/Solar Profit R25.xlsx",
            overwrite = TRUE,
            as_table = TRUE)
 str(solar_profit)
-head(solar_profit); tail(solar_profit)
+rm(capex_height, i, n, reapprop, expanded_data, energy_cost)
 ```
 
 ## Profit from Solar
 
 ```{r}
-pf_solar_r25 <- solar_profit %>% 
+pf_solar <- solar_profit %>% 
   filter(sprop == 1,
          elcprc == 0.04) %>%
   select(al_regs, array, height, eannprof, eannprofworeap)
 cat("Maximum profit from solar at 100% PVD at 25% REAP = ",
-    max(pf_solar_r25$eannprof),
+    max(pf_solar$eannprof),
     fill = TRUE)
-pf_solar_r25[which.max(pf_solar_r25$eannprof),]
+pf_solar[which.max(pf_solar$eannprof),]
 cat("Minimum profit from solar at 100% PVD at 25% REAP = ",
-    min(pf_solar_r25$eannprof),
+    min(pf_solar$eannprof),
     fill = TRUE)
-pf_solar_r25[which.min(pf_solar_r25$eannprof),]
+pf_solar[which.min(pf_solar$eannprof),]
+rm(pf_solar)
 ```
 
 ### Plot Solar profit
@@ -715,6 +690,7 @@ datalot_levs = c("Location 1", "Location 2")
     cat("Electricity Price = ", i)
     print(b)
   }
+rm(lox, array_levs, datalot_levs, b, i)
 ```
 
 # Profit from crops
@@ -753,7 +729,6 @@ tomato_long <- melt(tomato_profit,
 # Convert the 'Price' column to numeric by extracting the number
 tomato_long$price <- as.numeric(gsub("rolac", "", tomato_long$price))
 str(tomato_long)
-head(tomato_long); tail(tomato_long)
 ```
 
 ### Plot Tomato Profit
@@ -802,7 +777,6 @@ strawberry_profit = strawberry %>%
          rolac3, rolac4, rolac5, rolac6, 
          rolac7, rolac8, rolac9)
 str(strawberry_profit)
-strawberry_profit
 ```
 
 Convert data to long format:
@@ -825,7 +799,6 @@ stberry_long <- melt(strawberry_profit,
 # Convert the 'Price' column to numeric by extracting the number
 stberry_long$price <- as.numeric(gsub("rolac", "", stberry_long$price))
 str(stberry_long)
-head(stberry_long); tail(stberry_long)
 ```
 
 ### Plot Strawberry Profit
@@ -881,8 +854,6 @@ squash_long <- melt(squash_profit,
 
 # Convert the 'Price' column to numeric by extracting the number
 squash_long$price <- as.numeric(gsub("rolac", "", squash_long$price))
-head(squash_profit); tail(squash_profit)
-head(squash_long); tail(squash_long)
 ```
 
 # Profit from agrivoltaics
@@ -921,12 +892,12 @@ tav_profit <- tav_profit %>%
   ) %>%
   ungroup()
 
-# Check the result
-str(tav_profit)
-head(tav_profit); tail(tav_profit)
-
 # TAV Profit Greater or Equal to Tomato
 tavp_ge_tomato = tav_profit %>% filter(tavp_ge_t == 1)
+
+# Check the result
+str(tav_profit)
+rm(solar_expanded, tomato_expanded, tav_profit_values)
 ```
 
 ### Saving results locally
@@ -937,7 +908,6 @@ write_feather(tav_profit,
   version = 2,
   chunk_size = 65536L,
   compression = c("default"),
-  #compression = c("default", "lz4", "lz4_frame", "uncompressed", "zstd"),
   compression_level = NULL
 )
 tictoc::tic("Using Dplyr:")
@@ -1019,11 +989,10 @@ sbav_profit <- sbav_profit %>%
   ) %>%
   ungroup()
 
-str(sbav_profit)
-head(sbav_profit); tail(sbav_profit)
-
 # TAV Profit Greater or Equal to Tomato
 sbavp_ge_sberry = sbav_profit %>% filter(sbavp_ge_sb == 1)
+str(sbav_profit)
+rm(solar_expanded, stberry_expanded, sbav_profit_values)
 ```
 
 ### Saving results locally
@@ -1038,11 +1007,9 @@ write_feather(sbav_profit,
   #compression = c("default", "lz4", "lz4_frame", "uncompressed", "zstd"),
   compression_level = NULL
 )
-tictoc::tic("Using Base R Matrix:")
 write_xlsx(x = sbav_profit[sample(nrow(tav_profit), 100),],
            file = "Results/SBAV Profit Sample R25.xlsx",
            as_table = TRUE)
-tictoc::toc()
 ```
 
 ```{r}
@@ -1160,4 +1127,5 @@ write_xlsx(
   file = "Results/Profit SQAV GE Squash R25.xlsx",
   as_table = TRUE
 )
+rm(solar_expanded, squash_expanded, squash_long, sqav_profit_values)
 ```
