@@ -193,7 +193,7 @@ Electricity price (\$/kWh) was retail electricity price range for Alabama based 
 elec_price <- read_xlsx("Data/Parameters.xlsx",
                               sheet = "Electricity Price") %>%
   rename(epr_kwh = `Electricity Price ($/kWh)`)
-elec_price
+as.list(elec_price)
 ```
 
 ## PV system cost
@@ -242,7 +242,6 @@ capex <- read.table(file = "Data/CAPEX.txt",
   rename(capex = cost,
          height = pheight,
          array = tracker)
-capex
 ```
 
 ```{r CpxPlt}
@@ -983,7 +982,7 @@ write_xlsx(x = sbav_profit[sample(nrow(sbav_profit), 100),],
 tictoc::toc()
 ```
 
-```{r, eval=TRUE}
+```{r}
 write_xlsx(x = sbav_profit %>%
              filter(sprop %in% c(0, 0.25, 0.50, 0.75, 1),
                     yldvar == 1,
