@@ -22,7 +22,7 @@ Benefit-cost analysis, Climate change, Photovoltaic, Solar energy, Strawberry, T
 C53, C63, Q48
 
 ## CAPEX ($/W)
-![PV CAPEX ($/W)](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/CAPEX%20Solar%20Panels%20R25.png?raw=true)
+![PV CAPEX ($/W)](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/CAPEX%20Solar%20Panels.png?raw=true)
 Figure: AV Capital investment cost (CAPEX).
 
 

@@ -214,11 +214,13 @@ tcc_tav_tomato_r25 <- tav_profit %>%
          )
 tcc_tav_tomato_r25[which.max(tcc_tav_tomato_r25$eannprofworeap),]
 cat("Minimum REAP Compensation to make TAV as profitable as Tomato: ",
-    abs(max(tcc_tav_tomato_r25$eannprofworeap)) + 9619.38, fill = TRUE)
+    abs(max(tcc_tav_tomato_r25$eannprofworeap)) + 9619.38,
+    fill = TRUE)
 
 tcc_tav_tomato_r25[which.min(tcc_tav_tomato_r25$eannprofworeap),]
 cat("Maximum REAP Compensation to make TAV as profitable as Tomato: ",
-    abs(min(tcc_tav_tomato_r25$eannprofworeap)) + 9619.38, fill = TRUE)
+    abs(min(tcc_tav_tomato_r25$eannprofworeap)) + 9619.38,
+    fill = TRUE)
 ```
 
 ## Strawberry AV
@@ -243,7 +245,7 @@ dim(sbav_profit)
     ```{r}
     # Calculate the profit:
     # Step 1: Filter the dataframe to get the unique profit values for each price when yldvar is 1
-    unique_profits <- unique(sbav_profit[sbav_profit$yldvar == 1, 
+    unique_profits <- unique(sbav_profit[sbav_profit$yldvar == 1,
                                         c("price", "profit")])
 
     # Step 2: Create a lookup table for unique profits by price
@@ -251,7 +253,8 @@ dim(sbav_profit)
                               unique_profits$price)
 
     # Step 3: Create the new variable sbavp_wocp by subtracting the unique profit from sqav_profit
-    sbav_profit$sbavp_wocp <- mapply(function(sbav_profit, price) {
+    sbav_profit$sbavp_wocp <- mapply(function(sbav_profit,
+                                              price) {
       profit_to_subtract <- ifelse(price %in% 
                                      names(profit_lookup), 
                                    profit_lookup[as.character(price)], 0)
@@ -259,7 +262,7 @@ dim(sbav_profit)
     }, sbav_profit$sbav_profit, sbav_profit$price)
 
     unique_profits # 7 Prices give 7 Profits at 100% Yield.
-    rm(unique_profits); rm(profit_lookup)
+    rm(unique_profits, profit_lookup)
     ```
 
     ### SBAVP GE Strawberry Profit
@@ -302,7 +305,7 @@ sbav_be_yld <- rbindlist(results,
          height, profit, yldvar, yield, sbav_profit, sbavp_wocp)
 
 # Clean up
-rm(results); rm(split_data); rm(process_subset)
+rm(results, split_data, process_subset)
 ```
 
 ```{r}
@@ -362,11 +365,15 @@ if (length(missing_columns) > 0) {
 
 # Generate column names using reversed order of expand.grid
 col_names <- apply(expand.grid(height, array, sprop), 1,
-                   function(x) paste0(x[3], " ", x[2], " ", x[1]))
+                   function(x) paste0(x[3], " ",
+                                      x[2], " ",
+                                      x[1]))
 
 # Generate row names using reversed order of expand.grid (without elcprc)
 row_names <- apply(expand.grid(price, yldvar, al_regs), 1,
-                   function(x) paste0(x[3], " ", x[2], " ", x[1]))
+                   function(x) paste0(x[3], " ",
+                                      x[2], " ",
+                                      x[1]))
 
 # Create an empty matrix to store the results
 result_matrix <- matrix(NA, 
@@ -398,7 +405,9 @@ merged_data$col_name <- apply(
 
 merged_data$row_name <- apply(
   merged_data[, c("al_regs", "yldvar", "price")], 1,
-  function(x) paste0(x[1], " ", x[2], " ", x[3]))
+  function(x) paste0(x[1], " ",
+                     x[2], " ",
+                     x[3]))
 
 
 # Fill the matrix with tav_profit values
@@ -426,7 +435,7 @@ rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
 write_xlsx(x = ct_tav_pft %>%
   dplyr::mutate(Row_Names = rownames(ct_tav_pft)) %>%
   dplyr::select(Row_Names, everything()),
-           file = "Results/Profit Ctab TAV R25.xlsx",
+           file = "Results/TAV Profits Ctab R25.xlsx",
            as_table = TRUE)
 dim(ct_tav_pft)
 ```
@@ -664,7 +673,7 @@ tav_prof_man
 write_xlsx(x = tav_prof_man %>%
   dplyr::mutate(Row_Names = rownames(tav_prof_man)) %>%
   dplyr::select(Row_Names, everything()),
-           file = "Results/Profit TAV Manuscript R25.xlsx",
+           file = "Results/TAV Profits Manuscript R25.xlsx",
            as_table = TRUE)
 # Display the result matrix
 rm(result_matrix); rm(sprop); rm(array); rm(height); 
@@ -744,7 +753,8 @@ rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
       function(x) paste0(x[1], x[2], x[3]))
 
     merged_data$row_name <- apply(
-      merged_data[, c("al_regs", "yldvar", "price", "elcprc")], 1,
+      merged_data[, c("al_regs", "yldvar", 
+                      "price", "elcprc")], 1,
       function(x) paste0(x[4],
                          x[3],
                          x[2],
@@ -769,7 +779,7 @@ rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
 ```{r}
 write.csv(as.data.frame(ct_tavp_wocp),
           row.names = TRUE,
-          file = "Results/ct_tavp_wocp R25.csv")
+          file = "Results/TAV Profits GE Tomato R25.csv")
 ```
 
 ## TAVP - Tomato Profit HeatMap
@@ -798,14 +808,11 @@ heatmap_plot <- pheatmap(t(ct_tavp_wocp),
                          #cellheight = 3,
                          #cellwidth = 3
                          )
-```
-
-```{r}
 ggsave(heatmap_plot,
        height = 8,
        width = 12,
        units = "in",
-       file = paste0("Plots/gp_tavp_wocp R25", ".png"))
+       file = paste0("Plots/TAV Profits GE Tomato R25", ".png"))
 rm(heatmap_plot); rm(colorcount)
 ```
 
@@ -890,13 +897,10 @@ for (i in seq_len(nrow(result_matrix))) {
   }
 }
 ct_tav_be_yld <- as.data.frame(result_matrix) # Table in Excel.
-dim(ct_tav_be_yld); rm(result_matrix)
-```
-
-```{r}
 write.csv(as.data.frame(ct_tav_be_yld),
           row.names = TRUE,
-          file = "Results/ct_tav_be_yld R25.csv")
+          file = "Results/TAV Breakeven Yield R25.csv")
+dim(ct_tav_be_yld); rm(result_matrix)
 ```
 
 ## TAV Breakeven Yield Heatmap
@@ -929,22 +933,19 @@ heatmap_plot <- pheatmap((ct_tav_be_yld),
                          number_format = "%.0f"
                          #legend_breaks = uniquevalue
                          )
-```
-
-```{r}
 ggsave(heatmap_plot,
        height = 8,
        width = 12,
        units = "in",
-       file = paste0("Plots/gp_tav_be_yld R25", ".png"))
-rm(heatmap_plot); rm(colorcount); rm(uniquevalue)
+       file = paste0("Plots/TAV Breakeven Yield R25", ".png"))
+rm(heatmap_plot, colorcount, uniquevalue)
 ```
 
 ## Plot Tomato Profits by Panels
 
 You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, eval=FALSE}
+```{r, results='hide'}
 combinations <- expand.grid(
   yldvar = c(0, 0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield
   price = c(17, 20, 23), # Tomato price
@@ -1002,7 +1003,7 @@ for (combo in seq_len(nrow(combinations))) {
   }
   print(combinations[combo,])
   print(tav_sp_plot)
-  ggsave(file = paste0("Plots/tav_sp_R25", combo, ".png"))
+  ggsave(file = paste0("Plots/TAV by PVD R25", combo, ".png"))
   #break
 }
 ```
@@ -1011,7 +1012,7 @@ for (combo in seq_len(nrow(combinations))) {
 
 You can see plot breakdown based on solar proportion, crop price, and electricity price. You can see variation for all crop yield variation in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, eval=FALSE}
+```{r, results='hide'}
 combinations <- expand.grid(
   sprop = c(0, 0.25, 0.50, 0.75, 1.00), # Solar proportion
   price = c(17, 20, 23), # Tomato price
@@ -1067,7 +1068,7 @@ for (combo in seq_len(nrow(combinations))) {
   }
   print(combinations[combo,])
   print(tav_yv_plot)
-  ggsave(file = paste0("Plots/tav_yv_R25", combo, ".png"))
+  ggsave(file = paste0("Plots/TAV by Yield R25", combo, ".png"))
   #break
 }
 ```
@@ -1160,7 +1161,7 @@ rm(elcprc); rm(price); rm(yldvar); rm(al_regs)
 write_xlsx(x = ct_sbav_pft %>%
   dplyr::mutate(Row_Names = rownames(ct_sbav_pft)) %>%
   dplyr::select(Row_Names, everything()),
-           file = "Results/Profit Ctab SBAV R25.xlsx",
+           file = "Results/SBAV Profits Ctab R25.xlsx",
            as_table = TRUE)
 dim(ct_sbav_pft)
 ```
@@ -1392,7 +1393,7 @@ sbav_prof_man
 write_xlsx(x = sbav_prof_man %>%
   dplyr::mutate(Row_Names = rownames(sbav_prof_man)) %>%
   dplyr::select(Row_Names, everything()),
-           file = "Results/Profit SBAV Manuscript R25.xlsx",
+           file = "Results/SBAV Profits Manuscript R25.xlsx",
            as_table = TRUE)
 # Display the result matrix
 rm(result_matrix); rm(sprop); rm(array); rm(height); 
@@ -1500,15 +1501,11 @@ for (i in seq_len(nrow(result_matrix))) {
   }
 }
 ct_sbavp_wocp <- as.data.frame(result_matrix) #Table in Excel.
-rm(result_matrix)
-```
-
-```{r}
 write.csv(as.data.frame(ct_sbavp_wocp),
           row.names = TRUE,
           #col.names = TRUE,
-          file = "Results/ct_sbavp_wocp R25.csv")
-dim(ct_sbavp_wocp)
+          file = "Results/SBAV BE Sberry Profits R25.csv")
+dim(ct_sbavp_wocp); rm(result_matrix)
 ```
 
 ## SBAVP - Strawberry Profit Heatmap
@@ -1519,7 +1516,6 @@ dim(ct_sbavp_wocp)
 colorcount = length(unique(as.vector(as.matrix(ct_sbavp_wocp[-1]))))
 colorcount
 heatmap_plot <- pheatmap(t(ct_sbavp_wocp),
-                         #clustering_distance_rows = "correlation",
                          clustering_distance_rows = "euclidean",
                          clustering_distance_cols = "euclidean",
                          clustering_method = "complete",
@@ -1537,14 +1533,11 @@ heatmap_plot <- pheatmap(t(ct_sbavp_wocp),
                          #cellheight = 3,
                          #cellwidth = 3
                          )
-```
-
-```{r}
 ggsave(heatmap_plot,
        height = 8,
        width = 12,
        units = "in",
-       file = paste0("Plots/gp_sbavp_wocp R25", ".png"))
+       file = paste0("Plots/SBAV BE Sberry Profit R25", ".png"))
 rm(heatmap_plot, colorcount)
 ```
 
@@ -1631,12 +1624,9 @@ for (i in seq_len(nrow(result_matrix))) {
   }
 }
 ct_sbav_be_yld <- as.data.frame(result_matrix) # Table in Excel.
-```
-
-```{r}
 write.csv(as.data.frame(ct_sbav_be_yld),
           row.names = TRUE,
-          file = "Results/ct_sbav_be_yld R25.csv")
+          file = "Results/SBAV Breakeven Yield R25.csv")
 dim(ct_sbav_be_yld)
 ```
 
@@ -1670,14 +1660,11 @@ heatmap_plot <- pheatmap((ct_sbav_be_yld),
                          number_format = "%.0f",
                          legend_breaks = uniquevalue
                          )
-```
-
-```{r}
 ggsave(heatmap_plot,
        height = 8,
        width = 12,
        units = "in",
-       file = paste0("Plots/gp_sbav_be_yld R25", ".png"))
+       file = paste0("Plots/SBAV Breakeven Yield R25", ".png"))
 rm(heatmap_plot); rm(colorcount); rm(uniquevalue)
 ```
 
@@ -1685,9 +1672,10 @@ rm(heatmap_plot); rm(colorcount); rm(uniquevalue)
 
 You can see plot breakdown based on yield variation, crop price, and electricity price. You can see variation for all solar proportion in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, eval=FALSE}
+```{r, results='hide'}
 combinations <- expand.grid(
-  yldvar = c(0, 0.1, 0.3, 0.5, 0.7, 1, 1.20, 1.5, 1.80, 2), # Yield
+  yldvar = c(0, 0.1, 0.3, 0.5, 0.7, 1,
+             1.20, 1.5, 1.80, 2), # Yield
   price = c(3, 6, 9), # Strawberry price
   elcprc = c(0.03, 0.04, 0.05) # Electricity price
 )
@@ -1731,7 +1719,6 @@ for (combo in seq_len(nrow(combinations))) {
          title = (list(combinations[combo,]))
          ) +
     theme(strip.background = element_blank())
-  # Add horizontal line at y = 0 if y has both positive and negative values
   if (min(filtered_data$sbav_profit) < 0 &
       max(filtered_data$sbav_profit) > 0) {
     sbav_sp_plot <- sbav_sp_plot + 
@@ -1742,8 +1729,8 @@ for (combo in seq_len(nrow(combinations))) {
   }
   print(combinations[combo,])
   print(sbav_sp_plot)
-  ggsave(file = paste0("Plots/sbav_sp_ R25", combo, ".png"))
-  #break
+  ggsave(file = paste0("Plots/SBAV by PVD",
+                       combo, ".png"))
 }
 ```
 
@@ -1751,7 +1738,7 @@ for (combo in seq_len(nrow(combinations))) {
 
 You can see plot breakdown based on solar proportion, crop price, and electricity price. You can see variation for all crop yield variation in one facet of the chart. Each facet of the chart contain av profit three heights of solar panels, four regions of AL, two array types.
 
-```{r, eval=FALSE}
+```{r, results='hide'}
 combinations <- expand.grid(
   sprop = c(0, 0.25, 0.50, 0.75, 1.00), # Solar proportion
   price = c(3, 6, 9), # Strawberry price
@@ -1808,7 +1795,7 @@ for (combo in seq_len(nrow(combinations))) {
   }
   print(combinations[combo,])
   print(sbav_yv_plot)
-  ggsave(file = paste0("Plots/sbav_yv_ R25", combo, ".png"))
-  #break
+  ggsave(file = paste0("Plots/SBAV by Yield R25", 
+                       combo, ".png"))
 }
 ```

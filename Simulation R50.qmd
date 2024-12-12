@@ -293,7 +293,7 @@ capex %>%
 
 # Save the plot
 ggsave(
-  filename = "Plots/CAPEX Solar Panels R50.png",
+  filename = "Plots/CAPEX Solar Panels.png",
   width = 8,
   height = 6,
   units = "in"
@@ -718,8 +718,9 @@ colnames(tomato_profit) <- c("yldvar", "yield",
 # Reshape the data frame from wide to long format
 tomato_long <- melt(tomato_profit,
                 id.vars = c("yldvar", "yield"),
-                measure.vars = c("rolac17", "rolac18", "rolac19",
-                                 "rolac20", "rolac21", "rolac22",
+                measure.vars = c("rolac17", "rolac18",
+                                 "rolac19", "rolac20",
+                                 "rolac21", "rolac22",
                                  "rolac23"),
                 variable.name = "price",
                 value.name = "profit")
@@ -788,8 +789,9 @@ colnames(strawberry_profit) <- c("yldvar", "yield",
 # Reshape the data frame from wide to long format
 stberry_long <- melt(strawberry_profit,
                 id.vars = c("yldvar", "yield"),
-                measure.vars = c("rolac3", "rolac4", "rolac5",
-                                 "rolac6", "rolac7", "rolac8",
+                measure.vars = c("rolac3", "rolac4",
+                                 "rolac5", "rolac6",
+                                 "rolac7", "rolac8",
                                  "rolac9"),
                 variable.name = "price",
                 value.name = "profit")
@@ -844,8 +846,9 @@ squash_profit = squash %>%
 # Reshape the data frame from wide to long format
 squash_long <- reshape2::melt(squash_profit,
                 id.vars = c("yldvar", "yield"),
-                measure.vars = c("rolac11", "rolac12", "rolac13",
-                                 "rolac14","rolac15", "rolac16",
+                measure.vars = c("rolac11", "rolac12",
+                                 "rolac13", "rolac14",
+                                 "rolac15", "rolac16",
                                  "rolac17"),
                 variable.name = "price",
                 value.name = "profit")
@@ -919,7 +922,7 @@ write_xlsx(x = tav_profit %>%
     al_regs == "Black Belt" ~ 3,
     al_regs == "Southern" ~ 4,
     TRUE ~ NA_real_)),
-           file = "Results/Profit TAV WriteUp R50.xlsx",
+           file = "Results/TAV Profit WriteUp R50.xlsx",
            as_table = TRUE)
 ```
 
@@ -997,7 +1000,7 @@ write_xlsx(x = sbav_profit %>%
     al_regs == "Black Belt" ~ 3,
     al_regs == "Southern" ~ 4,
     TRUE ~ NA_real_)),
-           file = "Results/Profit SBAV WriteUp R50.xlsx",
+           file = "Results/SBAV Profit WriteUp R50.xlsx",
            as_table = TRUE)
 ```
 
@@ -1025,7 +1028,8 @@ sqav_profit <- data.frame(lapply(sqav_profit, unlist))
 sqav_profit <- sqav_profit %>%
   group_by(price) %>%  # Control for unique prices
   mutate(
-    sqavp_ge_sq = if_else(yldvar == 1 & sqav_profit >= profit, 1, 0)
+    sqavp_ge_sq = if_else(yldvar == 1 & 
+                            sqav_profit >= profit, 1, 0)
   ) %>%
   ungroup()
 
@@ -1058,7 +1062,7 @@ write_xlsx(x = sqav_profit %>%
     al_regs == "Black Belt" ~ 3,
     al_regs == "Southern" ~ 4,
     TRUE ~ NA_real_)),
-           file = "Results/Profit SQAV WriteUp R50.xlsx",
+           file = "Results/SQAV Profit WriteUp R50.xlsx",
            as_table = TRUE)
 
 write_xlsx(
@@ -1075,7 +1079,7 @@ write_xlsx(
       al_regs == "Southern" ~ 4,
       TRUE ~ NA_real_
     )),
-  file = "Results/Profit SQAV GE Squash R50.xlsx",
+  file = "Results/SQAV Profit GE Squash R50.xlsx",
   as_table = TRUE
 )
 rm(solar_expanded, squash_expanded, squash_long, sqav_profit_values)

@@ -290,7 +290,7 @@ capex %>%
 
 # Save the plot
 ggsave(
-  filename = "Plots/CAPEX Solar Panels R25.png",
+  filename = "Plots/CAPEX Solar Panels.png",
   width = 8,
   height = 6,
   units = "in"
@@ -460,7 +460,7 @@ if(any(is.na(energy_revenue))) {
 } else {
   print("No NAs found in the result data frame.")
 }
-str(energy_revenue)
+str(energy_revenue); 
 rm(matrix1, matrix2, new_row, i, j, row_index)
 ```
 
@@ -634,8 +634,7 @@ write_xlsx(file = "Results/Solar Profit R25.xlsx",
            x = solar_profit,
            overwrite = TRUE,
            as_table = TRUE)
-str(solar_profit)
-rm(capex_height, i, n, reapprop, expanded_data, energy_cost)
+str(solar_profit); rm(capex_height, i, n, reapprop, expanded_data, energy_cost)
 ```
 
 ## Profit from Solar
@@ -701,8 +700,7 @@ tomato_profit = tomato %>%
   select(yldvar, yield, 
          rolac17, rolac18, rolac19, rolac20, 
          rolac21, rolac22, rolac23)
-dim(tomato_profit)
-tomato_profit
+dim(tomato_profit); tomato_profit
 ```
 
 Convert data to long format:
@@ -717,14 +715,16 @@ colnames(tomato_profit) <- c("yldvar", "yield",
 # Reshape the data frame from wide to long format
 tomato_long <- melt(tomato_profit,
                 id.vars = c("yldvar", "yield"),
-                measure.vars = c("rolac17", "rolac18", "rolac19",
-                                 "rolac20", "rolac21", "rolac22",
+                measure.vars = c("rolac17", "rolac18",
+                                 "rolac19", "rolac20",
+                                 "rolac21", "rolac22",
                                  "rolac23"),
                 variable.name = "price",
                 value.name = "profit")
 
 # Convert the 'Price' column to numeric by extracting the number
-tomato_long$price <- as.numeric(gsub("rolac", "", tomato_long$price))
+tomato_long$price <- as.numeric(gsub("rolac", "", 
+                                     tomato_long$price))
 str(tomato_long)
 ```
 
@@ -794,7 +794,8 @@ stberry_long <- melt(strawberry_profit,
                 value.name = "profit")
 
 # Convert the 'Price' column to numeric by extracting the number
-stberry_long$price <- as.numeric(gsub("rolac", "", stberry_long$price))
+stberry_long$price <- as.numeric(gsub("rolac", "", 
+                                      stberry_long$price))
 str(stberry_long)
 ```
 
@@ -843,14 +844,16 @@ squash_profit = squash %>%
 # Reshape the data frame from wide to long format
 squash_long <- melt(squash_profit,
                 id.vars = c("yldvar", "yield"),
-                measure.vars = c("rolac11", "rolac12", "rolac13",
-                                 "rolac14","rolac15", "rolac16",
+                measure.vars = c("rolac11", "rolac12", 
+                                 "rolac13", "rolac14",
+                                 "rolac15", "rolac16",
                                  "rolac17"),
                 variable.name = "price",
                 value.name = "profit")
 
 # Convert the 'Price' column to numeric by extracting the number
-squash_long$price <- as.numeric(gsub("rolac", "", squash_long$price))
+squash_long$price <- as.numeric(gsub("rolac", "", 
+                                     squash_long$price))
 ```
 
 # Profit from agrivoltaics
@@ -863,7 +866,7 @@ Total profit from solar and crops for all combinations of AVs simulated.
 -   The last variable (tav_profit) is the final profit from tomato agrivoltaic system which is the result of our interest.
 
 ```{r TAV}
-# Calculate all combinations of rows from both matrices in a vectorized way
+# Calculate all combinations of rows in a vectorized way
 solar_expanded <- solar_profit[rep(1:nrow(solar_profit), 
                                    each = nrow(tomato_long)), ]
 tomato_expanded <- tomato_long[rep(1:nrow(tomato_long), 
@@ -885,7 +888,9 @@ tav_profit <- data.frame(lapply(tav_profit, unlist))
 tav_profit <- tav_profit %>%
   group_by(price) %>%  # Control for unique prices
   mutate(
-    tavp_ge_t = if_else(yldvar == 1 & tav_profit >= profit, 1, 0)
+    tavp_ge_t = if_else(yldvar == 1 & 
+                          tav_profit >= profit,
+                        1, 0)
   ) %>%
   ungroup()
 
@@ -930,7 +935,7 @@ write_xlsx(x = tav_profit %>%
     al_regs == "Black Belt" ~ 3,
     al_regs == "Southern" ~ 4,
     TRUE ~ NA_real_)),
-           file = "Results/Profit TAV WriteUp R25.xlsx",
+           file = "Results/TAV Profit WriteUp R25.xlsx",
            as_table = TRUE)
 ```
 
@@ -949,7 +954,7 @@ write_xlsx(
       al_regs == "Southern" ~ 4,
       TRUE ~ NA_real_
     )),
-  file = "Results/Profit TAV GE Tomato R25.xlsx",
+  file = "Results/TAV Profit GE Tomato R25.xlsx",
   as_table = TRUE
 )
 ```
@@ -962,9 +967,9 @@ write_xlsx(
 ```{r SBAV}
 # Generate all combinations of rows from both matrices in a vectorized way
 solar_expanded <- solar_profit[rep(1:nrow(solar_profit), 
-                                   each = nrow(stberry_long)), ]
+                                   each = nrow(stberry_long)),]
 stberry_expanded <- stberry_long[rep(1:nrow(stberry_long),
-                                     times = nrow(solar_profit)), ]
+                                     times = nrow(solar_profit)),]
 
 # Calculate the new column for sbav_profit directly
 sbav_profit_values <- solar_expanded$eannprof + stberry_expanded$profit
@@ -982,7 +987,8 @@ sbav_profit <- data.frame(lapply(sbav_profit, unlist))
 sbav_profit <- sbav_profit %>%
   group_by(price) %>%  # Control for unique prices
   mutate(
-    sbavp_ge_sb = if_else(yldvar == 1 & sbav_profit >= profit, 1, 0)
+    sbavp_ge_sb = if_else(yldvar == 1 & 
+                            sbav_profit >= profit, 1, 0)
   ) %>%
   ungroup()
 
@@ -1001,7 +1007,6 @@ write_feather(sbav_profit,
   version = 2,
   chunk_size = 65536L,
   compression = c("default"),
-  #compression = c("default", "lz4", "lz4_frame", "uncompressed", "zstd"),
   compression_level = NULL
 )
 write_xlsx(x = sbav_profit[sample(nrow(tav_profit), 100),],
@@ -1024,7 +1029,7 @@ write_xlsx(x = sbav_profit %>%
     al_regs == "Black Belt" ~ 3,
     al_regs == "Southern" ~ 4,
     TRUE ~ NA_real_)),
-           file = "Results/Profit SBAV WriteUp R25.xlsx",
+           file = "Results/SBAV Profit WriteUp R25.xlsx",
            as_table = TRUE)
 ```
 
@@ -1043,7 +1048,7 @@ write_xlsx(
       al_regs == "Southern" ~ 4,
       TRUE ~ NA_real_
     )),
-  file = "Results/Profit SBAV GE Strawberry R25.xlsx",
+  file = "Results/SBAV Profit GE Strawberry R25.xlsx",
   as_table = TRUE
 )
 ```
@@ -1105,7 +1110,7 @@ write_xlsx(x = sqav_profit %>%
     al_regs == "Black Belt" ~ 3,
     al_regs == "Southern" ~ 4,
     TRUE ~ NA_real_)),
-           file = "Results/Profit SQAV WriteUp R25.xlsx",
+           file = "Results/SQAV Profit WriteUp R25.xlsx",
            as_table = TRUE)
 write_xlsx(
   x = sqavp_ge_squash %>%
@@ -1121,7 +1126,7 @@ write_xlsx(
       al_regs == "Southern" ~ 4,
       TRUE ~ NA_real_
     )),
-  file = "Results/Profit SQAV GE Squash R25.xlsx",
+  file = "Results/SQAV Profit GE Squash R25.xlsx",
   as_table = TRUE
 )
 rm(solar_expanded, squash_expanded, squash_long, sqav_profit_values)
