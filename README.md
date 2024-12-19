@@ -22,10 +22,10 @@ Benefit-cost analysis, Climate change, Photovoltaic, Solar energy, Strawberry, T
 C53, C63, Q48
 
 ### How to navigate through files in the repository?
-Step 1: Run and Render "Simulation R25.qmd". Rendering this file generates "Simulation-R25.pdf".
-Step 2: Run and Render "AV Profit R25.qmd". Rendering this files generates "AV-Profit-R25.pdf". This file will generate several results inside "Results" repository.
+Step 1: Run and render "Simulation R25.qmd". Rendering this file generates "Simulation-R25.pdf".
+Step 2: Run and render "AV Profit R25.qmd". Rendering this files generates "AV-Profit-R25.pdf". This file will generate several results inside "Results" repository.
 
-Step 3: Repeat steps 1 and 2 for .qmd files with R50 files in the same order as above. The outcome is similar as above for their respective steps.
+Step 3: Repeat steps 1 and 2 for .qmd files with R50 files in the same order as above. The outcomes are similar as above for the respective steps.
 
 You can fild data used in the modeling inside "Data" repository and results and figures generated during simulation and alnalysis in "results" and "Plots" repositories. You can delete all files inside "Results" and "Plots" repositories before running, if you wish to. Running steps 1 to 3 automatically generate deleted results and figures.
 
