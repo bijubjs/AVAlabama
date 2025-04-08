@@ -24,6 +24,9 @@ C53, C63, Q48
 ## Full paper (Right click to open link below in a new tab):
 https://www.choicesmagazine.org/choices-magazine/submitted-articles/specialty-crop-agrivoltaics-in-the-southeastern-usa-profitability-and-the-role-of-rural-energy-for-america-program
 
+## Read behind the scene blog post about this paper (Right click to open link below in a new tab):
+https://bijeshmishra.com/2025/02/08/aval-backend/
+
 ### How to navigate through files in the repository?
 Step 1: Run and render "Simulation R25.qmd". Rendering this file generates "Simulation-R25.pdf".
 Step 2: Run and render "AV Profit R25.qmd". Rendering this files generates "AV-Profit-R25.pdf". This file will generate several results inside "Results" repository.
