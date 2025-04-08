@@ -21,10 +21,10 @@ Benefit-cost analysis, Climate change, Photovoltaic, Solar energy, Strawberry, T
 ## JEL Codes
 C53, C63, Q48
 
-## Full paper (Right click to open link below in a new tab):
+## Full paper (Right click and open in new tab):
 https://www.choicesmagazine.org/choices-magazine/submitted-articles/specialty-crop-agrivoltaics-in-the-southeastern-usa-profitability-and-the-role-of-rural-energy-for-america-program
 
-## Read behind the scene blog post about this paper (Right click to open link below in a new tab):
+## Back end of Agrivoltaics in Alabama Paper (Right click and open in new tab):
 https://bijeshmishra.com/2025/02/08/aval-backend/
 
 ### How to navigate through files in the repository?
