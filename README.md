@@ -9,7 +9,7 @@ Bijesh Mishra<sup>1*</sup>, Ruiqing Miao<sup>1*</sup>, Ngbede Musa<sup>1</sup>, 
 
 <sup>3</sup>National Renewable Energy Lab, Denver, CO, 80401
 
-<sup>*</sup>Corresponding authors: bzm0094@auburn.edu; rzm0050@auburn.edu
+<sup>*</sup>Corresponding authors: bzm0094@auburn.edu; bmishra36@gatech.edu; rzm0050@auburn.edu
 
 
 ## Abstract
@@ -59,3 +59,4 @@ SAV profits in the four regions of Alabama under various solar energy system con
 Figure: SBAV profit after 50\% of the total PV CAPEX is compensated through a REAP within six months of the initial investment.
 ![SBAV Profits R25](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/SBAV%20Profits%20Ctab%20R25.png?raw=true)
 Figure: SBAV profit after 25\% of the total PV CAPEX is compensated through a REAP within six months of the initial investment.
+
