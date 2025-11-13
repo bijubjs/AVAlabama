@@ -24,17 +24,16 @@ C53, C63, Q48
 ## Full paper (Right click and open in new tab):
 https://www.choicesmagazine.org/choices-magazine/submitted-articles/specialty-crop-agrivoltaics-in-the-southeastern-usa-profitability-and-the-role-of-rural-energy-for-america-program
 
-## Back end of Agrivoltaics in Alabama Paper (Right click and open in new tab):
-https://bijeshmishra.com/2025/02/08/aval-backend/
+## Right click and open in new tab: [Back end of Agrivoltaics in Alabama Paper](https://bijeshmishra.com/2025/02/08/aval-backend/)
 
 ### How to navigate through files in the repository?
 Step 1: Run and render "Simulation R25.qmd". Rendering this file generates "Simulation-R25.pdf".
 
-Step 2: Run and render "AV Profit R25.qmd". Rendering this files generates "AV-Profit-R25.pdf". This file will generate several results inside "Results" repository.
+Step 2: Run and render "AV Profit R25.qmd". Rendering these files generates "AV-Profit-R25.pdf". This file will yield several results inside the "Results" repository.
 
-Step 3: Repeat steps 1 and 2 for .qmd files with "R50" in their names in the same order as above. The outcomes are similar as above for the respective steps.
+Step 3: Repeat steps 1 and 2 for .qmd files with "R50" in their names in the same order as above. The outcomes are similar to those above for the respective steps.
 
-You can find data used in the modeling inside "Data" repository and results and figures generated during simulation and alnalysis in "results" and "Plots" repositories. You can delete all files inside the "Results" and "Plots" repositories before running, if you wish to. Running steps 1 to 3 automatically generate deleted results and figures.
+You can find data used in the modeling inside the "Data" repository, and results and figures generated during simulation and analysis in the "results" and "Plots" repositories. You can delete all files in the "Results" and "Plots" repositories before running, if you wish. Running steps 1 to 3 automatically generates deleted results and figures.
 
 ## CAPEX ($/W)
 ![PV CAPEX ($/W)](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/CAPEX%20Solar%20Panels.png?raw=true)
@@ -43,7 +42,7 @@ Figure: AV Capital investment cost (CAPEX).
 
 # Tomato Agrivoltaics
 ## TAV Profits 2,160 Scenarios
-TAV profits in the four regions of Alabama under various solar energy system configurations. The vertical axis indicates electricity price, tomato price, tomato yield, and regions of Alabama. For example, "Northern 0.5 17" on the first row means the northern region of Alabama, 50% yield of 1,360 cartons of tomatoes, and $17 per carton of tomato. The horizontal axis has PVD, solar array types, and solar panel ground clearance height (ft.). For example, "0.10 Fixed 4.6" on the first column means 10% PVD, fixed-tilt solar panels mounted 4.6 ft. above the ground. Green and red colored blocks represent profits and losses from TAVs respectively. Profits and losses increase as blocks turn darker in color.
+TAV profits in the four regions of Alabama under various solar energy system configurations. The vertical axis indicates electricity price, tomato price, tomato yield, and regions of Alabama. For example, "Northern 0.5 17" on the first row means the northern region of Alabama, 50% yield of 1,360 cartons of tomatoes, and $17 per carton of tomato. The horizontal axis has PVD, solar array types, and solar panel ground clearance height (ft.). For example, "0.10 Fixed 4.6" on the first column means 10% PVD, fixed-tilt solar panels mounted 4.6 ft. above the ground. Green and red colored blocks represent profits and losses from TAVs, respectively. Profits and losses increase as blocks turn darker in color.
 
 ![TAV Profits R50](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/TAV%20Profits%20CTab%20R50.png?raw=true)
 Figure: TAV profit after 50% of total PV CAPEX is compensated through a REAP within six months of the initial investment.
@@ -53,10 +52,11 @@ Figure: TAV profit after 25\% of total PV CAPEX is compensated through a REAP wi
 
 # Strawberry Agrivoltaics
 ## SBAV Profits 2,160 Scenarios
-SAV profits in the four regions of Alabama under various solar energy system configurations. The vertical axis has electricity prices, strawberry prices, strawberry yield, and regions of Alabama. For example, the label, "Northern 0.5 3" on the first row represents the northern region of Alabama, strawberry yield at 50% of 3,075 buckets, and $3 per bucket strawberry. The horizontal axis has PVD, solar panel array types, and solar panel ground clearance height (ft.). For example, the label "0.10 Fixed 4.6" on the first column represents 10% PVD, fixed-tilt solar panels mounted 4.6 ft. above the ground. Green and red colored blocks represent profits and losses from TAVs respectively. Profits and losses increase as blocks turn darker in color.
+SAV profits in the four regions of Alabama under various solar energy system configurations. The vertical axis has electricity prices, strawberry prices, strawberry yield, and regions of Alabama. For example, the label, "Northern 0.5 3" on the first row represents the northern region of Alabama, strawberry yield at 50% of 3,075 buckets, and $3 per bucket strawberries. The horizontal axis has PVD, solar panel array types, and solar panel ground clearance height (ft.). For example, the label "0.10 Fixed 4.6" on the first column represents 10% PVD, fixed-tilt solar panels mounted 4.6 ft. above the ground. Green and red colored blocks represent profits and losses from TAVs, respectively. Profits and losses increase as blocks turn darker in color.
 
 ![SBAV Profits R50](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/SBAV%20Profits%20Ctab%20R50.png?raw=true)
 Figure: SBAV profit after 50\% of the total PV CAPEX is compensated through a REAP within six months of the initial investment.
 ![SBAV Profits R25](https://github.com/bijubjs/Agrivoltaics-alabama/blob/main/Plots/SBAV%20Profits%20Ctab%20R25.png?raw=true)
 Figure: SBAV profit after 25\% of the total PV CAPEX is compensated through a REAP within six months of the initial investment.
+
 
